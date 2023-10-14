@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding a Gallery Webpage</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <style>
+        /* Style for the accordion sections */
+        .accordion-section {
+            margin: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .accordion-section h2 {
+            cursor: pointer;
+        }
+
+        .accordion-section-content {
+            display: none;
+        }
+
+        .accordion-section.active .accordion-section-content {
+            display: block;
+        }
+
+        /* Style for quiz questions and options */
+        .quiz-question {
+            margin-bottom: 10px;
+        }
+
+        .quiz-options label {
+            display: block;
+            margin: 5px 0;
+        }
+
+        .quiz-options input[type="radio"] {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Understanding a Gallery Webpage</h1>
+
+    <!-- HTML Section -->
+    <div class="accordion-section">
+        <h2>HTML</h2>
+        <div class="accordion-section-content">
+            <p>HTML (Hypertext Markup Language) is the structure of a webpage. It defines the content and layout of the webpage elements.</p>
+            <!-- Insert your HTML code explanation here -->
+            <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;link rel="stylesheet" type="text/css" href="style.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;main class="gallery-wrapper" id="test"&gt;
+        &lt;ul class="gallery__nav"&gt;&lt;/ul&gt;
+        &lt;div class="gallery__items"&gt;
+            &lt;section class="gallery__item" id="intro"&gt; 
+                &lt;div class="gallery__content"&gt;&lt;/div&gt;
+            &lt;/section&gt;
+            &lt;section class="gallery__item" id="item1"&gt;
+                &lt;div class="gallery__content"&gt;&lt;/div&gt;
+            &lt;/section&gt;
+            &lt;section class="gallery__item" id="item2"&gt;
+                &lt;div class="gallery__content"&gt;&lt;/div&gt;
+            &lt;/section&gt;
+        &lt;/div&gt;
+    &lt;/main&gt;
+    &lt;script src="/resources/js/jquery-3.3.1.min.js"&gt;&lt;/script&gt;
+    &lt;script src="https://hammerjs.github.io/dist/hammer.min.js"&gt;&lt;/script&gt;
+    &lt;script src="script.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+            </pre>
+            <!-- HTML Quiz -->
+            <div class="quiz-question">
+                <p>Question 1: What does HTML stand for?</p>
+                <div class="quiz-options">
+                    <label><input type="radio" name="htmlQ1" value="a"> a) Hyper Text Makeup Language</label>
+                    <label><input type="radio" name="htmlQ1" value="b"> b) Hyper Transfer Markup Language</label>
+                    <label><input type="radio" name="htmlQ1" value="c"> c) Hyper Text Markup Language</label>
+                    <label><input type="radio" name="htmlQ1" value="d"> d) High-Level Text Markup Language</label>
+                </div>
+            </div>
+            <div class="quiz-question">
+                <p>Question 2: What is the purpose of the &lt;body&gt; element in HTML?</p>
+                <div class="quiz-options">
+                    <label><input type="radio" name="htmlQ2" value="a"> a) Defines page headings</label>
+                    <label><input type="radio" name="htmlQ2" value="b"> b) Contains the visible content of the webpage</label>
+                    <label><input type="radio" name="htmlQ2" value="c"> c) Specifies the document type</label>
+                    <label><input type="radio" name="htmlQ2" value="d"> d) Creates links to other web pages</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CSS Section -->
+    <div class="accordion-section">
+        <h2>CSS</h2>
+        <div class="accordion-section-content">
+            <p>CSS (Cascading Style Sheets) is responsible for the presentation and styling of HTML elements on the webpage.</p>
+            <!-- Insert your CSS code explanation here -->
+            <pre>
+/* CSS code from style.css */
+@font-face {
+    font-family: "Lato";
+    src: url("/resources/fonts/Lato-Regular.ttf");
+}
+/* ... (rest of your CSS code) ... */
+            </pre>
+            <!-- CSS Quiz -->
+            <div class="quiz-question">
+                <p>Question 1: What does CSS stand for?</p>
+                <div class="quiz-options">
+                    <label><input type="radio" name="cssQ1" value="a"> a) Computer Style Sheets</label>
+                    <label><input type="radio" name="cssQ1" value="b"> b) Creative Style Sheets</label>
+                    <label><input type="radio" name="cssQ1" value="c"> c) Cascading Style Sheets</label>
+                    <label><input type="radio" name="cssQ1" value="d"> d) Colorful Style Sheets</label>
+                </div>
+            </div>
+            <div class="quiz-question">
+                <p>Question 2: What is the main purpose of CSS?</p>
+                <div class="quiz-options">
+                    <label><input type="radio" name="cssQ2" value="a"> a) To define the structure of a webpage</label>
+                    <label><input type="radio" name="cssQ2" value="b"> b) To create interactive web forms</label>
+                    <label><input type="radio" name="cssQ2" value="c"> c) To control the presentation and style of web elements</label>
+                    <label><input type="radio" name="cssQ2" value="d"> d) To manage server-side scripting</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Section -->
+    <div class="accordion-section">
+        <h2>JavaScript</h2>
+        <div class="accordion-section-content">
+            <p>JavaScript adds interactivity to the webpage. It handles user interactions and dynamic behavior.</p>
+            <!-- Insert your JavaScript code explanation here -->
+            <pre>
+// JavaScript code
+$('body').on('click', '.gallery__nav li', function(e) {
+    // ... (JavaScript code explanation)
+});
+// ... (more JavaScript code) ...
+            </pre>
+            <!-- JavaScript Quiz -->
+            <div class="quiz-question">
+                <p>Question 1: What is JavaScript primarily used for?</p>
+                <div class="quiz-options">
+                    <label><input type="radio" name="jsQ1" value="a"> a) Adding structure to web content</label>
+                    <label><input type="radio" name="jsQ1" value="b"> b) Styling web elements</label>
+                    <label><input type="radio" name="jsQ1" value="c"> c) Adding interactivity to web pages</label>
+                    <label><input type="radio" name="jsQ1" value="d"> d) Creating web layouts</label>
+                </div>
+            </div>
+            <div class="quiz-question">
+                <p>Question 2: Which JavaScript library is used for touch gestures in the code?</p>
+                <div class="quiz-options">
+                    <label><input type="radio" name="jsQ2" value="a"> a) jQuery</label>
+                    <label><input type="radio" name="jsQ2" value="b"> b) Hammer.js</label>
+                    <label><input type="radio" name="jsQ2" value="c"> c) AngularJS</label>
+                    <label><input type="radio" name="jsQ2" value="d"> d) React</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript to add accordion functionality
+        const accordionSections = document.querySelectorAll('.accordion-section');
+
+        accordionSections.forEach((section) => {
+            const header = section.querySelector('h2');
+            header.addEventListener('click', () => {
+                section.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
