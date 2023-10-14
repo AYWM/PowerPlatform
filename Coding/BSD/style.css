@@ -17,6 +17,21 @@ h1 {
     color: #333;
 }
 
+
+/* Style for quiz questions and options */
+.quiz-question {
+    margin-bottom: 10px;
+}
+
+.quiz-options label {
+    display: block;
+    margin: 5px 0;
+}
+
+.quiz-options input[type="radio"] {
+    margin-right: 5px;
+}
+
 /* Define styles for quiz questions and options */
 .quiz-question {
     margin-bottom: 20px;
@@ -64,3 +79,25 @@ h1 {
     content: '\f111';
     color: #009688;
 }
+
+/* Style for the accordion sections */
+.accordion-section {
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.accordion-section h2 {
+    cursor: pointer;
+}
+
+.accordion-section-content {
+    display: none;
+}
+
+.accordion-section.active .accordion-section-content {
+    display: block;
+}
+
