@@ -1,0 +1,66 @@
+/* CSS code from style.css */
+@font-face {
+    font-family: "Lato";
+    src: url("/resources/fonts/Lato-Regular.ttf");
+}
+
+/* Add your additional CSS styles here */
+body {
+    background-color: #fff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+/* Define styles for quiz questions and options */
+.quiz-question {
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.quiz-question:hover {
+    transform: scale(1.02);
+}
+
+.quiz-options label {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #f2f2f2;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.quiz-options label:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.02);
+}
+
+.quiz-options input[type="radio"] {
+    display: none;
+}
+
+.quiz-options input[type="radio"] + label::before {
+    content: '\f10c';
+    font-family: 'Font Awesome 5 Free';
+    margin-right: 5px;
+    color: transparent;
+    transition: color 0.2s;
+}
+
+.quiz-options input[type="radio"]:checked + label::before {
+    content: '\f111';
+    color: #009688;
+}
