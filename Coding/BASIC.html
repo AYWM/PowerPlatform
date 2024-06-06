@@ -1,0 +1,766 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Basics for Kids</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        .code-block {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .tabs .tab a {
+            color: #42a5f5;
+        }
+        .tabs .tab a.active {
+            color: #0d47a1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="center-align">Programming Basics for Kids</h1>
+        <p>Welcome to the fun world of programming! This guide will take you through the basic concepts you need to understand to start your journey in computer programming.</p>
+
+        <h2>Introduction to Programming Concepts</h2>
+        <p>Programming is the process of creating instructions for computers to perform specific tasks. Think of programming like writing a recipe. Each step in the recipe is an instruction for making a dish.</p>
+
+        <h2>Interpreter vs. Compiler</h2>
+        <ul>
+            <li><strong>Interpreter:</strong> Translates code line by line and executes it immediately. (Like a student reading a manual line by line and building a LEGO castle as they go.)</li>
+            <li><strong>Compiler:</strong> Translates the entire code at once into machine code before execution. (Like a student reading the entire manual once completely and then building the entire castle from start to finish.)</li>
+        </ul>
+
+        <h2>Variables and Data Types</h2>
+        <div class="code-block">
+            <ul class="tabs">
+                <li class="tab col s2"><a href="#python1">Python</a></li>
+                <li class="tab col s2"><a href="#javascript1">JavaScript</a></li>
+                <li class="tab col s2"><a href="#c1">C</a></li>
+                <li class="tab col s2"><a href="#cpp1">C++</a></li>
+                <li class="tab col s2"><a href="#java1">Java</a></li>
+            </ul>
+            <div id="python1">
+                <pre>
+name = "Alice"   # String
+age = 21         # Integer
+height = 5.6     # Float
+is_student = True # Boolean
+                </pre>
+            </div>
+            <div id="javascript1">
+                <pre>
+let name = "Alice";   // String
+let age = 21;         // Integer
+let height = 5.6;     // Float
+let isStudent = true; // Boolean
+                </pre>
+            </div>
+            <div id="c1">
+                <pre>
+#include &lt;stdio.h&gt;
+
+int main() {
+    char name[] = "Alice";   // String
+    int age = 21;            // Integer
+    float height = 5.6;      // Float
+    int isStudent = 1;       // Boolean (1 for true)
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="cpp1">
+                <pre>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    string name = "Alice";   // String
+    int age = 21;            // Integer
+    float height = 5.6;      // Float
+    bool isStudent = true;   // Boolean
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="java1">
+                <pre>
+public class Main {
+    public static void main(String[] args) {
+        String name = "Alice";   // String
+        int age = 21;            // Integer
+        float height = 5.6f;     // Float
+        boolean isStudent = true; // Boolean
+    }
+}
+                </pre>
+            </div>
+        </div>
+
+        <h5>Interactive Variable Examples</h5>
+        <div class="code-block">
+    <div class="row">
+        <div class="input-field col s6">
+            <input id="numberInput" type="number" value="0">
+            <label for="numberInput">Number Variable</label>
+        </div>
+        <div class="input-field col s6">
+            <input id="stringInput" type="text" value="Hello">
+            <label for="stringInput">String Variable</label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s3">
+            <p>Increment Number</p>
+            <button class="btn" onclick="incrementNumber()">V = V + 1</button>
+        </div>
+        <div class="col s3">
+            <p>Decrement Number</p>
+            <button class="btn" onclick="decrementNumber()">V = V - 1</button>
+        </div>
+        <div class="col s3">
+            <p>Concatenate String</p>
+            <button class="btn" onclick="concatString()">V = V + '!'</button>
+        </div>
+        <div class="col s3">
+            <p>De-concatenate String</p>
+            <button class="btn" onclick="deconcatString()">V = V.slice(0, -1)</button>
+        </div>
+    </div>
+    
+    <p id="numberOutput">Number Output: 0</p>
+    <p id="stringOutput">String Output: Hello</p>
+</div>
+
+
+
+        <h2>Arrays (Lists)</h2>
+        <div class="code-block">
+            <ul class="tabs">
+                <li class="tab col s2"><a href="#python6">Python</a></li>
+                <li class="tab col s2"><a href="#javascript6">JavaScript</a></li>
+                <li class="tab col s2"><a href="#c6">C</a></li>
+                <li class="tab col s2"><a href="#cpp6">C++</a></li>
+                <li class="tab col s2"><a href="#java6">Java</a></li>
+            </ul>
+            <div id="python6">
+                <pre>
+fruits = ["apple", "banana", "cherry"]
+print(fruits[0])  # Output: apple
+                </pre>
+            </div>
+            <div id="javascript6">
+                <pre>
+let fruits = ["apple", "banana", "cherry"];
+console.log(fruits[0]);  // Output: apple
+                </pre>
+            </div>
+            <div id="c6">
+                <pre>
+#include &lt;stdio.h&gt;
+
+int main() {
+    char* fruits[] = {"apple", "banana", "cherry"};
+    printf("%s\n", fruits[0]);  // Output: apple
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="cpp6">
+                <pre>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    string fruits[] = {"apple", "banana", "cherry"};
+    cout &lt;&lt; fruits[0] &lt;&lt; endl;  // Output: apple
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="java6">
+                <pre>
+public class Main {
+    public static void main(String[] args) {
+        String[] fruits = {"apple", "banana", "cherry"};
+        System.out.println(fruits[0]);  // Output: apple
+    }
+}
+                </pre>
+            </div>
+        </div>
+
+        <h2>If-Else Statements</h2>
+        <div class="code-block">
+            <ul class="tabs">
+                <li class="tab col s2"><a href="#python2">Python</a></li>
+                <li class="tab col s2"><a href="#javascript2">JavaScript</a></li>
+                <li class="tab col s2"><a href="#c2">C</a></li>
+                <li class="tab col s2"><a href="#cpp2">C++</a></li>
+                <li class="tab col s2"><a href="#java2">Java</a></li>
+            </ul>
+            <div id="python2">
+                <pre>
+age = 18
+if age >= 18:
+    print("You are an adult.")
+else:
+    print("You are a minor.")
+                </pre>
+            </div>
+            <div id="javascript2">
+                <pre>
+let age = 18;
+if (age >= 18) {
+    console.log("You are an adult.");
+} else {
+    console.log("You are a minor.");
+}
+                </pre>
+            </div>
+            <div id="c2">
+                <pre>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int age = 18;
+    if (age >= 18) {
+        printf("You are an adult.\n");
+    } else {
+        printf("You are a minor.\n");
+    }
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="cpp2">
+                <pre>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int age = 18;
+    if (age >= 18) {
+        cout &lt;&lt; "You are an adult." &lt;&lt; endl;
+    } else {
+        cout &lt;&lt; "You are a minor." &lt;&lt; endl;
+    }
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="java2">
+                <pre>
+public class Main {
+    public static void main(String[] args) {
+        int age = 18;
+        if (age >= 18) {
+            System.out.println("You are an adult.");
+        } else {
+            System.out.println("You are a minor.");
+        }
+    }
+}
+                </pre>
+            </div>
+        </div>
+
+        <h2>Functions</h2>
+        <div class="code-block">
+            <ul class="tabs">
+                <li class="tab col s2"><a href="#python3">Python</a></li>
+                <li class="tab col s2"><a href="#javascript3">JavaScript</a></li>
+                <li class="tab col s2"><a href="#c3">C</a></li>
+                <li class="tab col s2"><a href="#cpp3">C++</a></li>
+                <li class="tab col s2"><a href="#java3">Java</a></li>
+            </ul>
+            <div id="python3">
+                <pre>
+def greet(name):
+    return f"Hello, {name}!"
+
+print(greet("Alice"))  # Output: Hello, Alice!
+                </pre>
+            </div>
+            <div id="javascript3">
+                <pre>
+function greet(name) {
+    return "Hello, " + name + "!";
+}
+
+console.log(greet("Alice"));  // Output: Hello, Alice!
+                </pre>
+            </div>
+            <div id="c3">
+                <pre>
+#include &lt;stdio.h&gt;
+
+char* greet(char* name) {
+    static char result[50];
+    sprintf(result, "Hello, %s!", name);
+    return result;
+}
+
+int main() {
+    printf("%s\n", greet("Alice"));  // Output: Hello, Alice!
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="cpp3">
+                <pre>
+#include &lt;iostream&gt;
+using namespace std;
+
+string greet(string name) {
+    return "Hello, " + name + "!";
+}
+
+int main() {
+    cout &lt;&lt; greet("Alice") &lt;&lt; endl;  // Output: Hello, Alice!
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="java3">
+                <pre>
+public class Main {
+    public static String greet(String name) {
+        return "Hello, " + name + "!";
+    }
+
+    public static void main(String[] args) {
+        System.out.println(greet("Alice"));  // Output: Hello, Alice!
+    }
+}
+                </pre>
+            </div>
+        </div>
+
+<h5>Real-life Function Example: Mom's Instructions</h5>
+        <div class="code-block">
+            <ul class="tabs">
+                <li class="tab col s2"><a href="#python4">Python</a></li>
+                <li class="tab col s2"><a href="#javascript4">JavaScript</a></li>
+                <li class="tab col s2"><a href="#c4">C</a></li>
+                <li class="tab col s2"><a href="#cpp4">C++</a></li>
+                <li class="tab col s2"><a href="#java4">Java</a></li>
+            </ul>
+            <div id="python4">
+                <pre>
+def have_breakfast():
+    print("Get up from bed")
+    print("Go brush teeth")
+    print("Go to dining room")
+    print("Pick up spoon")
+    print("Start eating")
+
+have_breakfast()
+                </pre>
+            </div>
+            <div id="javascript4">
+                <pre>
+function haveBreakfast() {
+    console.log("Get up from bed");
+    console.log("Go brush teeth");
+    console.log("Go to dining room");
+    console.log("Pick up spoon");
+    console.log("Start eating");
+}
+
+haveBreakfast();
+                </pre>
+            </div>
+            <div id="c4">
+                <pre>
+#include &lt;stdio.h&gt;
+
+void have_breakfast() {
+    printf("Get up from bed\n");
+    printf("Go brush teeth\n");
+    printf("Go to dining room\n");
+    printf("Pick up spoon\n");
+    printf("Start eating\n");
+}
+
+int main() {
+    have_breakfast();
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="cpp4">
+                <pre>
+#include &lt;iostream&gt;
+using namespace std;
+
+void have_breakfast() {
+    cout &lt;&lt; "Get up from bed" &lt;&lt; endl;
+    cout &lt;&lt; "Go brush teeth" &lt;&lt; endl;
+    cout &lt;&lt; "Go to dining room" &lt;&lt; endl;
+    cout &lt;&lt; "Pick up spoon" &lt;&lt; endl;
+    cout &lt;&lt; "Start eating" &lt;&lt; endl;
+}
+
+int main() {
+    have_breakfast();
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="java4">
+                <pre>
+public class Main {
+    public static void haveBreakfast() {
+        System.out.println("Get up from bed");
+        System.out.println("Go brush teeth");
+        System.out.println("Go to dining room");
+        System.out.println("Pick up spoon");
+        System.out.println("Start eating");
+    }
+
+    public static void main(String[] args) {
+        haveBreakfast();
+    }
+}
+                </pre>
+            </div>
+        </div>
+        
+        <h2>For Loops</h2>
+        <div class="code-block">
+            <ul class="tabs">
+                <li class="tab col s2"><a href="#python39">Python</a></li>
+                <li class="
+
+tab col s2"><a href="#javascript4">JavaScript</a></li>
+                <li class="tab col s2"><a href="#c39">C</a></li>
+                <li class="tab col s2"><a href="#cpp39">C++</a></li>
+                <li class="tab col s2"><a href="#java39">Java</a></li>
+            </ul>
+            <div id="python39">
+                <pre>
+for i in range(5):
+    print(i)
+                </pre>
+            </div>
+            <div id="javascript39">
+                <pre>
+for (let i = 0; i < 5; i++) {
+    console.log(i);
+}
+                </pre>
+            </div>
+            <div id="c39">
+                <pre>
+#include &lt;stdio.h&gt;
+
+int main() {
+    for (int i = 0; i < 5; i++) {
+        printf("%d\n", i);
+    }
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="cpp39">
+                <pre>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    for (int i = 0; i < 5; i++) {
+        cout &lt;&lt; i &lt;&lt; endl;
+    }
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="java39">
+                <pre>
+public class Main {
+    public static void main(String[] args) {
+        for (int i = 0; i < 5; i++) {
+            System.out.println(i);
+        }
+    }
+}
+                </pre>
+            </div>
+        </div>
+
+        <h2>While Loops (UNTILL)</h2>
+        <div class="code-block">
+            <ul class="tabs">
+                <li class="tab col s2"><a href="#python5">Python</a></li>
+                <li class="tab col s2"><a href="#javascript5">JavaScript</a></li>
+                <li class="tab col s2"><a href="#c5">C</a></li>
+                <li class="tab col s2"><a href="#cpp5">C++</a></li>
+                <li class="tab col s2"><a href="#java5">Java</a></li>
+            </ul>
+            <div id="python5">
+                <pre>
+count = 0
+while count < 5:
+    print(count)
+    count += 1
+                </pre>
+            </div>
+            <div id="javascript5">
+                <pre>
+let count = 0;
+while (count < 5) {
+    console.log(count);
+    count++;
+}
+                </pre>
+            </div>
+            <div id="c5">
+                <pre>
+#include &lt;stdio.h&gt;
+
+int main() {
+    int count = 0;
+    while (count < 5) {
+        printf("%d\n", count);
+        count++;
+    }
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="cpp5">
+                <pre>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int count = 0;
+    while (count < 5) {
+        cout &lt;&lt; count &lt;&lt; endl;
+        count++;
+    }
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="java5">
+                <pre>
+public class Main {
+    public static void main(String[] args) {
+        int count = 0;
+        while (count < 5) {
+            System.out.println(count);
+            count++;
+        }
+    }
+}
+                </pre>
+            </div>
+        </div>
+
+        <h2>Events (Mouse, Keyboard, etc.)</h2>
+        <div class="code-block">
+            <ul class="tabs">
+                <li class="tab col s2"><a href="#python7">Python</a></li>
+                <li class="tab col s2"><a href="#javascript7">JavaScript</a></li>
+                <li class="tab col s2"><a href="#c7">C</a></li>
+                <li class="tab col s2"><a href="#cpp7">C++</a></li>
+                <li class="tab col s2"><a href="#java7">Java</a></li>
+            </ul>
+            <div id="python7">
+                <pre>
+import pygame
+pygame.init()
+
+screen = pygame.display.set_mode((640, 480))
+running = True
+
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+pygame.quit()
+                </pre>
+            </div>
+            <div id="javascript7">
+ <h5>Mouse Events</h5>
+                <pre>
+document.addEventListener('click', function() {
+    alert('Mouse clicked!');
+});
+                </pre>
+                <h5>Keyboard Events</h5>
+                <pre>
+document.addEventListener('keydown', function(event) {
+    console.log(`Key pressed: ${event.key}`);
+});
+                </pre>
+                <h5>Camera Access</h5>
+                <pre>
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(function(stream) {
+    let video = document.querySelector('video');
+    video.srcObject = stream;
+})
+.catch(function(error) {
+    console.log("Error accessing camera: ", error);
+});
+                </pre>
+            </div>
+            <div id="c7">
+                <pre>
+#include &lt;stdio.h&gt;
+#include &lt;conio.h&gt;
+
+int main() {
+    char ch;
+    printf("Press any key to exit...\n");
+    ch = getch();
+    printf("You pressed: %c\n", ch);
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="cpp7">
+                <pre>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    char ch;
+    cout &lt;&lt; "Press any key to exit..." &lt;&lt; endl;
+    ch = cin.get();
+    cout &lt;&lt; "You pressed: " &lt;&lt; ch &lt;&lt; endl;
+    return 0;
+}
+                </pre>
+            </div>
+            <div id="java7">
+                <pre>
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Press any key to exit...");
+        char ch = scanner.next().charAt(0);
+        System.out.println("You pressed: " + ch);
+    }
+}
+                </pre>
+            </div>
+        </div>
+
+
+        <h2>Practical Project: Putting It All Together</h2>
+        <p>Let's create a simple interactive web page using HTML, CSS, and JavaScript. This project will help you understand how to apply the concepts you've learned.</p>
+        <hr>
+        <p>Display Input Text as Overlay on Video</p>
+        <hr>
+        <h5>HTML:</h5>
+        <div class="code-block">
+            <pre>
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Interactive Web Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1 id="heading"&gt;Hello, World!&lt;/h1&gt;
+    &lt;button id="changeTextButton"&gt;Change Text&lt;/button&gt;
+    &lt;input type="text" id="textInput" placeholder="Type something..."&gt;
+    &lt;video autoplay&gt;&lt;/video&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+            </pre>
+        </div>
+
+        <h5>CSS:</h5>
+        <div class="code-block">
+            <pre>
+body {
+    font-family: Arial, sans-serif;
+}
+h1 {
+    color: blue;
+}
+.video-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    font-size: 24px;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 8px;
+}
+            </pre>
+        </div>
+
+        <h5>JavaScript:</h5>
+        <div class="code-block">
+            <pre>
+// Event listener for button click
+document.getElementById('changeTextButton').addEventListener('click', function() {
+    let newText = document.getElementById('textInput').value;
+    document.getElementById('heading').innerText = newText;
+});
+
+// Event listener for key press
+document.addEventListener('keydown', function(event) {
+    console.log(`Key pressed: ${event.key}`);
+});
+
+// Accessing the camera
+navigator.mediaDevices.getUserMedia({ video: true })
+.then(function(stream) {
+    let video = document.querySelector('video');
+    video.srcObject = stream;
+})
+.catch(function(error) {
+    console.log("Error accessing camera: ", error);
+});
+            </pre>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var elems = document.querySelectorAll('.tabs');
+            var instances = M.Tabs.init(elems, {});
+        });
+
+        function incrementNumber() {
+            let numberInput = document.getElementById('numberInput');
+            numberInput.value = parseInt(numberInput.value) + 1;
+            document.getElementById('numberOutput').textContent = "Number Output: " + numberInput.value;
+        }
+
+        function decrementNumber() {
+            let numberInput = document.getElementById('numberInput');
+            numberInput.value = parseInt(numberInput.value) - 1;
+            document.getElementById('numberOutput').textContent = "Number Output: " + numberInput.value;
+        }
+
+        function concatString() {
+            let stringInput = document.getElementById('stringInput');
+            stringInput.value += "!";
+            document.getElementById('stringOutput').textContent = "String Output: " + stringInput.value;
+        }
+
+        function deconcatString() {
+            let stringInput = document.getElementById('stringInput');
+            stringInput.value = stringInput.value.slice(0, -1);
+            document.getElementById('stringOutput').textContent = "String Output: " + stringInput.value;
+        }
+    </script>
+</body>
+</html>
