@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Web Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: blue;
+        }
+        .video-overlay {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 24px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="heading">Hello, World!</h1>
+    <button id="changeTextButton">Change Text</button>
+    <input type="text" id="textInput" placeholder="Type something...">
+    <video autoplay></video>
+
+    <script>
+        // Event listener for button click
+        document.getElementById('changeTextButton').addEventListener('click', function() {
+            let newText = document.getElementById('textInput').value;
+            document.getElementById('heading').innerText = newText;
+        });
+
+        // Accessing the camera
+        navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function(stream) {
+            let video = document.querySelector('video');
+            video.srcObject = stream;
+
+            // Overlay text input on the video
+            let textInput = document.getElementById('textInput');
+            let overlay = document.createElement('div');
+            overlay.classList.add('video-overlay');
+            video.parentNode.appendChild(overlay);
+
+            textInput.addEventListener('input', function() {
+                overlay.textContent = this.value;
+            });
+        })
+        .catch(function(error) {
+            console.log("Error accessing camera: ", error);
+        });
+    </script>
+</body>
+</html>
