@@ -7,17 +7,48 @@
     <title>Programming Basics for Kids</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <style>
+        body {
+            background: linear-gradient(45deg, #f3e5f5, #e1f5fe);
+        }
+        h1, h2, h5, p {
+            color: #37474f;
+        }
         .code-block {
-            background-color: #f5f5f5;
+            background-color: #ffffff;
             padding: 20px;
             border-radius: 8px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .tabs .tab a {
             color: #42a5f5;
         }
         .tabs .tab a.active {
             color: #0d47a1;
+        }
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            overflow: auto;
+        }
+        .btn {
+            background: linear-gradient(45deg, #42a5f5, #1e88e5);
+        }
+        @media (max-width: 600px) {
+            pre {
+                font-size: 14px;
+                padding: 10px;
+            }
+            .tabs .tab {
+                width: auto !important;
+            }
+        }
+        .animated-btn {
+            transition: transform 0.3s ease;
+        }
+        .animated-btn:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
