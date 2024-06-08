@@ -7,54 +7,264 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            padding: 20px;
         }
         h1 {
-            color: blue;
+            color: #333;
+            text-align: center;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            margin-top: 20px;
+        }
+        video {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         .video-overlay {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             color: white;
             font-size: 24px;
             background-color: rgba(0, 0, 0, 0.5);
             padding: 10px;
             border-radius: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            max-width: 90%;
+            word-wrap: break-word;
         }
+        #colorPalette {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            justify-content: center;
+        }
+        .color-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+        }
+        #textInput {
+            width: 100%;
+            max-width: 640px;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #retryButton {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #retryButton:hover {
+            background-color: #0056b3;
+        }
+        /*.dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .watermark {
+            position: absolute;
+            font-size: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }*/
+        .watermark {
+            position: absolute;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2px 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            pointer-events: none; /* Prevent interference with click events */
+        }
+
+        .dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none; /* Prevent interference with click events */
+        }
+        #saveButton {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
-    <h1 id="heading">Hello, World!</h1>
-    <button id="changeTextButton">Change Text</button>
+    <h1 id="heading">Interactive Web Page</h1>
+    <div id="colorPalette">
+        <div class="color-box" style="background-color: red;" data-color="red"></div>
+        <div class="color-box" style="background-color: blue;" data-color="blue"></div>
+        <div class="color-box" style="background-color: green;" data-color="green"></div>
+        <div class="color-box" style="background-color: yellow;" data-color="yellow"></div>
+        <div class="color-box" style="background-color: purple;" data-color="purple"></div>
+        <label>
+        <input type="checkbox" id="roundingCheckbox">
+        Show Rounded Values
+        </label>
+    </div>
     <input type="text" id="textInput" placeholder="Type something...">
-    <video autoplay></video>
-
+     <button id="retryButton" onclick="requestCameraAccess()">Retry Camera Access</button>
+    <div class="video-container">
+        <video autoplay playsinline></video>
+        <div class="video-overlay" id="overlay">Your Text Here</div>
+    </div>
+    
+    <button id="saveButton">Save Image</button>
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"></script>
+    
     <script>
-        // Event listener for button click
-        document.getElementById('changeTextButton').addEventListener('click', function() {
-            let newText = document.getElementById('textInput').value;
-            document.getElementById('heading').innerText = newText;
+        const overlay = document.getElementById('overlay');
+        const textInput = document.getElementById('textInput');
+        const video = document.querySelector('video');
+        const retryButton = document.getElementById('retryButton');
+        const colorPalette = document.getElementById('colorPalette');
+        let chosenColor = 'red';
+
+        textInput.addEventListener('input', function() {
+            overlay.textContent = this.value;
         });
 
-        // Accessing the camera
-        navigator.mediaDevices.getUserMedia({ video: true })
-        .then(function(stream) {
-            let video = document.querySelector('video');
-            video.srcObject = stream;
+        colorPalette.addEventListener('click', function(event) {
+            if (event.target.classList.contains('color-box')) {
+                chosenColor = event.target.getAttribute('data-color');
+                video.style.boxShadow = `0 4px 8px ${chosenColor}`;
+                overlay.style.textShadow = `2px 2px 4px ${chosenColor}`;
+            }
+        });
 
-            // Overlay text input on the video
-            let textInput = document.getElementById('textInput');
-            let overlay = document.createElement('div');
-            overlay.classList.add('video-overlay');
-            video.parentNode.appendChild(overlay);
+        video.addEventListener('click', function(event) {
+            const rect = video.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
 
-            textInput.addEventListener('input', function() {
-                overlay.textContent = this.value;
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            dot.style.backgroundColor = chosenColor;
+            dot.style.left = `${x - 5}px`; // Adjust for dot size
+            dot.style.top = `${y - 5}px`;
+
+            const watermark = document.createElement('div');
+            watermark.classList.add('watermark');
+            watermark.style.left = `${x + 10}px`; // Adjust for dot size and positioning
+            watermark.style.top = `${y + 10}px`;
+
+            // Check if rounding is enabled
+            const roundingCheckbox = document.getElementById('roundingCheckbox');
+            const displayX = roundingCheckbox.checked ? Math.round(x) : x;
+            const displayY = roundingCheckbox.checked ? Math.round(y) : y;
+
+            watermark.textContent = `(${displayX}, ${displayY})`;
+
+            const videoContainer = document.querySelector('.video-container');
+            videoContainer.appendChild(dot);
+            videoContainer.appendChild(watermark);
+        });
+
+        // Save Image button functionality
+        document.getElementById('saveButton').addEventListener('click', function() {
+            const video = document.querySelector('video');
+            const overlay = document.querySelector('.video-overlay');
+            const dots = document.querySelectorAll('.dot');
+            const watermarks = document.querySelectorAll('.watermark');
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas dimensions to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Draw the current video frame onto the canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Draw overlay text
+            ctx.font = `${window.getComputedStyle(overlay).fontSize} ${window.getComputedStyle(overlay).fontFamily}`;
+            ctx.fillStyle = window.getComputedStyle(overlay).color;
+            const overlayX = parseInt(window.getComputedStyle(overlay).left);
+            const overlayY = parseInt(window.getComputedStyle(overlay).top) + parseInt(window.getComputedStyle(overlay).fontSize);
+            ctx.fillText(overlay.textContent, overlayX, overlayY);
+
+            // Draw dots
+            dots.forEach(dot => {
+                const dotX = parseInt(dot.style.left) + (parseInt(getComputedStyle(dot).width) / 2);
+                const dotY = parseInt(dot.style.top) + (parseInt(getComputedStyle(dot).height) / 2);
+                ctx.beginPath();
+                ctx.arc(dotX, dotY, parseInt(getComputedStyle(dot).width) / 2, 0, Math.PI * 2);
+                ctx.fillStyle = getComputedStyle(dot).backgroundColor;
+                ctx.fill();
             });
-        })
-        .catch(function(error) {
-            console.log("Error accessing camera: ", error);
+
+            // Draw watermarks
+            watermarks.forEach(watermark => {
+                ctx.font = `${window.getComputedStyle(watermark).fontSize} ${window.getComputedStyle(watermark).fontFamily}`;
+                ctx.fillStyle = window.getComputedStyle(watermark).color;
+                const watermarkX = parseInt(window.getComputedStyle(watermark).left);
+                const watermarkY = parseInt(window.getComputedStyle(watermark).top) + parseInt(window.getComputedStyle(watermark).fontSize);
+                ctx.fillText(watermark.textContent, watermarkX, watermarkY);
+            });
+
+            // Convert canvas to image and download
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'screenshot.png';
+            link.click();
         });
+
+
+        function startVideoStream() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+                retryButton.style.display = 'none';
+            })
+            .catch(function(error) {
+                console.log("Error accessing camera: ", error);
+                overlay.textContent = 'Camera access denied. Please allow camera access and click Retry.';
+                retryButton.style.display = 'block';
+            });
+        }
+
+        function requestCameraAccess() {
+            startVideoStream();
+        }
+
+        // Initialize video stream on page load
+        startVideoStream();
     </script>
 </body>
 </html>
