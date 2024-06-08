@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +12,10 @@
         h1, h2, h5, p {
             color: #37474f;
         }
-        
+        .code-block-container {
+            position: relative;
+/*            display: inline-block;*/
+        }
         .code-block {
             background-color: #ffffff;
             padding: 20px;
@@ -103,10 +105,10 @@
         .highlight {
             background-color: yellow;
         }
-         .video-container {
+        .video-container {
             position: relative;
             width: 100%;
-            max-width: 560px;
+/*            max-width: 560px;*/
             margin: auto;
         }
         .video-placeholder {
@@ -119,7 +121,7 @@
         }
         .play-button {
             position: absolute;
-            top: 50%;
+            top: 39%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 60px;
@@ -127,6 +129,19 @@
             background: url('https://img.icons8.com/ios-filled/100/000000/play-button-circled.png') no-repeat center center;
             background-size: cover;
             pointer-events: none;
+        }
+        .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #f0f0f0;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-button:hover {
+            background-color: #e0e0e0;
         }
     </style>
 </head>
@@ -199,7 +214,7 @@
             <li><strong>Interpreter:</strong> Translates code line by line and executes it immediately. (Like a student reading a manual line by line and building a LEGO castle as they go.)</li>
             <li><strong>Compiler:</strong> Translates the entire code at once into machine code before execution. (Like a student reading the entire manual once completely and then building the entire castle from start to finish.)</li>
         </ul>
-        <div class="video-container">
+        <div class="video-container" id="e4ax90XmUBc">
             <div class="video-placeholder" onclick="loadVideo('e4ax90XmUBc')">
                 <img src="https://img.youtube.com/vi/e4ax90XmUBc/hqdefault.jpg" alt="Video Thumbnail">
                 <div class="play-button"></div>
@@ -216,24 +231,32 @@
                 <li class="tab col s2"><a href="#cpp1">C++</a></li>
                 <li class="tab col s2"><a href="#java1">Java</a></li>
             </ul>
-            <div id="python1">
+            <div id="python1" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 name = "Alice"   # String
 age = 21         # Integer
 height = 5.6     # Float
 is_student = True # Boolean
+</code>
                 </pre>
             </div>
-            <div id="javascript1">
+            <div id="javascript1" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 let name = "Alice";   // String
 let age = 21;         // Integer
 let height = 5.6;     // Float
 let isStudent = true; // Boolean
+</code>
                 </pre>
             </div>
-            <div id="c1">
+            <div id="c1" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;stdio.h&gt;
 
 int main() {
@@ -243,10 +266,13 @@ int main() {
     int isStudent = 1;       // Boolean (1 for true)
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="cpp1">
+            <div id="cpp1" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;iostream&gt;
 using namespace std;
 
@@ -257,10 +283,13 @@ int main() {
     bool isStudent = true;   // Boolean
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="java1">
+            <div id="java1" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 public class Main {
     public static void main(String[] args) {
         String name = "Alice";   // String
@@ -269,6 +298,7 @@ public class Main {
         boolean isStudent = true; // Boolean
     }
 }
+</code>
                 </pre>
             </div>
         </div>
@@ -320,20 +350,28 @@ public class Main {
                 <li class="tab col s2"><a href="#cpp6">C++</a></li>
                 <li class="tab col s2"><a href="#java6">Java</a></li>
             </ul>
-            <div id="python6">
+            <div id="python6" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 fruits = ["apple", "banana", "cherry"]
 print(fruits[0])  # Output: apple
+</code>
                 </pre>
             </div>
-            <div id="javascript6">
+            <div id="javascript6" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 let fruits = ["apple", "banana", "cherry"];
 console.log(fruits[0]);  // Output: apple
+</code>
                 </pre>
             </div>
-            <div id="c6">
+            <div id="c6" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;stdio.h&gt;
 
 int main() {
@@ -341,10 +379,13 @@ int main() {
     printf("%s\n", fruits[0]);  // Output: apple
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="cpp6">
+            <div id="cpp6" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;iostream&gt;
 using namespace std;
 
@@ -353,16 +394,20 @@ int main() {
     cout &lt;&lt; fruits[0] &lt;&lt; endl;  // Output: apple
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="java6">
+            <div id="java6" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 public class Main {
     public static void main(String[] args) {
         String[] fruits = {"apple", "banana", "cherry"};
         System.out.println(fruits[0]);  // Output: apple
     }
 }
+</code>
                 </pre>
             </div>
         </div>
@@ -376,27 +421,35 @@ public class Main {
                 <li class="tab col s2"><a href="#cpp2">C++</a></li>
                 <li class="tab col s2"><a href="#java2">Java</a></li>
             </ul>
-            <div id="python2">
+            <div id="python2" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 age = 18
 if age >= 18:
     print("You are an adult.")
 else:
     print("You are a minor.")
+</code>
                 </pre>
             </div>
-            <div id="javascript2">
+            <div id="javascript2" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 let age = 18;
 if (age >= 18) {
     console.log("You are an adult.");
 } else {
     console.log("You are a minor.");
 }
+</code>
                 </pre>
             </div>
-            <div id="c2">
+            <div id="c2" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;stdio.h&gt;
 
 int main() {
@@ -408,10 +461,13 @@ int main() {
     }
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="cpp2">
+            <div id="cpp2" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;iostream&gt;
 using namespace std;
 
@@ -424,10 +480,13 @@ int main() {
     }
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="java2">
+            <div id="java2" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 public class Main {
     public static void main(String[] args) {
         int age = 18;
@@ -438,6 +497,7 @@ public class Main {
         }
     }
 }
+</code>
                 </pre>
             </div>
         </div>
@@ -451,25 +511,33 @@ public class Main {
                 <li class="tab col s2"><a href="#cpp3">C++</a></li>
                 <li class="tab col s2"><a href="#java3">Java</a></li>
             </ul>
-            <div id="python3">
+            <div id="python3" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 def greet(name):
     return f"Hello, {name}!"
 
 print(greet("Alice"))  # Output: Hello, Alice!
+</code>
                 </pre>
             </div>
-            <div id="javascript3">
+            <div id="javascript3" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 function greet(name) {
     return "Hello, " + name + "!";
 }
 
 console.log(greet("Alice"));  // Output: Hello, Alice!
+</code>
                 </pre>
             </div>
-            <div id="c3">
+            <div id="c3" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;stdio.h&gt;
 
 char* greet(char* name) {
@@ -482,10 +550,13 @@ int main() {
     printf("%s\n", greet("Alice"));  // Output: Hello, Alice!
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="cpp3">
+            <div id="cpp3" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;iostream&gt;
 using namespace std;
 
@@ -497,10 +568,13 @@ int main() {
     cout &lt;&lt; greet("Alice") &lt;&lt; endl;  // Output: Hello, Alice!
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="java3">
+            <div id="java3" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 public class Main {
     public static String greet(String name) {
         return "Hello, " + name + "!";
@@ -510,6 +584,7 @@ public class Main {
         System.out.println(greet("Alice"));  // Output: Hello, Alice!
     }
 }
+</code>
                 </pre>
             </div>
         </div>
@@ -523,8 +598,10 @@ public class Main {
                 <li class="tab col s2"><a href="#cpp4">C++</a></li>
                 <li class="tab col s2"><a href="#java4">Java</a></li>
             </ul>
-            <div id="python4">
+            <div id="python4" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 def have_breakfast():
     print("Get up from bed")
     print("Go brush teeth")
@@ -533,10 +610,13 @@ def have_breakfast():
     print("Start eating")
 
 have_breakfast()
+</code>
                 </pre>
             </div>
-            <div id="javascript4">
+            <div id="javascript4" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 function haveBreakfast() {
     console.log("Get up from bed");
     console.log("Go brush teeth");
@@ -546,10 +626,13 @@ function haveBreakfast() {
 }
 
 haveBreakfast();
+</code>
                 </pre>
             </div>
-            <div id="c4">
+            <div id="c4" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;stdio.h&gt;
 
 void have_breakfast() {
@@ -564,10 +647,13 @@ int main() {
     have_breakfast();
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="cpp4">
+            <div id="cpp4" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;iostream&gt;
 using namespace std;
 
@@ -583,10 +669,13 @@ int main() {
     have_breakfast();
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="java4">
+            <div id="java4" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 public class Main {
     public static void haveBreakfast() {
         System.out.println("Get up from bed");
@@ -600,6 +689,7 @@ public class Main {
         haveBreakfast();
     }
 }
+</code>
                 </pre>
             </div>
         </div>
@@ -608,28 +698,34 @@ public class Main {
         <div class="code-block">
             <ul class="tabs">
                 <li class="tab col s2"><a href="#python39">Python</a></li>
-                <li class="
-
-tab col s2"><a href="#javascript4">JavaScript</a></li>
+                <li class="tab col s2"><a href="#javascript39">JavaScript</a></li>
                 <li class="tab col s2"><a href="#c39">C</a></li>
                 <li class="tab col s2"><a href="#cpp39">C++</a></li>
                 <li class="tab col s2"><a href="#java39">Java</a></li>
             </ul>
-            <div id="python39">
+            <div id="python39" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 for i in range(5):
     print(i)
+</code>
                 </pre>
             </div>
-            <div id="javascript39">
+            <div id="javascript39" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 for (let i = 0; i < 5; i++) {
     console.log(i);
 }
+</code>
                 </pre>
             </div>
-            <div id="c39">
+            <div id="c39" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;stdio.h&gt;
 
 int main() {
@@ -638,10 +734,13 @@ int main() {
     }
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="cpp39">
+            <div id="cpp39" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;iostream&gt;
 using namespace std;
 
@@ -651,10 +750,13 @@ int main() {
     }
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="java39">
+            <div id="java39" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 public class Main {
     public static void main(String[] args) {
         for (int i = 0; i < 5; i++) {
@@ -662,6 +764,7 @@ public class Main {
         }
     }
 }
+</code>
                 </pre>
             </div>
         </div>
@@ -675,25 +778,33 @@ public class Main {
                 <li class="tab col s2"><a href="#cpp5">C++</a></li>
                 <li class="tab col s2"><a href="#java5">Java</a></li>
             </ul>
-            <div id="python5">
+            <div id="python5" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 count = 0
 while count < 5:
     print(count)
     count += 1
+</code>
                 </pre>
             </div>
-            <div id="javascript5">
+            <div id="javascript5" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 let count = 0;
 while (count < 5) {
     console.log(count);
     count++;
 }
+</code>
                 </pre>
             </div>
-            <div id="c5">
+            <div id="c5" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;stdio.h&gt;
 
 int main() {
@@ -704,10 +815,13 @@ int main() {
     }
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="cpp5">
+            <div id="cpp5" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;iostream&gt;
 using namespace std;
 
@@ -719,10 +833,13 @@ int main() {
     }
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="java5">
+            <div id="java5" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 public class Main {
     public static void main(String[] args) {
         int count = 0;
@@ -732,6 +849,7 @@ public class Main {
         }
     }
 }
+</code>
                 </pre>
             </div>
         </div>
@@ -745,8 +863,10 @@ public class Main {
                 <li class="tab col s2"><a href="#cpp7">C++</a></li>
                 <li class="tab col s2"><a href="#java7">Java</a></li>
             </ul>
-            <div id="python7">
+            <div id="python7" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 import pygame
 pygame.init()
 
@@ -759,23 +879,37 @@ while running:
             running = False
 
 pygame.quit()
+</code>
                 </pre>
             </div>
             <div id="javascript7">
  <h5>Mouse Events</h5>
-                <pre>
+ <div class="code-block-container">
+    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre>
+<code>
 document.addEventListener('click', function() {
     alert('Mouse clicked!');
 });
-                </pre>
+</code>
+        </pre>
+    </div>
                 <h5>Keyboard Events</h5>
+<div class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 document.addEventListener('keydown', function(event) {
     console.log(`Key pressed: ${event.key}`);
 });
+</code>
                 </pre>
+</div>
                 <h5>Camera Access</h5>
+<div class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 navigator.mediaDevices.getUserMedia({ video: true })
 .then(function(stream) {
     let video = document.querySelector('video');
@@ -784,10 +918,14 @@ navigator.mediaDevices.getUserMedia({ video: true })
 .catch(function(error) {
     console.log("Error accessing camera: ", error);
 });
+</code>
                 </pre>
+ </div>       
             </div>
-            <div id="c7">
+            <div id="c7" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;stdio.h&gt;
 #include &lt;conio.h&gt;
 
@@ -798,10 +936,13 @@ int main() {
     printf("You pressed: %c\n", ch);
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="cpp7">
+            <div id="cpp7" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 #include &lt;iostream&gt;
 using namespace std;
 
@@ -812,10 +953,13 @@ int main() {
     cout &lt;&lt; "You pressed: " &lt;&lt; ch &lt;&lt; endl;
     return 0;
 }
+</code>
                 </pre>
             </div>
-            <div id="java7">
+            <div id="java7" class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
+<code>
 import java.util.Scanner;
 
 public class Main {
@@ -826,6 +970,7 @@ public class Main {
         System.out.println("You pressed: " + ch);
     }
 }
+</code>
                 </pre>
             </div>
         </div>
@@ -838,68 +983,306 @@ public class Main {
         <hr>
         <h5>HTML:</h5>
         <div class="code-block">
-            <pre>
+            <div class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <pre>
+<code>
 &lt;!DOCTYPE html&gt;
-&lt;html&gt;
+&lt;html lang="en"&gt;
 &lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
     &lt;title&gt;Interactive Web Page&lt;/title&gt;
+    &lt;style&gt;
+        /* css style   */
+    &lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
-    &lt;h1 id="heading"&gt;Hello, World!&lt;/h1&gt;
-    &lt;button id="changeTextButton"&gt;Change Text&lt;/button&gt;
+    &lt;h1 id="heading"&gt;Interactive Web Page&lt;/h1&gt;
+    &lt;div id="colorPalette"&gt;
+        &lt;div class="color-box" style="background-color: red;" data-color="red"&gt;&lt;/div&gt;
+        &lt;div class="color-box" style="background-color: blue;" data-color="blue"&gt;&lt;/div&gt;
+        &lt;div class="color-box" style="background-color: green;" data-color="green"&gt;&lt;/div&gt;
+        &lt;div class="color-box" style="background-color: yellow;" data-color="yellow"&gt;&lt;/div&gt;
+        &lt;div class="color-box" style="background-color: purple;" data-color="purple"&gt;&lt;/div&gt;
+        &lt;label&gt;
+        &lt;input type="checkbox" id="roundingCheckbox"&gt;
+        Show Rounded Values
+        &lt;/label&gt;
+    &lt;/div&gt;
     &lt;input type="text" id="textInput" placeholder="Type something..."&gt;
-    &lt;video autoplay&gt;&lt;/video&gt;
+     &lt;button id="retryButton" onclick="requestCameraAccess()"&gt;Retry Camera Access&lt;/button&gt;
+    &lt;div class="video-container"&gt;
+        &lt;video autoplay playsinline&gt;&lt;/video&gt;
+        &lt;div class="video-overlay" id="overlay"&gt;Your Text Here&lt;/div&gt;
+    &lt;/div&gt;
+    
+    &lt;button id="saveButton"&gt;Save Image&lt;/button&gt;
+    &lt;script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.7/dist/html2canvas.min.js"&gt;&lt;/script&gt;
+    
+    &lt;script&gt;
+        // js code
+    &lt;/script&gt;
 &lt;/body&gt;
 &lt;/html&gt;
+</code>
             </pre>
+</div>
         </div>
 
         <h5>CSS:</h5>
         <div class="code-block">
-            <pre>
+            <div class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <pre>
+<code>
 body {
-    font-family: Arial, sans-serif;
-}
-h1 {
-    color: blue;
-}
-.video-overlay {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    color: white;
-    font-size: 24px;
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 10px;
-    border-radius: 8px;
-}
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            max-width: 640px;
+            margin-top: 20px;
+        }
+        video {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .video-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 24px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            text-align: center;
+            max-width: 90%;
+            word-wrap: break-word;
+        }
+        #colorPalette {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            justify-content: center;
+        }
+        .color-box {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid #fff;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+        }
+        #textInput {
+            width: 100%;
+            max-width: 640px;
+            padding: 10px;
+            margin-top: 20px;
+            font-size: 18px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #retryButton {
+            display: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #retryButton:hover {
+            background-color: #0056b3;
+        }
+        /*.dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .watermark {
+            position: absolute;
+            font-size: 10px;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2px 4px;
+            border-radius: 3px;
+        }*/
+        .watermark {
+            position: absolute;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 2px 5px;
+            border-radius: 5px;
+            font-size: 12px;
+            pointer-events: none; /* Prevent interference with click events */
+        }
+
+        .dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none; /* Prevent interference with click events */
+        }
+        #saveButton {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </code>
             </pre>
+        </div>
         </div>
 
         <h5>JavaScript:</h5>
         <div class="code-block">
-            <pre>
-// Event listener for button click
-document.getElementById('changeTextButton').addEventListener('click', function() {
-    let newText = document.getElementById('textInput').value;
-    document.getElementById('heading').innerText = newText;
-});
+            <div class="code-block-container">
+                <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                <pre>
+<code>
+const overlay = document.getElementById('overlay');
+        const textInput = document.getElementById('textInput');
+        const video = document.querySelector('video');
+        const retryButton = document.getElementById('retryButton');
+        const colorPalette = document.getElementById('colorPalette');
+        let chosenColor = 'red';
 
-// Event listener for key press
-document.addEventListener('keydown', function(event) {
-    console.log(`Key pressed: ${event.key}`);
-});
+        textInput.addEventListener('input', function() {
+            overlay.textContent = this.value;
+        });
 
-// Accessing the camera
-navigator.mediaDevices.getUserMedia({ video: true })
-.then(function(stream) {
-    let video = document.querySelector('video');
-    video.srcObject = stream;
-})
-.catch(function(error) {
-    console.log("Error accessing camera: ", error);
-});
+        colorPalette.addEventListener('click', function(event) {
+            if (event.target.classList.contains('color-box')) {
+                chosenColor = event.target.getAttribute('data-color');
+                video.style.boxShadow = `0 4px 8px ${chosenColor}`;
+                overlay.style.textShadow = `2px 2px 4px ${chosenColor}`;
+            }
+        });
+
+        video.addEventListener('click', function(event) {
+            const rect = video.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            dot.style.backgroundColor = chosenColor;
+            dot.style.left = `${x - 5}px`; // Adjust for dot size
+            dot.style.top = `${y - 5}px`;
+
+            const watermark = document.createElement('div');
+            watermark.classList.add('watermark');
+            watermark.style.left = `${x + 10}px`; // Adjust for dot size and positioning
+            watermark.style.top = `${y + 10}px`;
+
+            // Check if rounding is enabled
+            const roundingCheckbox = document.getElementById('roundingCheckbox');
+            const displayX = roundingCheckbox.checked ? Math.round(x) : x;
+            const displayY = roundingCheckbox.checked ? Math.round(y) : y;
+
+            watermark.textContent = `(${displayX}, ${displayY})`;
+
+            const videoContainer = document.querySelector('.video-container');
+            videoContainer.appendChild(dot);
+            videoContainer.appendChild(watermark);
+        });
+
+        // Save Image button functionality
+        document.getElementById('saveButton').addEventListener('click', function() {
+            const video = document.querySelector('video');
+            const overlay = document.querySelector('.video-overlay');
+            const dots = document.querySelectorAll('.dot');
+            const watermarks = document.querySelectorAll('.watermark');
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Set canvas dimensions to match video
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // Draw the current video frame onto the canvas
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Draw overlay text
+            ctx.font = `${window.getComputedStyle(overlay).fontSize} ${window.getComputedStyle(overlay).fontFamily}`;
+            ctx.fillStyle = window.getComputedStyle(overlay).color;
+            const overlayX = parseInt(window.getComputedStyle(overlay).left);
+            const overlayY = parseInt(window.getComputedStyle(overlay).top) + parseInt(window.getComputedStyle(overlay).fontSize);
+            ctx.fillText(overlay.textContent, overlayX, overlayY);
+
+            // Draw dots
+            dots.forEach(dot => {
+                const dotX = parseInt(dot.style.left) + (parseInt(getComputedStyle(dot).width) / 2);
+                const dotY = parseInt(dot.style.top) + (parseInt(getComputedStyle(dot).height) / 2);
+                ctx.beginPath();
+                ctx.arc(dotX, dotY, parseInt(getComputedStyle(dot).width) / 2, 0, Math.PI * 2);
+                ctx.fillStyle = getComputedStyle(dot).backgroundColor;
+                ctx.fill();
+            });
+
+            // Draw watermarks
+            watermarks.forEach(watermark => {
+                ctx.font = `${window.getComputedStyle(watermark).fontSize} ${window.getComputedStyle(watermark).fontFamily}`;
+                ctx.fillStyle = window.getComputedStyle(watermark).color;
+                const watermarkX = parseInt(window.getComputedStyle(watermark).left);
+                const watermarkY = parseInt(window.getComputedStyle(watermark).top) + parseInt(window.getComputedStyle(watermark).fontSize);
+                ctx.fillText(watermark.textContent, watermarkX, watermarkY);
+            });
+
+            // Convert canvas to image and download
+            const link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'screenshot.png';
+            link.click();
+        });
+
+
+        function startVideoStream() {
+            navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                video.srcObject = stream;
+                retryButton.style.display = 'none';
+            })
+            .catch(function(error) {
+                console.log("Error accessing camera: ", error);
+                overlay.textContent = 'Camera access denied. Please allow camera access and click Retry.';
+                retryButton.style.display = 'block';
+            });
+        }
+
+        function requestCameraAccess() {
+            startVideoStream();
+        }
+
+        // Initialize video stream on page load
+        startVideoStream();
+    </code>
             </pre>
+        </div>
         </div>
     </div>
 
@@ -1017,10 +1400,23 @@ navigator.mediaDevices.getUserMedia({ video: true })
             document.getElementById('stringOutput').textContent = "String Output: " + stringInput.value;
         }
         function loadVideo(videoId) {
-            const videoContainer = document.querySelector('.video-container');
+            const videoContainer = document.querySelector('.video-container#'+videoId);
             videoContainer.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}?autoplay=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
         }
 
+        function copyCode(button) {
+            const codeBlock = button.nextElementSibling;
+            const code = codeBlock.textContent;
+
+            navigator.clipboard.writeText(code).then(() => {
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
+        }
 
     </script>
 </body>
