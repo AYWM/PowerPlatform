@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programming Basics for Kids</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous" />
+
     <style>
         body {
             background: linear-gradient(45deg, #f3e5f5, #e1f5fe);
         }
-        h1, h2, h5, p {
+        h1, h2,h3, h5, p {
             color: #37474f;
         }
         .code-block-container {
@@ -102,8 +105,8 @@
         .bookmarks a:hover {
             background-color: #004d40;
         }
-        .highlight {
-            background-color: yellow;
+        .highlight td {
+            background-color: #e0f7fa; /* Light blue background color */
         }
         .video-container {
             position: relative;
@@ -143,11 +146,44 @@
         .copy-button:hover {
             background-color: #e0e0e0;
         }
+        .project-container {
+            margin-bottom: 20px;
+        }
+        .project-header {
+            cursor: pointer;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 5px;
+        }
+
+        .project-header h3 {
+            margin: 0;
+            font-size: 18px; /* Smaller font size */
+            color: #333;
+        }
+        .project-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+            background-color: #fff;
+        }
+
+        .project-content.show {
+            display: block; /* Show content when toggled */
+        }
+        .collapse-icon {
+            font-size: 16px;
+        }
     </style>
 </head>
+
 <body>
 
-     <!-- Search Bar -->
+    <!-- Search Bar -->
     <!-- <div class="container search-bar">
         <div class="row">
             <div class="input-field col s12">
@@ -165,7 +201,7 @@
                 <input id="search" type="text" placeholder="Search..." onkeydown="if (event.key === 'Enter') performSearch()">
                 <div id="dropdown" class="dropdown"></div>
             </div>
-        <!--     <div class="input-field col s2 m2">
+            <!--     <div class="input-field col s2 m2">
                 <button class="btn waves-effect waves-light" onclick="performSearch()">Search</button>
             </div>
             <div class="input-field col s3 m2">
@@ -194,19 +230,20 @@
 
         <h2 id="intro">Introduction to Programming Concepts</h2>
         <p>
-            Imagine you have a robot.<br />
-            --<br />
-            This robot can do lots of cool things.<br />
-            --<br />
-            Like play music, move around, or even tell jokes.<br />
-            -- <br />
-            But here's the thing: the robot doesn't know how to do any of these things by itself.<br />
-            --<br />
-            It needs you to tell it exactly what to do.<br />
-            --<br />
-            <b>Programming is like writing a list of instructions for the robot so it can understand what you want it to do.</b><br />
-            --<br />
-            These instructions are called "<u><b>code</b></u>".
+            Imagine you have a robot.
+            <br /> --
+            <br /> This robot can do lots of cool things.
+            <br /> --
+            <br /> Like play music, move around, or even tell jokes.
+            <br /> --
+            <br /> But here's the thing: the robot doesn't know how to do any of these things by itself.
+            <br /> --
+            <br /> It needs you to tell it exactly what to do.
+            <br /> --
+            <br />
+            <b>Programming is like writing a list of instructions for the robot so it can understand what you want it to do.</b>
+            <br /> --
+            <br /> These instructions are called "<u><b>code</b></u>".
         </p>
 
         <h2 id="translators">Translators: Interpreter vs. Compiler</h2>
@@ -305,39 +342,39 @@ public class Main {
 
         <h5>Interactive Variable Examples</h5>
         <div class="code-block">
-    <div class="row">
-        <div class="input-field col s6">
-            <input id="numberInput" type="number" value="0">
-            <label for="numberInput">Number Variable</label>
-        </div>
-        <div class="input-field col s6">
-            <input id="stringInput" type="text" value="Hello">
-            <label for="stringInput">String Variable</label>
-        </div>
-    </div>
+            <div class="row">
+                <div class="input-field col s6">
+                    <input id="numberInput" type="number" value="0">
+                    <label for="numberInput">Number Variable</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="stringInput" type="text" value="Hello">
+                    <label for="stringInput">String Variable</label>
+                </div>
+            </div>
 
-    <div class="row">
-        <div class="col s3">
-            <p>Increment Number</p>
-            <button class="btn" onclick="incrementNumber()">V = V + 1</button>
+            <div class="row">
+                <div class="col s3">
+                    <p>Increment Number</p>
+                    <button class="btn" onclick="incrementNumber()">V = V + 1</button>
+                </div>
+                <div class="col s3">
+                    <p>Decrement Number</p>
+                    <button class="btn" onclick="decrementNumber()">V = V - 1</button>
+                </div>
+                <div class="col s3">
+                    <p>Concatenate String</p>
+                    <button class="btn" onclick="concatString()">V = V + '!'</button>
+                </div>
+                <div class="col s3">
+                    <p>De-concatenate String</p>
+                    <button class="btn" onclick="deconcatString()">V = V.slice(0, -1)</button>
+                </div>
+            </div>
+
+            <p id="numberOutput">Number Output: 0</p>
+            <p id="stringOutput">String Output: Hello</p>
         </div>
-        <div class="col s3">
-            <p>Decrement Number</p>
-            <button class="btn" onclick="decrementNumber()">V = V - 1</button>
-        </div>
-        <div class="col s3">
-            <p>Concatenate String</p>
-            <button class="btn" onclick="concatString()">V = V + '!'</button>
-        </div>
-        <div class="col s3">
-            <p>De-concatenate String</p>
-            <button class="btn" onclick="deconcatString()">V = V.slice(0, -1)</button>
-        </div>
-    </div>
-    
-    <p id="numberOutput">Number Output: 0</p>
-    <p id="stringOutput">String Output: Hello</p>
-</div>
 
 
 
@@ -589,7 +626,7 @@ public class Main {
             </div>
         </div>
 
-<h5>Real-life Function Example: Mom's Instructions</h5>
+        <h5>Real-life Function Example: Mom's Instructions</h5>
         <div class="code-block">
             <ul class="tabs">
                 <li class="tab col s2"><a href="#python4">Python</a></li>
@@ -693,7 +730,7 @@ public class Main {
                 </pre>
             </div>
         </div>
-        
+
         <h2 id="for_loop">For Loops</h2>
         <div class="code-block">
             <ul class="tabs">
@@ -883,32 +920,32 @@ pygame.quit()
                 </pre>
             </div>
             <div id="javascript7">
- <h5>Mouse Events</h5>
- <div class="code-block-container">
-    <button class="copy-button" onclick="copyCode(this)">Copy</button>
-        <pre>
+                <h5>Mouse Events</h5>
+                <div class="code-block-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre>
 <code>
 document.addEventListener('click', function() {
     alert('Mouse clicked!');
 });
 </code>
         </pre>
-    </div>
+                </div>
                 <h5>Keyboard Events</h5>
-<div class="code-block-container">
-                <button class="copy-button" onclick="copyCode(this)">Copy</button>
-                <pre>
+                <div class="code-block-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre>
 <code>
 document.addEventListener('keydown', function(event) {
     console.log(`Key pressed: ${event.key}`);
 });
 </code>
                 </pre>
-</div>
+                </div>
                 <h5>Camera Access</h5>
-<div class="code-block-container">
-                <button class="copy-button" onclick="copyCode(this)">Copy</button>
-                <pre>
+                <div class="code-block-container">
+                    <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                    <pre>
 <code>
 navigator.mediaDevices.getUserMedia({ video: true })
 .then(function(stream) {
@@ -920,7 +957,7 @@ navigator.mediaDevices.getUserMedia({ video: true })
 });
 </code>
                 </pre>
- </div>       
+                </div>
             </div>
             <div id="c7" class="code-block-container">
                 <button class="copy-button" onclick="copyCode(this)">Copy</button>
@@ -979,13 +1016,23 @@ public class Main {
         <h2>Practical Project: Putting It All Together</h2>
         <p>Let's create a simple interactive web page using HTML, CSS, and JavaScript. This project will help you understand how to apply the concepts you've learned.</p>
         <hr>
-        <p>Display Input Text as Overlay on Video</p> <a href="https://raw.githubusercontent.com/AYWM/PowerPlatform/main/Coding/BASIC_PRACTICAL_EXAMPLE.html" target="_blank">Example Code</a> <a href="https://aywm.github.io/PowerPlatform/Coding/BASIC_PRACTICAL_EXAMPLE.html" target="_blank">Example Page</a>
-        <hr>
-        <h5>HTML:</h5>
-        <div class="code-block">
-            <div class="code-block-container">
-                <button class="copy-button" onclick="copyCode(this)">Copy</button>
-                <pre>
+        <div class="project-container">
+            <div class="project-header" onclick="toggleProject('project1')">
+                <h3>Display Input Text as Overlay on Video (HTML, CSS, JS)</h3>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="project-content" id="project1">
+                <a href="https://raw.githubusercontent.com/AYWM/PowerPlatform/main/Coding/BASIC_PRACTICAL_EXAMPLE.html" target="_blank">
+                    <i class="fas fa-code"></i> Example Code
+                </a>
+                <a href="https://aywm.github.io/PowerPlatform/Coding/BASIC_PRACTICAL_EXAMPLE.html" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Example Page
+                </a>
+                <h5>HTML:</h5>
+                <div class="code-block">
+                    <div class="code-block-container">
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                        <pre>
 <code>
 &lt;!DOCTYPE html&gt;
 &lt;html lang="en"&gt;
@@ -1027,14 +1074,14 @@ public class Main {
 &lt;/html&gt;
 </code>
             </pre>
-</div>
-        </div>
+                    </div>
+                </div>
 
-        <h5>CSS:</h5>
-        <div class="code-block">
-            <div class="code-block-container">
-                <button class="copy-button" onclick="copyCode(this)">Copy</button>
-                <pre>
+                <h5>CSS:</h5>
+                <div class="code-block">
+                    <div class="code-block-container">
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                        <pre>
 <code>
 body {
             font-family: Arial, sans-serif;
@@ -1154,14 +1201,14 @@ body {
         }
     </code>
             </pre>
-        </div>
-        </div>
+                    </div>
+                </div>
 
-        <h5>JavaScript:</h5>
-        <div class="code-block">
-            <div class="code-block-container">
-                <button class="copy-button" onclick="copyCode(this)">Copy</button>
-                <pre>
+                <h5>JavaScript:</h5>
+                <div class="code-block">
+                    <div class="code-block-container">
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                        <pre>
 <code>
 const overlay = document.getElementById('overlay');
         const textInput = document.getElementById('textInput');
@@ -1282,23 +1329,404 @@ const overlay = document.getElementById('overlay');
         startVideoStream();
     </code>
             </pre>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
-    </div>
 
-    <div class="container">
+        <hr>
+
+        <div class="project-container">
+            <div class="project-header" onclick="toggleProject('project2')">
+                <h3>Phaser: 2d Game Framework (HTML, CSS, JS)</h3>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="project-content" id="project2">
+                <a href="https://raw.githubusercontent.com/AYWM/PowerPlatform/main/Coding/phaser_practical_example.html" target="_blank">
+                    <i class="fas fa-code"></i> Example Code
+                </a>
+                <a href="https://aywm.github.io/PowerPlatform/Coding/phaser_practical_example.html" target="_blank">
+                    <i class="fas fa-external-link-alt"></i> Example Page
+                </a>
+                <h5>Explaination</h5>
+                 <div class="input-field col s12">
+            <input type="text" id="searchPhaserTable" class="search-bar">
+            <label for="searchPhaserTable">Search Table</label>
+        </div>
+        <div class="code-block">
+            <table id="phaser-table" class="highlight responsive-table centered">
+                <thead>
+                    <tr>
+                        <th>Element/Object</th>
+                        <th>Explanation</th>
+                        <th>Example</th>
+                        <th>Differences (if applicable)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>config</td>
+                        <td>Configuration object that sets up the game's settings, including size and physics.</td>
+                        <td>{ type: Phaser.AUTO, width: 800, height: 600 }</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>type: Phaser.AUTO</td>
+                        <td>Tells Phaser to use WebGL if possible, otherwise use Canvas.</td>
+                        <td></td>
+                        <td><strong>Difference:</strong> Determines the rendering technology used by Phaser. WebGL allows for hardware-accelerated rendering, offering better performance and graphical capabilities compared to Canvas. Canvas is a 2D drawing API supported by all major browsers, but it may not perform as well with complex animations or graphics.</td>
+                    </tr>
+                    <tr>
+                        <td>width: 800, height: 600</td>
+                        <td>Sets the width and height of the game screen to 800x600 pixels.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>backgroundColor: '#87CEEB'</td>
+                        <td>Sets the background color of the game to a sky blue color.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>parent: 'gameCanvas'</td>
+                        <td>Links the game to the HTML element with the ID 'gameCanvas'.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>physics</td>
+                        <td>Adds physics settings to the game, like gravity and collision detection.</td>
+                        <td>{ default: 'arcade', arcade: { gravity: { y: 300 }, debug: false } }</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>scene</td>
+                        <td>Contains the functions for loading assets, creating objects, and updating the game.</td>
+                        <td>{ preload: preload, create: create, update: update }</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>game</td>
+                        <td>The main Phaser game object that starts the game with the configuration settings.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>player</td>
+                        <td>The main character in the game that the player controls.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>cursors</td>
+                        <td>Stores the keyboard input for controlling the player.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>preload</td>
+                        <td>Function to load game assets (images, sounds) before the game starts.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>this.load.image</td>
+                        <td>Loads an image asset for the game.</td>
+                        <td>this.load.image('sky', 'https://phaser.io/images/img.png')</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>this.load.spritesheet</td>
+                        <td>Loads a spritesheet, which is an image containing multiple frames of animation.</td>
+                        <td>this.load.spritesheet('dude', 'https://phaser.io/images/img.png', { frameWidth: 32, frameHeight: 48 })</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>create</td>
+                        <td>Function to set up the game objects and add them to the scene.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>this.add.image</td>
+                        <td>Adds a static image to the game scene.</td>
+                        <td>this.add.image(400, 300, 'sky')</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>platforms</td>
+                        <td>A group of static platforms the player can stand on.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>this.physics.add.sprite</td>
+                        <td>Adds a sprite with physics properties (like gravity) to the game.</td>
+                        <td>this.physics.add.sprite(100, 450, 'dude')</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>player.setBounce</td>
+                        <td>Makes the player bounce a little when landing.</td>
+                        <td>player.setBounce(0.2)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>player.setCollideWorldBounds</td>
+                        <td>Prevents the player from moving outside the game area.</td>
+                        <td>player.setCollideWorldBounds(true)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>this.anims.create</td>
+                        <td>Creates animations for the player sprite.</td>
+                        <td>this.anims.create({ key: 'left', frames: [...] })</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>cursors.left.isDown</td>
+                        <td>Checks if the left arrow key is being pressed.</td>
+                        <td>if (cursors.left.isDown)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>player.setVelocityX</td>
+                        <td>Sets the player's horizontal speed.</td>
+                        <td>player.setVelocityX(-160)</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>stars</td>
+                        <td>A group of star objects the player can collect.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>collectStar</td>
+                        <td>Function that handles the player collecting a star.</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>star.disableBody</td>
+                        <td>Removes the star from the game when collected.</td>
+                        <td>star.disableBody(true, true)</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+          <h5>HTML:</h5>
+                <div class="code-block">
+                    <div class="code-block-container">
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                        <pre>
+<code>
+&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Phaser Game for Kids&lt;/title&gt;
+    &lt;style&gt;
+/*   styles goes here     */
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div id="gameCanvas"&gt;&lt;/div&gt;
+
+    &lt;script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+        // javascript goes here
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code>
+            </pre>
+                    </div>
+                </div>
+
+                <h5>CSS:</h5>
+                <div class="code-block">
+                    <div class="code-block-container">
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                        <pre>
+<code>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #87CEEB;
+}
+
+#gameCanvas {
+    display: block;
+    margin: 0 auto;
+    width: 800px;
+    height: 600px;
+    background-color: #000;
+}
+</code>
+            </pre>
+                    </div>
+                </div>
+
+                <h5>JavaScript:</h5>
+                <div class="code-block">
+                    <div class="code-block-container">
+                        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+                        <pre>
+<code>
+    const config = {
+            type: Phaser.AUTO,
+            width: 800,
+            height: 600,
+            backgroundColor: '#87CEEB',
+            parent: 'gameCanvas',
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 300 },
+                    debug: false
+                }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+
+        const game = new Phaser.Game(config);
+
+        let player;
+        let cursors;
+
+        function preload() {
+            this.load.image('sky', 'https://labs.phaser.io/assets/skies/space3.png');
+            this.load.image('ground', 'https://labs.phaser.io/assets/sprites/platform.png');
+            this.load.image('star', 'https://labs.phaser.io/assets/sprites/star.png');
+            this.load.image('bomb', 'https://labs.phaser.io/assets/sprites/enemy-bullet.png'); // Corrected URL
+            this.load.spritesheet('dude', 
+                'https://labs.phaser.io/assets/sprites/dude.png', 
+                { frameWidth: 32, frameHeight: 48 }
+            );
+        }
+
+        function create() {
+            this.add.image(400, 300, 'sky');
+
+            const platforms = this.physics.add.staticGroup();
+
+            platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+            platforms.create(600, 400, 'ground');
+            platforms.create(50, 250, 'ground');
+            platforms.create(750, 220, 'ground');
+
+            player = this.physics.add.sprite(100, 450, 'dude');
+            player.setBounce(0.2);
+            player.setCollideWorldBounds(true);
+
+            this.anims.create({
+                key: 'left',
+                frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+                frameRate: 10,
+                repeat: -1
+            });
+
+            this.anims.create({
+                key: 'turn',
+                frames: [ { key: 'dude', frame: 4 } ],
+                frameRate: 20
+            });
+
+            this.anims.create({
+                key: 'right',
+                frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+                frameRate: 10,
+                repeat: -1
+            });
+
+            const stars = this.physics.add.group({
+                key: 'star',
+                repeat: 11,
+                setXY: { x: 12, y: 0, stepX: 70 }
+            });
+
+            stars.children.iterate(function (child) {
+                child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+            });
+
+            this.physics.add.collider(player, platforms);
+            this.physics.add.collider(stars, platforms);
+            this.physics.add.overlap(player, stars, collectStar, null, this);
+
+            cursors = this.input.keyboard.createCursorKeys();
+        }
+
+        function update() {
+            if (cursors.left.isDown) {
+                player.setVelocityX(-160);
+                player.anims.play('left', true);
+            } else if (cursors.right.isDown) {
+                player.setVelocityX(160);
+                player.anims.play('right', true);
+            } else {
+                player.setVelocityX(0);
+                player.anims.play('turn');
+            }
+
+            if (cursors.up.isDown && player.body.touching.down) {
+                player.setVelocityY(-330);
+            }
+        }
+
+        function collectStar(player, star) {
+            star.disableBody(true, true);
+        }
+    </code>
+            </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <h2>Conclusion</h2>
         <p>With these basics, you're now ready to start your coding adventure! Remember, practice makes perfect, and the more you code, the better you'll get. Happy coding!</p>
     </div>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script>
+
+        
+        document.getElementById('searchPhaserTable').addEventListener('keyup', function() {
+            var value = this.value.toLowerCase();
+            var rows = document.querySelectorAll('#phaser-table tbody tr');
+
+            rows.forEach(function(row) {
+                var showRow = false;
+                var cells = row.getElementsByTagName('td');
+
+                for (var i = 0; i < cells.length; i++) {
+                    if (cells[i].textContent.toLowerCase().indexOf(value) > -1) {
+                        showRow = true;
+                        break;
+                    }
+                }
+
+                row.style.display = showRow ? '' : 'none';
+            });
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.getElementById('search');
             const dropdown = document.getElementById('dropdown');
             const headings = document.querySelectorAll('h1, h2, h3, h4, h5');
             let suggestions = [];
+
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
 
             // Populate suggestions based on headings
             headings.forEach((heading, index) => {
@@ -1418,6 +1846,24 @@ const overlay = document.getElementById('overlay');
             });
         }
 
+        function toggleProject(projectId) {
+            const projectContent = document.getElementById(projectId);
+            console.log(projectContent);
+            const icon = document.querySelector('.project-container .project-header .collapse-icon');
+            console.log(projectId);
+            console.log(icon);
+
+            if (projectContent.style.display === 'block') {
+                projectContent.style.display = 'none';
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            } else {
+                projectContent.style.display = 'block';
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            }
+        }
     </script>
 </body>
+
 </html>
