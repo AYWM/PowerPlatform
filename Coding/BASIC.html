@@ -197,6 +197,23 @@
             border-radius: 5px;
             margin-bottom: 20px;
           }
+        .text-container {
+            width: 300px; /* Adjust the width as needed */
+            padding: 10px;
+            text-align: center;
+            margin: 20px auto;
+        }
+        .text-content {
+            color: white;
+            font-weight: bold;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            display: block;
+            border-bottom: 2px solid #000; /* Bottom border */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(45deg, #ff6b6b, #ffcc00);
+        }
     </style>
 </head>
 
@@ -257,7 +274,7 @@
         </div>
         <div class="project-container">
             <div class="project-header" aria-controls="videoActivities" onclick="toggleProject('videoActivities')">
-                <h3>WITH STUDENTS PLAYLIST 02: Activities & Projects</h3>
+                <h3>WITH STUDENTS PLAYLIST 02: Academic (Activities & Projects)</h3>
                 <i class="fas fa-chevron-down collapse-icon"></i>
             </div>
             <div class="project-content" id="videoActivities">
@@ -266,7 +283,7 @@
         </div>
         <div class="project-container">
             <div class="project-header" aria-controls="videoSongs" onclick="toggleProject('videoSongs')">
-                <h3>WITH STUDENTS PLAYLIST 03: Songs</h3>
+                <h3>WITH STUDENTS PLAYLIST 03: Entertainment (Songs ...)</h3>
                 <i class="fas fa-chevron-down collapse-icon"></i>
             </div>
             <div class="project-content" id="videoSongs">
@@ -1948,7 +1965,10 @@ body {
             <img src="${thumbnailUrl}" alt="${videoTitle}">
             <div class="play-button"></div>
           </div>
-          <h5 class="center-align">${videoTitle}</h5>
+        </div>
+
+              <div class="text-container center-align" style="padding:auto;margin:auto;">
+            <p class="text-content">${videoTitle}</p>
         </div>
       `;
 
