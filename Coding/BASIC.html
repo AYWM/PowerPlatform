@@ -7,6 +7,10 @@
     <title>Programming Basics for Kids</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/3.0.2/css/buttons.dataTables.min.css" async>
+    <link href="https://cdn.datatables.net/v/dt/dt-2.0.8/datatables.min.css" rel="stylesheet" async>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.6/css/responsive.dataTables.min.css"  async>
+
 
     <style>
         body {
@@ -41,6 +45,22 @@
         .btn {
             background: linear-gradient(45deg, #42a5f5, #1e88e5);
         }
+
+        .responsive-btn {
+            display: inline-block;
+/*            padding: 10px 20px;*/
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+            white-space: nowrap;       /* Prevents text from wrapping */
+            overflow: hidden;          /* Ensures overflowed content is hidden */
+            text-overflow: ellipsis;   /* Displays ellipsis (...) for overflowed text */
+            max-width: 100%;           /* Ensures the button does not exceed the container's width */
+        }
         @media (max-width: 600px) {
             pre {
                 font-size: 14px;
@@ -48,6 +68,13 @@
             }
             .tabs .tab {
                 width: auto !important;
+            }
+            .responsive-btn {
+                width: 100%;           /* Button takes full width of its container */
+                max-width: none;       /* Removes max-width restriction */
+            }
+            #CodeMonkeyPath{
+                content: url('https://github.com/AYWM/PowerPlatform/blob/main/Coding/Library/images/Snakey%20Mobile%20Pathway.png?raw=true');
             }
         }
         .animated-btn {
@@ -214,6 +241,37 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
             background: linear-gradient(45deg, #ff6b6b, #ffcc00);
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        .responsive-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px; /* Adjust spacing */
+        }
+
+        .responsive-table th, .responsive-table td {
+            border: 1px solid #dddddd;
+            padding: 8px;
+            text-align: left;
+        }
+        /* Adjust table header style */
+        .responsive-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        /* Adjust table row hover style */
+        .responsive-table tbody tr:hover {
+            background-color: #f5f5f5;
+        }
     </style>
 </head>
 
@@ -249,7 +307,7 @@
 
     <!-- Bookmarks -->
     <div class="container bookmarks">
-        <a href="#intro">Intro</a>
+        <!-- <a href="#intro">Intro</a> -->
         <a href="#translators">Translators</a>
         <a href="#variables">Variables</a>
         <a href="#arrays">Arrays</a>
@@ -258,38 +316,12 @@
         <a href="#for_loop">For-Loop</a>
         <a href="#while_loop">While-Loop</a>
         <a href="#events">Events</a>
+        <a href="#projects">Projects</a>
+        <a href="#codemonkey">CodeMonkey</a>
+        <a href="#videos">Videos</a>
     </div>
 
     <div class="container">
-        <h1 class="center-align">Video Library</h1>
-        <!-- Playlist Container -->
-        <div class="project-container">
-            <div class="project-header" aria-controls="videoShortMovie" onclick="toggleProject('videoShortMovie')">
-                <h3>WITH STUDENTS PLAYLIST 01: Short Movies (Moral, Ethical, Inspirational ...)</h3>
-                <i class="fas fa-chevron-down collapse-icon"></i>
-            </div>
-            <div class="project-content" id="videoShortMovie">
-                <div id="videoPlayList1" class="row"></div>
-            </div>
-        </div>
-        <div class="project-container">
-            <div class="project-header" aria-controls="videoActivities" onclick="toggleProject('videoActivities')">
-                <h3>WITH STUDENTS PLAYLIST 02: Academic (Activities & Projects)</h3>
-                <i class="fas fa-chevron-down collapse-icon"></i>
-            </div>
-            <div class="project-content" id="videoActivities">
-                <div id="videoPlayList2" class="row"></div>
-            </div>
-        </div>
-        <div class="project-container">
-            <div class="project-header" aria-controls="videoSongs" onclick="toggleProject('videoSongs')">
-                <h3>WITH STUDENTS PLAYLIST 03: Entertainment (Songs ...)</h3>
-                <i class="fas fa-chevron-down collapse-icon"></i>
-            </div>
-            <div class="project-content" id="videoSongs">
-                <div id="videoPlayList3" class="row"></div>
-            </div>
-        </div>
 
         <h1 class="center-align">Programming Basics for Kids</h1>
         <p>Welcome to the fun world of programming! This guide will take you through the basic concepts you need to understand to start your journey in computer programming.</p>
@@ -422,19 +454,19 @@ public class Main {
             <div class="row">
                 <div class="col s3">
                     <p>Increment Number</p>
-                    <button class="btn" onclick="incrementNumber()">V = V + 1</button>
+                    <button class="btn responsive-btn" onclick="incrementNumber()">V = V + 1</button>
                 </div>
                 <div class="col s3">
                     <p>Decrement Number</p>
-                    <button class="btn" onclick="decrementNumber()">V = V - 1</button>
+                    <button class="btn responsive-btn" onclick="decrementNumber()">V = V - 1</button>
                 </div>
                 <div class="col s3">
                     <p>Concatenate String</p>
-                    <button class="btn" onclick="concatString()">V = V + '!'</button>
+                    <button class="btn responsive-btn" onclick="concatString()">V = V + '!'</button>
                 </div>
                 <div class="col s3">
                     <p>De-concatenate String</p>
-                    <button class="btn" onclick="deconcatString()">V = V.slice(0, -1)</button>
+                    <button class="btn responsive-btn" onclick="deconcatString()">V = V.slice(0, -1)  </button>
                 </div>
             </div>
 
@@ -705,14 +737,14 @@ public class Main {
                 <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
 <code>
-def have_breakfast():
-    print("Get up from bed")
-    print("Go brush teeth")
-    print("Go to dining room")
-    print("Pick up spoon")
-    print("Start eating")
+def have_breakfast(person):
+    print(person+", Get up from bed")
+    print(person+", Go brush teeth")
+    print(person+", Go to dining room")
+    print(person+", Pick up spoon")
+    print(person+", Start eating")
 
-have_breakfast()
+have_breakfast("AMON")
 </code>
                 </pre>
             </div>
@@ -720,15 +752,15 @@ have_breakfast()
                 <button class="copy-button" onclick="copyCode(this)">Copy</button>
                 <pre>
 <code>
-function haveBreakfast() {
-    console.log("Get up from bed");
-    console.log("Go brush teeth");
-    console.log("Go to dining room");
-    console.log("Pick up spoon");
-    console.log("Start eating");
+function haveBreakfast(person) {
+    console.log(person+", Get up from bed");
+    console.log(person+", Go brush teeth");
+    console.log(person+", Go to dining room");
+    console.log(person+", Pick up spoon");
+    console.log(person+", Start eating");
 }
 
-haveBreakfast();
+haveBreakfast("AMON");
 </code>
                 </pre>
             </div>
@@ -738,16 +770,16 @@ haveBreakfast();
 <code>
 #include &lt;stdio.h&gt;
 
-void have_breakfast() {
-    printf("Get up from bed\n");
-    printf("Go brush teeth\n");
-    printf("Go to dining room\n");
-    printf("Pick up spoon\n");
-    printf("Start eating\n");
+void have_breakfast(char person[]) {
+    printf("%s, Get up from bed\n", person);
+    printf("%s, Go brush teeth\n", person);
+    printf("%s, Go to dining room\n", person);
+    printf("%s, Pick up spoon\n", person);
+    printf("%s, Start eating\n", person);
 }
 
 int main() {
-    have_breakfast();
+    have_breakfast("AMON");
     return 0;
 }
 </code>
@@ -760,16 +792,16 @@ int main() {
 #include &lt;iostream&gt;
 using namespace std;
 
-void have_breakfast() {
-    cout &lt;&lt; "Get up from bed" &lt;&lt; endl;
-    cout &lt;&lt; "Go brush teeth" &lt;&lt; endl;
-    cout &lt;&lt; "Go to dining room" &lt;&lt; endl;
-    cout &lt;&lt; "Pick up spoon" &lt;&lt; endl;
-    cout &lt;&lt; "Start eating" &lt;&lt; endl;
+void have_breakfast(string person) {
+    cout &lt;&lt; person &lt;&lt; ", Get up from bed" &lt;&lt; endl;
+    cout &lt;&lt; person &lt;&lt; ", Go brush teeth" &lt;&lt; endl;
+    cout &lt;&lt; person &lt;&lt; ", Go to dining room" &lt;&lt; endl;
+    cout &lt;&lt; person &lt;&lt; ", Pick up spoon" &lt;&lt; endl;
+    cout &lt;&lt; person &lt;&lt; ", Start eating" &lt;&lt; endl;
 }
 
 int main() {
-    have_breakfast();
+    have_breakfast("AMON");
     return 0;
 }
 </code>
@@ -780,16 +812,16 @@ int main() {
                 <pre>
 <code>
 public class Main {
-    public static void haveBreakfast() {
-        System.out.println("Get up from bed");
-        System.out.println("Go brush teeth");
-        System.out.println("Go to dining room");
-        System.out.println("Pick up spoon");
-        System.out.println("Start eating");
+    public static void haveBreakfast(String person) {
+        System.out.println(person + ", Get up from bed");
+        System.out.println(person + ", Go brush teeth");
+        System.out.println(person + ", Go to dining room");
+        System.out.println(person + ", Pick up spoon");
+        System.out.println(person + ", Start eating");
     }
 
     public static void main(String[] args) {
-        haveBreakfast();
+        haveBreakfast("AMON");
     }
 }
 </code>
@@ -1079,7 +1111,7 @@ public class Main {
         </div>
 
 
-        <h2>Practical Project: Putting It All Together</h2>
+        <h2 id="projects">Practical Project: Putting It All Together</h2>
         <p>Let's create a simple interactive web page using HTML, CSS, and JavaScript. This project will help you understand how to apply the concepts you've learned.</p>
         <hr>
         <div class="project-container">
@@ -1758,13 +1790,581 @@ body {
             </div>
         </div>
 
+        <h2 id="codemonkey">CodeMonkey</h2>
+        <div class="video-placeholder">
+            <img id="CodeMonkeyPath" src="https://github.com/AYWM/PowerPlatform/blob/main/Coding/Library/images/Straight%20Coding%20Pathway.png?raw=true" alt="CodeMonkey Amon">
+        </div>
+        <div class="video-container" >
+            <!-- <div class="video-placeholder"> -->
+        <iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?si=orM1IUPG5mZ56--V&amp;list=PLyU-6kEcAhfmng7mqI73bTyOxh5tsl_16" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        <!-- </div> -->
+    </div>
+    <table id="CodeMonkeyTable" class="display" style="width:100%">
+      <thead>
+        <tr>
+          <th>Grade Level</th>
+          <th>Name of Course</th>
+          <th>Lesson Plans/ Time Per Lesson</th>
+          <th>Concepts Covered</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>K</td>
+          <td>Codemonkey Junior - Sequencing & Loops</td>
+          <td>
+            <ul>
+              <li>30 Challenges</li>
+              <li>10 Lesson Plans</li>
+              <li>35 Minutes Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Logic</li>
+              <li>Algorithm</li>
+              <li><a href="https://vimeo.com/831880712" target="_blank"><i class="fas fa-external-link-alt"></i>Sequencing</a></li>
+              <li><a href="https://vimeo.com/831881079" target="_blank"><i class="fas fa-external-link-alt"></i>Loops</a></li>
+              <li>Counting And Orientation</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>K</td>
+          <td>CodeMonkey Junior - Advanced Sequencing & Loops</td>
+          <td>
+            <ul>
+              <li>30 Challenges</li>
+              <li>7 Lesson Plans</li>
+              <li>35 Minutes Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Logic</li>
+              <li>Algorithm</li>
+              <li><a href="https://vimeo.com/831880712" target="_blank"><i class="fas fa-external-link-alt"></i>Sequencing</a></li>
+              <li><a href="https://vimeo.com/831881079" target="_blank"><i class="fas fa-external-link-alt"></i>Loops</a></li>
+              <li>Counting And Orientation</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Codemonkey Junior - Conditional Loops</td>
+          <td>
+            <ul>
+              <li>30 Challenges</li>
+              <li>6 Lesson Plans</li>
+              <li>35 Minutes Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Logic</li>
+              <li>Algorithm</li>
+              <li><a href="https://vimeo.com/831880712" target="_blank"><i class="fas fa-external-link-alt"></i>Sequencing</a></li>
+              <li>Conditional Loops</li>
+              <li>Counting And Orientation</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>CodeMonkey Junior - Procedures</td>
+          <td>
+            <ul>
+              <li>30 Challenges</li>
+              <li>6 Lesson Plans</li>
+              <li>35 Minutes Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Logic</li>
+              <li>Algorithm</li>
+              <li>Procedures</li>
+              <li>Counting And Orientation</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Beaver Achiever: Sequencing & Simple Loops</td>
+          <td>
+            <ul>
+              <li>40 Challenges</li>
+              <li>9 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li><a href="https://vimeo.com/831880712" target="_blank"><i class="fas fa-external-link-alt"></i>Sequencing</a></li>
+              <li>Repeat Loops</li>
+              <li>Nested Loops</li>
+              <li>Loops with Counter</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Beaver Achiever: Conditional Loops</td>
+          <td>
+            <ul>
+              <li>35 Challenges</li>
+              <li>7 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li><a href="https://vimeo.com/831880712" target="_blank"><i class="fas fa-external-link-alt"></i>Sequencing</a></li>
+              <li>Repeat Loops</li>
+              <li>Nested Loops</li>
+              <li>Conditional Loops</li>
+              <li>While Loops</li>
+              <li>Until Loops</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Beaver Achiever: If/Else Conditions</td>
+          <td>
+            <ul>
+              <li>40 Challenges</li>
+              <li>7 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li><a href="https://vimeo.com/831880712" target="_blank"><i class="fas fa-external-link-alt"></i>Sequencing</a></li>
+              <li>If And If-else Conditions</li>
+              <li>Nested If And If-else Conditions</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Coding Adventure Part I: Fundamentals</td>
+          <td>
+            <ul>
+              <li>75 Challenges</li>
+              <li>16 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li><a href="https://youtu.be/Z2DBZIRY-Ek?si=HiZHP9ACifT-Kdze" target="_blank"><i class="fas fa-external-link-alt"></i>Fundamentals Of Objects</a> </li>
+              <li><a href="https://youtu.be/QbhQ6G61SMs?si=uvaxOmcTrs3w6a6R" target="_blank"><i class="fas fa-external-link-alt"></i>Sequencing</a></li>
+              <li><a href="https://youtu.be/G4W14UEEqOU?si=mutxUBLLaG05D4jZ" target="_blank"><i class="fas fa-external-link-alt"></i>Loops</a></li>
+              <li>Variables</li>
+              <li>Array Indexing</li>
+              <li>For Loops</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Space Monkey (HOC)</td>
+          <td>
+            <ul>
+              <li>17 Challenges</li>
+              <li>3 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li><a href="https://vimeo.com/831880712" target="_blank"><i class="fas fa-external-link-alt"></i>Sequencing</a></li>
+              <li><a href="https://youtu.be/G4W14UEEqOU?si=mutxUBLLaG05D4jZ" target="_blank"><i class="fas fa-external-link-alt"></i>Loops</a></li>
+              <li><a href="https://youtu.be/Z2DBZIRY-Ek?si=HiZHP9ACifT-Kdze" target="_blank"><i class="fas fa-external-link-alt"></i>Objects</a> </li>
+              <li>Indexing</li>
+              <li>While loops</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Blocks Jumper (HOC)</td>
+          <td>
+            <ul>
+              <li>10 Challenges</li>
+              <li>2 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li><a href="https://youtu.be/G4W14UEEqOU?si=mutxUBLLaG05D4jZ" target="_blank"><i class="fas fa-external-link-alt"></i>Loops</a></li>
+              <li>Event</li>
+              <li>Functions</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Digital Literacy - Digital Use</td>
+          <td>
+            <ul>
+              <li>16 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Hardware, Software</li>
+              <li>Internet, Browsers, Search Engines, Emails</li>
+              <li>Word Processing, Spreadsheets, Presentations</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Coding Adventure Part 2</td>
+          <td>
+            <ul>
+              <li>70 Challenges</li>
+              <li>16 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Function Definitions</li>
+              <li>Until Loops</li>
+              <li>Boolean Conditions</li>
+              <li>If and If-Else Conditions</li>
+              <li>Boolean Operators</li>
+            </ul>
+          </td>
+        </tr>
+
+        <tr>
+          <td>4</td>
+          <td>Digital Literacy - Digital Citizenship</td>
+          <td>
+            <ul>
+              <li>16 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Digital Citizen</li>
+              <li>Digital Wellness</li>
+              <li>Digital Safety</li>
+              <li>Fake News, Critical Thinking</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>AI is a Hoot (HOC)</td>
+          <td>
+            <ul>
+              <li>2 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Train an AI model</li>
+              <li>Ai Predictions</li>
+              <li>Events</li>
+              <li><a href="https://youtu.be/G4W14UEEqOU?si=mutxUBLLaG05D4jZ" target="_blank"><i class="fas fa-external-link-alt"></i>Loops</a></li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Coding Adventure Part 3</td>
+          <td>
+            <ul>
+              <li>65 Challenges</li>
+              <li>16 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Operator NOT</li>
+              <li>Comparisons</li>
+              <li>Function Return Values</li>
+              <li>Triggering Events using the mouse and keyboard</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Data Science★ </td>
+          <td>
+            <ul>
+              <li>16 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Collecting data</li>
+              <li>Surveys</li>
+              <li>Encoding data</li>
+              <li>Storing data</li>
+              <li>Data Visualization</li>
+              <li>Data correlations</li>
+              <li>Statistics and predictions</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Game Builder Courses:<br>★ Sprite Animations<br>★ Frogger<br>★ Platformer<br><hr><strong><i><u>Game Builder Platform</u></i></strong></td>
+          <td>
+            <ul>
+              <li>91 Exercises</li>
+              <li>19 Lesson Plans</li>
+              <li>45-minute Each</li>
+              <br><hr><strong><i><u>Creating your own games not included in number of lessons</u></i></strong>
+            </ul>
+          </td>
+          <td>
+            <ul>
+                <strong><i>GB Draw your <u>Sprite</u>:</i></strong>
+              <li>★ Create an animation using a sprite sheet</li>
+              <li>★ “addAnimation”, “startAnimation”</li>
+            </ul>
+            <hr>
+            <ul>
+                <strong><i>GB <u>Platformer</u>:</i></strong>
+              <li>★ Create and write event handlers</li>
+              <li>★ @onkey, @detroy, @collide</li>
+              <li>★ If statements</li>
+              <li>★ Adding sounds and loops</li>
+            </ul>
+            <hr>
+            <ul>
+                <strong><i>GB <u>Frogger</u>:</i></strong>
+              <li>★ Create unique versions of the classic game ‘Frogger’</li>
+              <li>★ Learn to control touch interface with the @onswipe event handler</li>
+              <li>★ Coding Components “onKey”, “step”, “if”, “setRotation”, “loop</li>
+              <li>★ Determine- position, speed, and direction</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>Artificial Intelligence</td>
+          <td>
+            <ul>
+              <li>16 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Ethics and critical thinking</li>
+              <li>Using AI (language model, image model)</li>
+              <li>Prompt engineering</li>
+              <li>Machine learning</li>
+              <li>Supervised and unsupervised learning</li>
+              <li>Reinforcement learning</li>
+              <li>Neural networks</li>
+              <li>Generative AI</li>
+              <li>Training an AI model</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Banana Tales Part 1</td>
+          <td>
+            <ul>
+              <li>87 Challenges</li>
+              <li>12 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li><a href="https://vimeo.com/808207692" target="_blank"><i class="fas fa-external-link-alt"></i>Sequencing</a></li>
+              <li>Lists</li>
+              <li>For Loops</li>
+              <li>Range, Variables</li>
+              <li>If/Else</li>
+              <li>While loops</li>
+              <li>Boolean operators</li>
+              <li>Functions</li>    
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Banana Tales Part 2</td>
+          <td>
+            <ul>
+              <li>63 Challenges</li>
+              <li>10 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Classes</li>
+              <li>Input, Integers</li>
+              <li>Strings</li>
+              <li>Dictionary</li>
+              <li>Set</li>
+              <li>Tuple</li>
+              <li>2d lists</li>
+              <li>Bubble sort</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Coding Chatbots</td>
+          <td>
+            <ul>
+              <li>74 Exercises</li>
+              <li>16 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Input/Output (Send/Read)</li>
+              <li>Dictionary</li>
+              <li>If</li>
+              <li>==</li>
+              <li>If Else</li>
+              <li>Variables</li>
+              <li>Lists</li>
+              <li>For Loops Assignment Operators</li>
+              <li>While Loops</li>
+              <li>And</li>
+              <li>Or</li>
+              <li>Ascii Codes</li>
+              <li>Return</li>
+              <li>Modules And Import</li>
+              <li>True/ False</li>
+              <li>Not</li>
+              <li>Random</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Moon Lander (Mini Course)</td>
+          <td>
+            <ul>
+              <li>17 Exercises</li>
+              <li>2 Lesson Plans</li>
+              <li>45-minute Each</li>
+            </ul>
+          </td>
+          <td>
+            <ul>
+              <li>Event</li>
+              <li>If, <, >,</li>
+              <li>If/Else</li>
+              <li>Assignment operators</li>
+              <li>Functions</li>
+              <li><a href="https://vimeo.com/589382566" target="_blank"><i class="fas fa-external-link-alt"></i>Sequencing</a></li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
         <h2>Conclusion</h2>
         <p>With these basics, you're now ready to start your coding adventure! Remember, practice makes perfect, and the more you code, the better you'll get. Happy coding!</p>
+        <div class="video-placeholder">
+        <table border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+            <tr >
+                <th style="border-top:1px solid #EEE; border-left:1px solid #EEE; background-color: transparent;"></th>
+                <th style="border: 1px solid black;background-color: #e6f2ff;">ISTE Standards (<u>Learn to <i style="color:red;">USE</i> Technology</u>)</th>
+                <th style="border: 1px solid black;background-color: #e6f2ff;">NCSTA Standards (<u>Learn to <i style="color:red;">CREATE</i> Technology</u>)</th>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black; background-color: #e6f2ff;"><strong>Standard Type</strong></td>
+                <td style="border: 1px solid black;">Habits of Mind, General Competencies</td>
+                <td style="border: 1px solid black;">Specific Technical Content</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black; background-color: #e6f2ff;"><strong>Purpose</strong></td>
+                <td style="border: 1px solid black;">Deepen Learning Across All Subjects</td>
+                <td style="border: 1px solid black;">Develop Technical Skills</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black; background-color: #e6f2ff;"><strong>Applications</strong></td>
+                <td style="border: 1px solid black;">All Subjects, Standards</td>
+                <td style="border: 1px solid black;">Discrete Subject</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black; background-color: #e6f2ff;"><strong>Used By</strong></td>
+                <td style="border: 1px solid black;">All Students, Educators, and Leaders</td>
+                <td style="border: 1px solid black;">All Students and Teachers of CS</td>
+            </tr>
+            <tr>
+                <td style="border: 1px solid black; background-color: #e6f2ff;"><strong>Assessment Type</strong></td>
+                <td style="border: 1px solid black;">Cross-Disciplinary, Integrated</td>
+                <td style="border: 1px solid black;">Content Specific (e.g., AP Exam)</td>
+            </tr>
+        </table>
+        <hr />
+        <img id="CSTAvsISTE" src="https://github.com/AYWM/PowerPlatform/blob/main/Coding/Library/images/csta_vs_iste.png?raw=true" alt="CSTAvsISTE Amon">
+        </div>
+
+        <h1 class="center-align" id="videos">Video Library</h1>
+        <!-- Playlist Container -->
+        <div class="project-container">
+            <div class="project-header" aria-controls="videoShortMovie" onclick="toggleProject('videoShortMovie')">
+                <h3>WITH STUDENTS PLAYLIST 01: Short Movies (Moral, Ethical, Inspirational ...)</h3>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="project-content" id="videoShortMovie">
+                <div id="videoPlayList1" class="row"></div>
+            </div>
+        </div>
+        <div class="project-container">
+            <div class="project-header" aria-controls="videoActivities" onclick="toggleProject('videoActivities')">
+                <h3>WITH STUDENTS PLAYLIST 02: Academic (Activities & Projects)</h3>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="project-content" id="videoActivities">
+                <div id="videoPlayList2" class="row"></div>
+            </div>
+        </div>
+        <div class="project-container">
+            <div class="project-header" aria-controls="videoSongs" onclick="toggleProject('videoSongs')">
+                <h3>WITH STUDENTS PLAYLIST 03: Entertainment (Songs ...)</h3>
+                <i class="fas fa-chevron-down collapse-icon"></i>
+            </div>
+            <div class="project-content" id="videoSongs">
+                <div id="videoPlayList3" class="row"></div>
+            </div>
+        </div>
     </div>
 
     <script src="https://www.googleapis.com/jsapi"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"></script>
+<script src="https://cdn.datatables.net/v/dt/dt-2.0.8/datatables.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.2.6/js/responsive.dataTables.min.js"  async></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/pdfmake.min.js" async></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/dataTables.buttons.min.js" async></script>    
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.dataTables.min.js" async></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" async></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.10/vfs_fonts.min.js" async></script>
+<script src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.print.min.js" async></script>
+<script id="html5Btn" src="https://cdn.datatables.net/buttons/3.0.2/js/buttons.html5.min.js" async></script>
+
     <script>
 
         
@@ -1977,6 +2577,27 @@ body {
   }
 });
 
+    html5Btn.addEventListener('load', function () {
+        $('#CodeMonkeyTable').DataTable({
+        responsive: true,
+        fixedColumns: true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "lengthChange": true,
+        "striped": true,
+        "hover": true,
+       "lengthMenu": [[3, 7, 10, -1], [3, 7, 10, "All"]],
+        buttons: ['copy', 'csv', 'excel', 'print',{
+                   extend: 'pdfHtml5',
+                   orientation: 'landscape',
+                   pageSize:'A4'
+                }],
+        layout: {
+            top2Start: 'buttons'
+        }
+     });
+    });
     </script>
 </body>
 
