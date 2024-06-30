@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self' http://192.168.12.14:3000 http://192.168.12.14:8888 http://api.tpacpackaging.com:3000 http://sbms.tpacpackaging.com:8888/">
+    <title>Sales Order Details</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="tpac_library/css/dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="tpac_library/css/dataTables.buttons.min.css">
+    <link rel="stylesheet" type="text/css" href="tpac_library/css/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="tpac_library/css/tpac_so_detail.css">
+    <script id="TeamsJs" src="tpac_library/js/MicrosoftTeams.min.js" async></script>
+    <script src="tpac_library/js/pdfmake.min.js" async></script>
+    <script src="tpac_library/js/jquery-3.7.1.slim.min.js"></script>
+    <script src="tpac_library/js/dataTables.min.js"></script>
+    <script src="tpac_library/js/dataTables.responsive.min.js"></script>
+    <script src="tpac_library/js/dataTables.buttons.min.js"></script>
+
+</head>
+<body>
+
+    <h1>TPAC SBMS: Web Extension</h1>
+
+    <div class="verification-container">
+        <select id="username" name="username">
+            <!-- Options will be populated dynamically via JavaScript -->
+        </select>
+        <input type="password" id="password" name="password" placeholder="Enter password">
+        <button  id="verifyUser">Verify User</button>
+    </div>
+    <div id="result"></div>
+    <br><hr><br>
+    <div id="summary"></div>
+    <br><hr><br>
+    <div id="approveQueue"></div>
+    <button id="submitApproveQueue">Submit</button>
+    <div id="user-email"></div>
+    
+    
+    <script src="tpac_library/js/tpac_so_detail.js"></script>
+    <script src="tpac_library/js/buttons.dataTables.min.js" async></script>
+    <script src="tpac_library/js/jszip.min.js" async></script>
+    <script src="tpac_library/js/vfs_fonts.min.js" async></script>
+    <script src="tpac_library/js/buttons.print.min.js" async></script>
+    <script src="tpac_library/js/buttons.html5.min.js" async></script>
+</body>
+</html>

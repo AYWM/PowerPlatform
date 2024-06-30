@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Results</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>TPAC SBMS: Web Extension Home</h1>
+    <div id="result"></div>
+    <script>
+        // let api_base_url = 'http://192.168.12.14:3000/sbms';
+        let api_base_url = 'http://api.tpacpackaging.com:3000/sbms';
+        // let so_detail_url = 'http://192.168.12.14:8888/so_detail.html';
+        let so_detail_url = 'http://sbms.tpacpackaging.com:8888/so_detail.html';
+        // This script will be used to fetch data from the server and display it in a table.
+        function encryptData(data) {
+            const jsonString = JSON.stringify(data);
+            return btoa(jsonString);
+        }
+        fetch(`${api_base_url}/unitList`)
+    .then(response => response.json())
+    .then(data => {
+        
+        console.log(data);
+
+        let table = '<table><tr><th>ID</th><th>Code</th><th>Name</th><th>APPROVE SO</th></tr>';
+        data.output.forEach(row => {
+            url_prams = encryptData( {
+                UNIT: row.UNIT_ID,
+                SO: "ALL"
+            });
+            table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${so_detail_url}?${url_prams} target="_blank">Show SOs</a></td></tr>`;
+        });
+        table += '</table>';
+        document.getElementById('result').innerHTML = table;
+    })
+    .catch(error => console.error('Error fetching data:', error));
+
+    </script>
+</body>
+</html>
