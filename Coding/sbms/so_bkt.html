@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full-Viewport Iframe</title>
+  <style>
+    /* Reset margins and padding */
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Ensure iframe covers the entire viewport */
+    iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <iframe src="http://sbms.tpacpackaging.com:8888/so_detail.html?eyJVTklUIjo3LCJTTyI6IkFMTCJ9" id="fullViewportIframe"></iframe>
+
+  <script>
+    // Optional: Ensure iframe resizes correctly on window resize
+    function resizeIframe() {
+      const iframe = document.getElementById('fullViewportIframe');
+      iframe.style.width = window.innerWidth + 'px';
+      iframe.style.height = window.innerHeight + 'px';
+    }
+
+    window.addEventListener('resize', resizeIframe);
+    window.addEventListener('load', resizeIframe);
+  </script>
+</body>
+</html>
