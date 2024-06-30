@@ -6,6 +6,8 @@
 </head>
 <body>
   <div id="content">Loading...</div>
+  <div id="user-email">Loading...</div>
+  <script src="https://statics.teams.microsoft.com/sdk/v1.9.0/js/MicrosoftTeams.min.js" id="TeamsJs"></script>
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const userEmail = urlParams.get('user');
@@ -15,6 +17,16 @@
     } else {
       document.getElementById('content').innerText = 'User email not found.';
     }
+
+    TeamsJs.addEventListener('load', function () {
+      microsoftTeams.initialize();
+      microsoftTeams.getContext((context) => {
+        // You can now use context.userPrincipalName or context.userObjectId
+        const userEmail = context.userPrincipalName;
+        document.getElementById('user-email').innerText = userEmail;
+        // Use the email to fetch user-specific content
+      });
+    });
   </script>
 </body>
 </html>
