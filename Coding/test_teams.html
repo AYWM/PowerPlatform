@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Teams Tab</title>
+</head>
+<body>
+  <div id="content">Loading...</div>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const userEmail = urlParams.get('user');
+    if (userEmail) {
+      document.getElementById('content').innerText = `Welcome, ${userEmail}`;
+      // Use the email to fetch user-specific content
+    } else {
+      document.getElementById('content').innerText = 'User email not found.';
+    }
+  </script>
+</body>
+</html>
