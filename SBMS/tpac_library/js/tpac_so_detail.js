@@ -1,9 +1,9 @@
 
 
 // let api_base_url = 'http://192.168.12.14:3000/sbms';
-let api_base_url = 'http://api.tpacpackaging.com:3000/sbms';
+let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
 // let so_detail_url = 'http://192.168.12.14:8888/so_detail.html';
-let so_detail_url = 'http://sbms.tpacpackaging.com:8888/so_detail.html';
+let so_detail_url = 'https://aywm.github.io/PowerPlatform/SBMS/so_detail.html';
 let approveQueue = [];
 let originalValues = {}; // To store the original values of the dropdowns
 let UnitParam,SoParam,UserName;
