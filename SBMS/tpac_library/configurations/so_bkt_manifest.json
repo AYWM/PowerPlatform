@@ -1,0 +1,36 @@
+{
+  "$schema": "https://developer.microsoft.com/en-us/json-schemas/teams/v1.9/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.9",
+  "version": "1.0.0",
+  "id": "123e4567-e89b-12d3-a456-426614174000",  // This should be a unique GUID
+  "packageName": "com.yourcompany.yourapp",
+  "developer": {
+    "name": "TPAC Packaging",
+    "websiteUrl": "https://www.tpacpackaging.com",
+    "privacyUrl": "https://www.tpacpackaging.com/privacy",
+    "termsOfUseUrl": "https://www.tpacpackaging.com/terms"
+  },
+  "name": {
+    "short": "TPAC SBMS",
+    "full": "TPAC SBMS: Web Extension"
+  },
+  "description": {
+    "short": "This is your app",
+    "full": "This is a longer description of your app"
+  },
+  "icons": {
+    "outline": "outline.png",
+    "color": "color.png"
+  },
+  "accentColor": "#FFFFFF",
+  "staticTabs": [
+    {
+      "entityId": "unique-id",
+      "name": "Your Tab",
+      "contentUrl": "http://sbms.tpacpackaging.com:8888/so_detail.html?eyJVTklUIjo3LCJTTyI6IkFMTCJ9",
+      "scopes": ["personal"]
+    }
+  ],
+  "permissions": ["identity", "messageTeamMembers"],
+  "validDomains": ["tpacpackaging.com"]
+}
