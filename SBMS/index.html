@@ -18,8 +18,8 @@
 </head>
 <body>
     <h1>TPAC SBMS: Web Extension Home</h1>
-    <div id="result"></div>
     <div id="user-email"></div>
+    <div id="result"></div>
     <script id="TeamsJs" src="tpac_library/js/MicrosoftTeams.min.js" async></script>
     <script>
         // let api_base_url = 'http://192.168.12.14:3000/sbms';
@@ -43,7 +43,7 @@
                 UNIT: row.UNIT_ID,
                 SO: "ALL"
             });
-            table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${so_detail_url}?${url_prams} target="_blank">Show SOs</a></td></tr>`;
+            table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${so_detail_url}?${url_prams}>Show SOs</a></td></tr>`;
         });
         table += '</table>';
         document.getElementById('result').innerHTML = table;
@@ -58,7 +58,7 @@
                 console.log(context);
                 const userEmail = context.userPrincipalName;
                 if (userEmail) {
-                    document.getElementById('user-email').innerText = userEmail;
+                    document.getElementById('user-email').innerHTML = "<h1>Welcome " + userEmail + ", Choose from below unit to enter: </h>";
                 }
                 // Use the email to fetch user-specific content
               });
