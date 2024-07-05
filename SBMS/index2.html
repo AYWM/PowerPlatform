@@ -192,11 +192,7 @@
         //         }
         //     });
         // });
-        document.addEventListener('DOMContentLoaded', function () {
-            // Ensure that the SDK script has loaded
-            const scriptElement = document.getElementById('TeamsJS2');
-            scriptElement.addEventListener('load', function () {
-                // Initialize the Teams SDK
+       // Initialize the Teams SDK
                 microsoftTeams.app.initialize({
                     initializeInClient: true,
                     timeout: 60000 // 60 seconds
@@ -228,8 +224,6 @@
                         console.error("An error occurred:", error);
                     }
                 });
-            });
-        });
 
         function handleThemeChange(theme){
             console.log("Current theme:", theme);
