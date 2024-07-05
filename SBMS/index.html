@@ -192,44 +192,84 @@
         //         }
         //     });
         // });
-        document.addEventListener('DOMContentLoaded', function () {
-            // Ensure that the SDK script has loaded
-            const scriptElement = document.getElementById('TeamsJS2');
-            scriptElement.addEventListener('load', function () {
-                // Initialize the Teams SDK
-                microsoftTeams.app.initialize({
-                    initializeInClient: true,
-                    timeout: 60000 // 60 seconds
-                }).then(() => {
-                    // Get the context
-                    return microsoftTeams.app.getContext();
-                }).then((context) => {
+        document.addEventListener('DOMContentLoaded', async function () {
+          // Ensure that the SDK script has loaded
+          const scriptElement = document.getElementById('TeamsJS2');
+          scriptElement.addEventListener('load', async function () {
+            try {
+              // Initialize the Teams SDK
+              await microsoftTeams.app.initialize({
+                initializeInClient: true,
+                timeout: 60000 // 60 seconds
+              });
 
-                    microsoftTeams.app.registerOnThemeChangeHandler(handleThemeChange);
-                    const userEmail = context.user.userPrincipalName;
-                    const currentTheme = context.theme;
-                    const sessionId = context.app.host.sessionId;
-                    const appSessionId = context.app.sessionId;
-                    
-                    console.log(context);
-                    if (userEmail) {
-                        let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
-                        displayText += "<br />";
-                        displayText += "<p id='TeamsTheme'>Theme: " + currentTheme + ",</p><p> Session ID: " + sessionId + "</p><p>App Session: " + appSessionId + "</p><hr>";
-                        document.getElementById('user-email').innerHTML = displayText;
-                        fetchCredential(userEmail);
-                    }
-                }).catch((error) => {
-                    if (error.message.includes("Initialization Failed. No Parent window found")) {
-                        // Display an alert to the user
-                        alert("Please open this application in the Microsoft Teams desktop or web app.");
-                    } else {
-                        // Handle other errors
-                        console.error("An error occurred:", error);
-                    }
-                });
-            });
+              // Get the context
+              const context = await microsoftTeams.app.getContext();
+
+              microsoftTeams.app.registerOnThemeChangeHandler(handleThemeChange);
+              const userEmail = context.user.userPrincipalName;
+              const currentTheme = context.theme;
+              const sessionId = context.app.host.sessionId;
+              const appSessionId = context.app.sessionId;
+
+              console.log(context);
+              if (userEmail) {
+                let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
+                displayText += "<br />";
+                displayText += "<p id='TeamsTheme'>Theme: " + currentTheme + ",</p><p> Session ID: " + sessionId + "</p><p>App Session: " + appSessionId + "</p><hr>";
+                document.getElementById('user-email').innerHTML = displayText;
+                fetchCredential(userEmail);
+              }
+            } catch (error) {
+              if (error.message.includes("Initialization Failed. No Parent window found")) {
+                // Display an alert to the user
+                alert("Please open this application in the Microsoft Teams desktop or web app.");
+              } else {
+                // Handle other errors
+                console.error("An error occurred:", error);
+              }
+            }
+          });
         });
+
+        // document.addEventListener('DOMContentLoaded', function () {
+        //     // Ensure that the SDK script has loaded
+        //     const scriptElement = document.getElementById('TeamsJS2');
+        //     scriptElement.addEventListener('load', function () {
+        //         // Initialize the Teams SDK
+        //         microsoftTeams.app.initialize({
+        //             initializeInClient: true,
+        //             timeout: 60000 // 60 seconds
+        //         }).then(() => {
+        //             // Get the context
+        //             return microsoftTeams.app.getContext();
+        //         }).then((context) => {
+
+        //             microsoftTeams.app.registerOnThemeChangeHandler(handleThemeChange);
+        //             const userEmail = context.user.userPrincipalName;
+        //             const currentTheme = context.theme;
+        //             const sessionId = context.app.host.sessionId;
+        //             const appSessionId = context.app.sessionId;
+                    
+        //             console.log(context);
+        //             if (userEmail) {
+        //                 let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
+        //                 displayText += "<br />";
+        //                 displayText += "<p id='TeamsTheme'>Theme: " + currentTheme + ",</p><p> Session ID: " + sessionId + "</p><p>App Session: " + appSessionId + "</p><hr>";
+        //                 document.getElementById('user-email').innerHTML = displayText;
+        //                 fetchCredential(userEmail);
+        //             }
+        //         }).catch((error) => {
+        //             if (error.message.includes("Initialization Failed. No Parent window found")) {
+        //                 // Display an alert to the user
+        //                 alert("Please open this application in the Microsoft Teams desktop or web app.");
+        //             } else {
+        //                 // Handle other errors
+        //                 console.error("An error occurred:", error);
+        //             }
+        //         });
+        //     });
+        // });
 
         function handleThemeChange(theme){
             console.log("Current theme:", theme);
