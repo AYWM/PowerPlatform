@@ -97,7 +97,7 @@
             });
         }
 
-        function fetchModules(p_email,u,p){
+         function fetchModules(p_email,u,p){
             const email_id = p_email;
             const username = (u == null || u == undefined ) ? '' : u.toString();
             const password = (p == null || p == undefined) ? '' : p ;
@@ -113,16 +113,17 @@
             })
             .then(response => response.json())
             .then(data => {
-                let table = '<table><tr><th>ID</th><th>Code</th><th>Name</th><th>APPROVE SO</th></tr>';
+                let table = '<table><tr><th>ID</th><th>Code</th><th>Name</th><th>URL🔗</th></tr>';
                 data.output.forEach(row => {
                     url_prams = encryptData( {
                         UNIT: row.UNIT_ID,
-                        SO: "ALL",
+                        QueryCriteria: "ALL",
                         USER: username,
                         PASSWORD: password,
-                        EMAIL: email_id
+                        EMAIL: email_id,
+                        DataType: row.DATA_TYPE
                     });
-                    table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${detail_page_url}?${url_prams}>Show SOs</a></td></tr>`;
+                    table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${detail_page_url}?${url_prams}>Show ${row.DATA_TYPE}s</a></td></tr>`;
                 });
                 table += '</table>';
                 document.getElementById('result').innerHTML = table;
