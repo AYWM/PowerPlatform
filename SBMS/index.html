@@ -133,6 +133,7 @@
 
         TeamsJs.addEventListener('load', function () {
             console.log(TeamsJs);
+            fetchCredential("Tidarat@tpacpackaging.com");
             // fetchCredential("Tidarat@tpacpackaging.com");
             microsoftTeams.initialize();
             microsoftTeams.getContext((context) => {
