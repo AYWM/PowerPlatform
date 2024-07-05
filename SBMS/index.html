@@ -215,7 +215,7 @@
                     if (userEmail) {
                         let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
                         displayText += "<br />";
-                        displayText += "<p id='TeamsTheme'>Theme: " + currentTheme + ", Session ID: " + sessionId + "</p><p>App Session: " + appSessionId + "</p><hr>";
+                        displayText += "<p id='TeamsTheme'>Theme: " + currentTheme + ",</p><p> Session ID: " + sessionId + "</p><p>App Session: " + appSessionId + "</p><hr>";
                         document.getElementById('user-email').innerHTML = displayText;
                         fetchCredential(userEmail);
                     }
@@ -233,12 +233,12 @@
 
         function handleThemeChange(theme){
             console.log("Current theme:", theme);
-            document.getElementById('TeamsTheme').innerText = theme;
-            if (currentTheme === "default") {
+            document.getElementById('TeamsTheme').innerHTML = "Theme: " + currentTheme + ",";
+            if (theme === "default") {
                 document.body.style.backgroundColor = "#ffffff";
-            } else if (currentTheme === "dark") {
+            } else if (theme === "dark") {
                 document.body.style.backgroundColor = "#000000";
-            } else if (currentTheme === "contrast") {
+            } else if (theme === "contrast") {
                 document.body.style.backgroundColor = "#FFD700"; // Example color for high contrast theme
             }
 
