@@ -1,37 +1,41 @@
 
 
 // let api_base_url = 'http://192.168.12.14:3000/sbms';
-let api_base_url = 'http://api.tpacpackaging.com:3000/sbms';
-//let detail_page_url = 'http://192.168.12.14:8888/tpac_detail_table.html';
+let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
+// let detail_page_url = 'http://192.168.12.14:8888/tpac_detail_table.html';
 let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/tpac_detail_table.html'
 let approveQueue = [];
 let originalValues = {}; // To store the original values of the dropdowns
-let encoded_url_params,UnitParam,SoParam,UserName;
+let encoded_url_params,UnitParam,QueryCriteria,UserName,UserEmail,DataType;
 
 
 function getQueryParams() {
     // const urlParams = new URLSearchParams(window.location.search);
     encoded_url_params = window.location.search.slice(1);
     const urlParams = decryptData(encoded_url_params);
+    const UserPWD = urlParams.PASSWORD
     UnitParam = urlParams.UNIT;
-    SoParam = urlParams.SO;
+    QueryCriteria = urlParams.QueryCriteria;
+    DataType = urlParams.DataType;
+    UserEmail = urlParams.EMAIL;
+    UserName = urlParams.USER;
 
-    if(urlParams.USER && urlParams.PASSWORD){
-        UserName = urlParams.USER;
-        const userPassword = urlParams.PASSWORD;
+    console.log(encoded_url_params,UnitParam,QueryCriteria,UserName,UserPWD,UserEmail,DataType);
+
+    if(UserName && UserPWD){
         const password_selectElement = document.getElementById('password');
-        password_selectElement.value = userPassword;
-        // console.log(UserName,userPassword,UnitParam,SoParam);
-        verifyUser(urlParams.USER.toString(),urlParams.PASSWORD);
+        password_selectElement.value = UserPWD;
+        // console.log(UserName,UserPWD,UnitParam,QueryCriteria);
+        verifyUser(UserName,UserPWD);
     }
 
-    if(SoParam && SoParam == 'ALL'){
+    if(QueryCriteria && QueryCriteria == 'ALL'){
         fetchUsernames(UnitParam);
     }
     else{
         const verificationContainer = document.querySelector('.verification-container');
         verificationContainer.classList.add('hidden');
-        fetchData(UnitParam,SoParam);
+        fetchData(UnitParam,QueryCriteria);
     }
 }
 
@@ -82,7 +86,7 @@ function verifyUser(username, password) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            fetchData(UnitParam,SoParam);
+            fetchData(UnitParam,QueryCriteria);
         } else {
             alert(data.detail.split('\n')[0]);
             throw new Error(data.detail);
@@ -252,7 +256,7 @@ function fetchData(unitId, SoNumber) {
                             buttons: ['copy', 'csv', 'excel', 'print',{
                                        extend: 'pdfHtml5',
                                        orientation: 'landscape',
-                                       pageSize: SoParam === 'ALL' ? 'A2' : 'A4'
+                                       pageSize: QueryCriteria === 'ALL' ? 'A2' : 'A4'
                                     }],
                             layout: {
                                 top2Start: 'buttons'
@@ -451,7 +455,7 @@ function submitApproveQueue() {
                 alert('Approval successfully');
                 approveQueue = [];
                 renderApproveQueue();
-                fetchData(UnitParam,SoParam);
+                fetchData(UnitParam,QueryCriteria);
             } else {
                 alert(data.detail.split('\n')[0]);
                 throw new Error(data.detail);
