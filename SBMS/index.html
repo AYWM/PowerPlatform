@@ -204,25 +204,18 @@
                     // Get the context
                     return microsoftTeams.app.getContext();
                 }).then((context) => {
+
+                    microsoftTeams.app.registerOnThemeChangeHandler(handleThemeChange);
                     const userEmail = context.user.userPrincipalName;
                     const currentTheme = context.theme;
                     const sessionId = context.app.host.sessionId;
                     const appSessionId = context.app.sessionId;
-
-                    // Example: Change the background color based on the theme
-                    if (currentTheme === "default") {
-                        document.body.style.backgroundColor = "#ffffff";
-                    } else if (currentTheme === "dark") {
-                        document.body.style.backgroundColor = "#000000";
-                    } else if (currentTheme === "contrast") {
-                        document.body.style.backgroundColor = "#FFD700"; // Example color for high contrast theme
-                    }
-
+                    
                     console.log(context);
                     if (userEmail) {
                         let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
                         displayText += "<br />";
-                        displayText += "<p>Theme: " + currentTheme + ", Session ID: " + sessionId + "</p><p>App Session: " + appSessionId + "</p><hr>";
+                        displayText += "<p id='TeamsTheme'>Theme: " + currentTheme + ", Session ID: " + sessionId + "</p><p>App Session: " + appSessionId + "</p><hr>";
                         document.getElementById('user-email').innerHTML = displayText;
                         fetchCredential(userEmail);
                     }
@@ -237,6 +230,19 @@
                 });
             });
         });
+
+        function handleThemeChange(theme){
+            console.log("Current theme:", theme);
+            document.getElementById('TeamsTheme').innerText = theme;
+            if (currentTheme === "default") {
+                document.body.style.backgroundColor = "#ffffff";
+            } else if (currentTheme === "dark") {
+                document.body.style.backgroundColor = "#000000";
+            } else if (currentTheme === "contrast") {
+                document.body.style.backgroundColor = "#FFD700"; // Example color for high contrast theme
+            }
+
+        }
     </script>
 </body>
 </html>
