@@ -19,49 +19,135 @@
 <body>
     <h1>TPAC SBMS: Web Extension Home</h1>
     <div id="user-email"></div>
+    <div id="user-detail"></div>
     <div id="result"></div>
     <script id="TeamsJs" src="tpac_library/js/MicrosoftTeams.min.js" async></script>
     <script>
         // let api_base_url = 'http://192.168.12.14:3000/sbms';
         let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
-        // let so_detail_url = 'http://192.168.12.14:8888/so_detail.html';
-        let so_detail_url = 'https://aywm.github.io/PowerPlatform/SBMS/so_detail.html';
+        // let detail_page_url = 'http://192.168.12.14:8888/tpac_detail_table.html';
+        let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/tpac_detail_table.html';
         // This script will be used to fetch data from the server and display it in a table.
         function encryptData(data) {
             const jsonString = JSON.stringify(data);
             return btoa(jsonString);
         }
-        fetch(`${api_base_url}/unitList`)
-    .then(response => response.json())
-    .then(data => {
         
-        console.log(data);
+        function fetchModulesOld(){
+            fetch(`${api_base_url}/unitList`)
+            .then(response => response.json())
+            .then(data => {
+                
+                console.log(data.output);
 
-        let table = '<table><tr><th>ID</th><th>Code</th><th>Name</th><th>APPROVE SO</th></tr>';
-        data.output.forEach(row => {
-            url_prams = encryptData( {
-                UNIT: row.UNIT_ID,
-                SO: "ALL"
+                let table = '<table><tr><th>ID</th><th>Code</th><th>Name</th><th>APPROVE SO</th></tr>';
+                data.output.forEach(row => {
+                    console.log(row)
+                    url_prams = encryptData( {
+                        UNIT: row.UNIT_ID,
+                        SO: "ALL"
+                    });
+                    table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${detail_page_url}?${url_prams}>Show SOs</a></td></tr>`;
+                });
+                table += '</table>';
+                document.getElementById('result').innerHTML = table;
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function fetchCredential(p_email){
+            
+            const email_id = p_email;
+            const username = '';
+            const password = '';
+            const unit_id = 2508;
+            const data_type = 'USER_CREDENTIAL';
+            const search_param = '';
+
+            fetch(`${api_base_url}/SelectFromSBMS`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username, password, unit_id, email_id, data_type, search_param})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log(data.output[0]);
+                    const u = data.output[0].USER_NAME;
+                    const p = data.output[0].PASSWORD;
+                    const d = data.output[0].DEPARTMENT;
+                    const l = data.output[0].LAST_LOGON_DATE;
+                    const ul = data.output[0].USER_LOCKED;
+                    document.getElementById('user-detail').innerHTML = '<p>User ID: ' + u + ',</p><p>Department: ' + d + ',</p><p>Last Logon Date: ' + l + ',</p><p>User Locked: ' + ul + '</p>';
+                    if(ul && ul == 'Y'){
+                        alert('User ' + u + ' is Locked !');
+                        return;
+                    }
+                    fetchModules(p_email,u,p);
+                } else {
+                    alert(data.message);
+                    throw new Error(data.message);
+                } 
+            })  
+            .catch(error => {
+                console.error('Error fetching data:', error)
             });
-            table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${so_detail_url}?${url_prams}>Show SOs</a></td></tr>`;
-        });
-        table += '</table>';
-        document.getElementById('result').innerHTML = table;
-    })
-    .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function fetchModules(p_email,u,p){
+            const email_id = p_email;
+            const username = (u == null || u == undefined ) ? '' : u.toString();
+            const password = (p == null || p == undefined) ? '' : p ;
+            const unit_id = 2508;
+            const data_type = 'UNIT_LIST';
+            const search_param = '';
+            fetch(`${api_base_url}/SelectFromSBMS`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username, password, unit_id, email_id, data_type, search_param})
+            })
+            .then(response => response.json())
+            .then(data => {
+                let table = '<table><tr><th>ID</th><th>Code</th><th>Name</th><th>APPROVE SO</th></tr>';
+                data.output.forEach(row => {
+                    url_prams = encryptData( {
+                        UNIT: row.UNIT_ID,
+                        SO: "ALL",
+                        USER: u,
+                        PASSWORD: p,
+                        EMAIL: email_id
+                    });
+                    table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${detail_page_url}?${url_prams}>Show SOs</a></td></tr>`;
+                });
+                table += '</table>';
+                document.getElementById('result').innerHTML = table;
+            })  
+            .catch(error => {
+                console.error('Error fetching data:', error)
+            });
+        }
 
         TeamsJs.addEventListener('load', function () {
-             console.log(TeamsJs);
-              microsoftTeams.initialize();
-              microsoftTeams.getContext((context) => {
+            console.log(TeamsJs);
+            // fetchCredential("Tidarat@tpacpackaging.com");
+            microsoftTeams.initialize();
+            microsoftTeams.getContext((context) => {
                 // You can now use context.userPrincipalName or context.userObjectId
                 console.log(context);
                 const userEmail = context.userPrincipalName;
                 if (userEmail) {
-                    document.getElementById('user-email').innerHTML = "<h1>Welcome " + userEmail + ", Choose from below unit to enter: </h1>";
+                    let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
+                    displayText += "<br />";
+                    displayText += "<p>Theme: "+context.theme+", Session ID: "+context.sessionId+"</p><hr>";
+                    document.getElementById('user-email').innerHTML = displayText;
+                    fetchCredential(userEmail);
                 }
-                // Use the email to fetch user-specific content
-              });
+            // Use the email to fetch user-specific content
+          });
         });
 
     </script>
