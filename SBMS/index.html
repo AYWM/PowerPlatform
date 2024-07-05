@@ -21,7 +21,8 @@
     <div id="user-email"></div>
     <div id="user-detail"></div>
     <div id="result"></div>
-    <script id="TeamsJs" src="tpac_library/js/MicrosoftTeams.min.js" async></script>
+    <!-- <script id="TeamsJs" src="tpac_library/js/MicrosoftTeams.min.js" async></script> -->
+    <script id="TeamsJS2" src="tpac_library/js/MicrosoftTeams2.min.js" async></script>
     <script>
         // let api_base_url = 'http://192.168.12.14:3000/sbms';
         let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
@@ -131,26 +132,52 @@
             });
         }
 
-        TeamsJs.addEventListener('load', function () {
-            console.log(TeamsJs);
-            fetchCredential("Tidarat@tpacpackaging.com");
-            // fetchCredential("Tidarat@tpacpackaging.com");
-            microsoftTeams.initialize();
-            microsoftTeams.getContext((context) => {
-                // You can now use context.userPrincipalName or context.userObjectId
-                console.log(context);
-                const userEmail = context.userPrincipalName;
-                if (userEmail) {
-                    let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
-                    displayText += "<br />";
-                    displayText += "<p>Theme: "+context.theme+", Session ID: "+context.sessionId+"</p><hr>";
-                    document.getElementById('user-email').innerHTML = displayText;
-                    fetchCredential(userEmail);
-                }
-            // Use the email to fetch user-specific content
-          });
-        });
+        // TeamsJs.addEventListener('load', function () {
+        //     console.log(TeamsJs);
+        //     // fetchCredential("Tidarat@tpacpackaging.com");
+        //     microsoftTeams.initialize();
+        //     microsoftTeams.getContext((context) => {
+        //         // You can now use context.userPrincipalName or context.userObjectId
+        //         console.log(context);
+        //         const userEmail = context.userPrincipalName;
+        //         if (userEmail) {
+        //             let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
+        //             displayText += "<br />";
+        //             displayText += "<p>Theme: "+context.theme+", Session ID: "+context.sessionId+"</p><hr>";
+        //             document.getElementById('user-email').innerHTML = displayText;
+        //             fetchCredential(userEmail);
+        //         }
+        //     // Use the email to fetch user-specific content
+        //   });
+        // });
 
+        TeamsJS2.addEventListener('load', function () {
+            console.log(TeamsJS2);
+            microsoftTeams.app.initialize().then(() => {
+                microsoftTeams.app.getContext().then((context) => {
+                    const userEmail = context.user.userPrincipalName;
+                    const currentTheme = context.theme;
+                    const sessionId = context.sessionId;
+                    // You can now use context.userPrincipalName or context.userObjectId
+                    console.log(context);
+                    if (userEmail) {
+                        let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
+                        displayText += "<br />";
+                        displayText += "<p>Theme: "+currentTheme+", Session ID: "+sessionId+"</p><hr>";
+                        document.getElementById('user-email').innerHTML = displayText;
+                        fetchCredential(userEmail);
+                    }
+                });
+            }).catch((error) => {
+                if (error.message.includes("Initialization Failed. No Parent window found")) {
+                  // Display an alert to the user
+                  alert("Please open this application in the Microsoft Teams desktop or web app.");
+                } else {
+                  // Handle other errors
+                  console.error("An error occurred:", error);
+                }
+            });
+        });
     </script>
 </body>
 </html>
