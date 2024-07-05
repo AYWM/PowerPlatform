@@ -118,8 +118,8 @@
                     url_prams = encryptData( {
                         UNIT: row.UNIT_ID,
                         SO: "ALL",
-                        USER: u,
-                        PASSWORD: p,
+                        USER: username,
+                        PASSWORD: password,
                         EMAIL: email_id
                     });
                     table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${detail_page_url}?${url_prams}>Show SOs</a></td></tr>`;
