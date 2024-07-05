@@ -153,7 +153,11 @@
 
         TeamsJS2.addEventListener('load', function () {
             console.log(TeamsJS2);
-            microsoftTeams.app.initialize().then(() => {
+            
+            microsoftTeams.app.initialize({
+              initializeInClient: true,
+              timeout: 60000 // 60 seconds
+            }).then(() => {
                 microsoftTeams.app.getContext().then((context) => {
                     const userEmail = context.user.userPrincipalName;
                     const currentTheme = context.theme;
