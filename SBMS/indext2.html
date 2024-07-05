@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Database Results</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>TPAC SBMS: Web Extension Home</h1>
+    <div id="user-email"></div>
+    <div id="user-detail"></div>
+    <div id="result"></div>
+    <!-- <script id="TeamsJs" src="tpac_library/js/MicrosoftTeams.min.js" async></script> -->
+    <script id="TeamsJS2" src="https://res.cdn.office.net/teams-js/2.24.0/js/MicrosoftTeams.min.js"></script>
+    <script>
+        let api_base_url = 'http://192.168.12.14:3000/sbms';
+        // let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
+        let detail_page_url = 'http://192.168.12.14:8888/tpac_detail_table.html';
+        // let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/tpac_detail_table.html';
+        // This script will be used to fetch data from the server and display it in a table.
+        function encryptData(data) {
+            const jsonString = JSON.stringify(data);
+            return btoa(jsonString);
+        }
+        
+        function fetchModulesOld(){
+            fetch(`${api_base_url}/unitList`)
+            .then(response => response.json())
+            .then(data => {
+                
+                console.log(data.output);
+
+                let table = '<table><tr><th>ID</th><th>Code</th><th>Name</th><th>APPROVE SO</th></tr>';
+                data.output.forEach(row => {
+                    console.log(row)
+                    url_prams = encryptData( {
+                        UNIT: row.UNIT_ID,
+                        SO: "ALL"
+                    });
+                    table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${detail_page_url}?${url_prams}>Show SOs</a></td></tr>`;
+                });
+                table += '</table>';
+                document.getElementById('result').innerHTML = table;
+            })
+            .catch(error => console.error('Error fetching data:', error));
+        }
+
+        function fetchCredential(p_email){
+            
+            const email_id = p_email;
+            const username = '';
+            const password = '';
+            const unit_id = 2508;
+            const data_type = 'USER_CREDENTIAL';
+            const search_param = '';
+
+            fetch(`${api_base_url}/SelectFromSBMS`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username, password, unit_id, email_id, data_type, search_param})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log(data.output[0]);
+                    const u = data.output[0].USER_NAME;
+                    const p = data.output[0].PASSWORD;
+                    const d = data.output[0].DEPARTMENT;
+                    const l = data.output[0].LAST_LOGON_DATE;
+                    const ul = data.output[0].USER_LOCKED;
+                    document.getElementById('user-detail').innerHTML = '<p>User ID: ' + u + ',</p><p>Department: ' + d + ',</p><p>Last Logon Date: ' + l + ',</p><p>User Locked: ' + ul + '</p>';
+                    if(ul && ul == 'Y'){
+                        alert('User ' + u + ' is Locked !');
+                        return;
+                    }
+                    fetchModules(p_email,u,p);
+                } else {
+                    alert(data.message);
+                    throw new Error(data.message);
+                } 
+            })  
+            .catch(error => {
+                console.error('Error fetching data:', error)
+            });
+        }
+
+        function fetchModules(p_email,u,p){
+            const email_id = p_email;
+            const username = (u == null || u == undefined ) ? '' : u.toString();
+            const password = (p == null || p == undefined) ? '' : p ;
+            const unit_id = 2508;
+            const data_type = 'UNIT_LIST';
+            const search_param = '';
+            fetch(`${api_base_url}/SelectFromSBMS`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username, password, unit_id, email_id, data_type, search_param})
+            })
+            .then(response => response.json())
+            .then(data => {
+                let table = '<table><tr><th>ID</th><th>Code</th><th>Name</th><th>APPROVE SO</th></tr>';
+                data.output.forEach(row => {
+                    url_prams = encryptData( {
+                        UNIT: row.UNIT_ID,
+                        SO: "ALL",
+                        USER: u,
+                        PASSWORD: p,
+                        EMAIL: email_id
+                    });
+                    table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${detail_page_url}?${url_prams}>Show SOs</a></td></tr>`;
+                });
+                table += '</table>';
+                document.getElementById('result').innerHTML = table;
+            })  
+            .catch(error => {
+                console.error('Error fetching data:', error)
+            });
+        }
+
+        // TeamsJs.addEventListener('load', function () {
+        //     console.log(TeamsJs);
+        //     // fetchCredential("Tidarat@tpacpackaging.com");
+        //     microsoftTeams.initialize();
+        //     microsoftTeams.getContext((context) => {
+        //         // You can now use context.userPrincipalName or context.userObjectId
+        //         console.log(context);
+        //         const userEmail = context.userPrincipalName;
+        //         if (userEmail) {
+        //             let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
+        //             displayText += "<br />";
+        //             displayText += "<p>Theme: "+context.theme+", Session ID: "+context.sessionId+"</p><hr>";
+        //             document.getElementById('user-email').innerHTML = displayText;
+        //             fetchCredential(userEmail);
+        //         }
+        //     // Use the email to fetch user-specific content
+        //   });
+        // });
+
+        // TeamsJS2.addEventListener('load', function () {
+        //     console.log(TeamsJS2);
+            
+        //     microsoftTeams.app.initialize({
+        //       initializeInClient: true,
+        //       timeout: 60000 // 60 seconds
+        //     }).then(() => {
+        //         microsoftTeams.app.getContext().then((context) => {
+        //             const userEmail = context.user.userPrincipalName;
+        //             const currentTheme = context.theme;
+        //             const sessionId = context.app.host.sessionId;
+        //             const appSessionId = context.app.sessionId;
+                    
+        //             // Example: Change the background color based on the theme
+        //             if (theme === "default") {
+        //                 document.body.style.backgroundColor = "#ffffff";
+        //             } else if (theme === "dark") {
+        //                 document.body.style.backgroundColor = "#000000";
+        //             } else if (theme === "contrast") {
+        //                 document.body.style.backgroundColor = "#FFD700"; // Example color for high contrast theme
+        //             }
+                    
+        //             console.log(context);
+        //             if (userEmail) {
+        //                 let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
+        //                 displayText += "<br />";
+        //                 displayText += "<p>Theme: "+currentTheme+", Session ID: "+sessionId+"</p><p>App Session: " + appSessionId + "</p><hr>";
+        //                 document.getElementById('user-email').innerHTML = displayText;
+        //                 fetchCredential(userEmail);
+        //             }
+        //         });
+        //     }).catch((error) => {
+        //         if (error.message.includes("Initialization Failed. No Parent window found")) {
+        //           // Display an alert to the user
+        //           alert("Please open this application in the Microsoft Teams desktop or web app.");
+        //         } else {
+        //           // Handle other errors
+        //           console.error("An error occurred:", error);
+        //         }
+        //     });
+        // });
+        document.addEventListener('DOMContentLoaded', function () {
+            // Ensure that the SDK script has loaded
+            const scriptElement = document.getElementById('TeamsJS2');
+            scriptElement.addEventListener('load', function () {
+                // Initialize the Teams SDK
+                microsoftTeams.app.initialize({
+                    initializeInClient: true,
+                    timeout: 60000 // 60 seconds
+                }).then(() => {
+                    // Get the context
+                    return microsoftTeams.app.getContext();
+                }).then((context) => {
+
+                    microsoftTeams.app.registerOnThemeChangeHandler(handleThemeChange);
+                    const userEmail = context.user.userPrincipalName;
+                    const currentTheme = context.theme;
+                    const sessionId = context.app.host.sessionId;
+                    const appSessionId = context.app.sessionId;
+                    
+                    console.log(context);
+                    if (userEmail) {
+                        let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
+                        displayText += "<br />";
+                        displayText += "<p id='TeamsTheme'>Theme: " + currentTheme + ", Session ID: " + sessionId + "</p><p>App Session: " + appSessionId + "</p><hr>";
+                        document.getElementById('user-email').innerHTML = displayText;
+                        fetchCredential(userEmail);
+                    }
+                }).catch((error) => {
+                    if (error.message.includes("Initialization Failed. No Parent window found")) {
+                        // Display an alert to the user
+                        alert("Please open this application in the Microsoft Teams desktop or web app.");
+                    } else {
+                        // Handle other errors
+                        console.error("An error occurred:", error);
+                    }
+                });
+            });
+        });
+
+        function handleThemeChange(theme){
+            console.log("Current theme:", theme);
+            document.getElementById('TeamsTheme').innerText = theme;
+            if (currentTheme === "default") {
+                document.body.style.backgroundColor = "#ffffff";
+            } else if (currentTheme === "dark") {
+                document.body.style.backgroundColor = "#000000";
+            } else if (currentTheme === "contrast") {
+                document.body.style.backgroundColor = "#FFD700"; // Example color for high contrast theme
+            }
+
+        }
+    </script>
+</body>
+</html>
