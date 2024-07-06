@@ -155,6 +155,7 @@ function fetchData(pswd) {
                                         </td>`;
                         }
                         else if (index === arr.length - 2) {
+                            console.log(convertStringToJsonObject(value));
                             table += `  <td>
                                             <a href="${detail_page_url}?${encryptData(convertStringToJsonObject(value))}"  target="_blank">
                                                 Show Detail
@@ -487,7 +488,9 @@ function submitApproveQueue() {
                 renderApproveQueue();
                 fetchData(password);
             } else {
-                alert(data.detail.split('\n')[0]);
+                console.log(data);
+
+                alert(JSON.stringify(data.detail));
                 throw new Error(data.detail);
             }
         })  
