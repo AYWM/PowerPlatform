@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>TPAC SBMS WEB EXTENSION</title>
+    <meta charset="UTF-8">
 
     <style>
         table {
@@ -29,6 +30,7 @@
         let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
         // let detail_page_url = 'http://192.168.12.14:8888/tpac_detail_table.html';
         let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/tpac_detail_table.html';
+        let url_table_header = 'URL🔗';
         // This script will be used to fetch data from the server and display it in a table.
         function encryptData(data) {
             const jsonString = JSON.stringify(data);
@@ -119,17 +121,30 @@
             })
             .then(response => response.json())
             .then(data => {
-                let table = '<table><tr><th>ID</th><th>Code</th><th>Name</th><th>URL🔗</th></tr>';
+                console.log(data.output);
+                
+                let table = '<table class="display"><thead><tr>';
+                // Create table headers dynamically based on the keys of the first object
+                Object.keys(data.output[0]).forEach(key => {
+                    table += `<th>${key}</th>`;
+                });
+                table += `<th>${url_table_header}</th></tr></thead><tbody>`;
                 data.output.forEach(row => {
                     url_prams = encryptData( {
                         UNIT: row.UNIT_ID,
-                        QueryCriteria: "ALL",
+                        QueryCriteria: row.QueryCriteria,
                         USER: username,
                         PASSWORD: password,
                         EMAIL: email_id,
                         DataType: row.DATA_TYPE
                     });
-                    table += `<tr><td>${row.UNIT_ID}</td><td>${row.UNIT_CODE}</td><td>${row.UNIT_NAME}</td><td><a href=${detail_page_url}?${url_prams}>Show ${row.DATA_TYPE}s</a></td></tr>`;
+                    table += '<tr>';
+                    Object.values(row).forEach((value, index, arr) => {
+                        table += `<td>${value}</td>`;
+
+                    });
+                    table += `<td><a href=${detail_page_url}?${url_prams}>Show ${row.DATA_TYPE}s</a></td>`;
+                    table += '</tr>';
                 });
                 table += '</table>';
                 document.getElementById('result').innerHTML = table;
