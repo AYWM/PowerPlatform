@@ -33,6 +33,7 @@
         let url_table_header = 'URL🔗';
         // This script will be used to fetch data from the server and display it in a table.
         function encryptData(data) {
+            // console.log(data);
             const jsonString = JSON.stringify(data);
             return btoa(jsonString);
         }
@@ -47,11 +48,11 @@
             .then(response => response.json())
             .then(data => {
                 
-                console.log(data.output);
+                // console.log(data.output);
 
                 let table = '<table><tr><th>ID</th><th>Code</th><th>Name</th><th>APPROVE SO</th></tr>';
                 data.output.forEach(row => {
-                    console.log(row)
+                    // console.log(row)
                     url_prams = encryptData( {
                         UNIT: row.UNIT_ID,
                         SO: "ALL"
@@ -83,7 +84,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    console.log(data.output[0]);
+                    // console.log(data.output[0]);
                     const u = data.output[0].USER_NAME;
                     const p = data.output[0].PASSWORD;
                     const d = data.output[0].DEPARTMENT;
@@ -121,8 +122,7 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data.output);
-                
+                // console.log(data.output);
                 let table = '<table class="display"><thead><tr>';
                 // Create table headers dynamically based on the keys of the first object
                 Object.keys(data.output[0]).forEach(key => {
@@ -130,18 +130,18 @@
                 });
                 table += `<th>${url_table_header}</th></tr></thead><tbody>`;
                 data.output.forEach(row => {
-                    url_prams = encryptData( {
+                    url_prams = encryptData({
                         UNIT: row.UNIT_ID,
-                        QueryCriteria: row.QueryCriteria,
                         USER: username,
                         PASSWORD: password,
                         EMAIL: email_id,
-                        DataType: row.DATA_TYPE
+                        DataType: row.DATA_TYPE,
+                        QUERY_CRITERIA: row.QUERY_CRITERIA
                     });
+                    console.log(row);
                     table += '<tr>';
                     Object.values(row).forEach((value, index, arr) => {
                         table += `<td>${value}</td>`;
-
                     });
                     table += `<td><a href=${detail_page_url}?${url_prams}>Show ${row.DATA_TYPE}s</a></td>`;
                     table += '</tr>';
