@@ -107,7 +107,7 @@
                 } 
             })  
             .catch(error => {
-                const error_message = 'Error Verifying User: ' + (error.detail ? error.detail : error.message);
+                const error_message = 'Error Verifying '+p_email+' User: ' + (error.detail ? error.detail : error.message);
                 document.getElementById('error').textContent = error_message;
                 alert(error_message);
             });
