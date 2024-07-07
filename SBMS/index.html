@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>TPAC SBMS WEB EXTENSION</title>
+    <title>TPAC SBMS WEB EXTENSION HOME</title>
     <meta charset="UTF-8">
 
     <style>
@@ -110,6 +110,7 @@
                 const error_message = 'Error Verifying '+p_email+' User: ' + (error.detail ? error.detail : error.message);
                 document.getElementById('error').textContent = error_message;
                 alert(error_message);
+                fetchModules(p_email,'','');
             });
         }
 
