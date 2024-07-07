@@ -17,7 +17,7 @@ function getQueryParams() {
     UserEmail = urlParams.EMAIL;
     UserName = urlParams.USER;
 
-    console.log(encoded_url_params,UnitParam,QUERY_CRITERIA,UserName,UserPWD,UserEmail,DataType);
+    // console.log(encoded_url_params,UnitParam,QUERY_CRITERIA,UserName,UserPWD,UserEmail,DataType);
 
     if(UserName && UserPWD){
         const password_selectElement = document.getElementById('password');
@@ -53,7 +53,7 @@ function fetchUsernames(unitId) {
     .then(response => response.json())
     .then(data => {
         if (data.status === 'success') {
-            console.log(data.output[0]);
+            // console.log(data.output[0]);
             const username_selectElement = document.getElementById('username');
             username_selectElement.innerHTML = '';
             let output = data.output;
@@ -80,6 +80,7 @@ function verifyUser(username, password) {
     }
 
     unit_id = UnitParam;
+    username = username.toString();
     
     fetch(`${api_base_url}/verifyUser`, {
         method: 'POST',
@@ -108,12 +109,13 @@ function verifyUser(username, password) {
 
 function fetchData(pswd) {
     const email_id = UserEmail;
-    const username = UserName;
+    const username = UserName.toString();
     const password = pswd;
     const unit_id = UnitParam;
-    const data_type = 'SO_LIST_PENDING_APPROVE';
-    const search_param = QUERY_CRITERIA;
+    const data_type = DataType;
+    const search_param = QUERY_CRITERIA.toString();
 
+    // console.log({username, search_param, password, unit_id, email_id, data_type});
     fetch(`${api_base_url}/SelectFromSBMS`, {
         method: 'POST',
         headers: {
@@ -123,16 +125,28 @@ function fetchData(pswd) {
     })
     .then(response => response.json())
     .then(data => {
+        // console.log(data);
         if (data.status === 'success') {
-                
-            if(search_param=='ALL'){
                 let output = data.output;
-                let table = '<h2>Showing Data for ALL SO Pending for Approve of Unit: ' + unit_id + '</h2>';
-                table += '<h3>Count of details: ' + output.length + '</h3>';
-                table += '<table class="display" id="searchTable"><thead><tr>';
+                let tableHeader, tableBody, col3Index, col6Index;
+
+                if (search_param === 'ALL') {
+                    tableHeader = `<h2>Showing Data for ALL ${data_type} of Unit: ${unit_id}</h2>`;
+                    col3Index = 6;
+                    col6Index = 8;
+                } else {
+                    tableHeader = `<h2>Showing Data for ${data_type} Number ${output[0]['SO_NO']}</h2>`;
+                    col3Index = 3;
+                    col6Index = 6;
+                }
+
+                let table = `${tableHeader}
+                             <h3>Count of details: ${output.length}</h3>
+                             <table class="display" id="searchTable"><thead><tr>`;
 
                 // Create table headers dynamically based on the keys of the first object
-                Object.keys(output[0]).forEach(key => {
+                Object.keys(output[0]).forEach((key, index) => {
+                    if (search_param !== 'ALL' && index === 0) return; // Skip first column for non-ALL
                     table += `<th>${key}</th>`;
                 });
                 table += '</tr></thead><tbody>';
@@ -140,34 +154,32 @@ function fetchData(pswd) {
                 // Create table rows with data
                 output.forEach(obj => {
                     table += '<tr>';
-                    Object.values(obj).forEach((value, index, arr) => {
+                    Object.entries(obj).forEach(([key, value], index, arr) => {
+                        if (search_param !== 'ALL' && index === 0) return; // Skip first column for non-ALL
+
                         // If it's the last column, add the dropdown
-                        if (index === arr.length - 1) {
-                            originalValues[arr[2]] = value; // Save the original value
+                        if (key.toUpperCase().includes("STATUS")) { //index === arr.length - 1
+                            originalValues[arr[2][1]] = value; // Save the original value
+                            console.log(arr);
                             table += `  <td>
-                                            <!-- <select onchange="handleSelectChange(this, '${arr[0]}', '${arr[2]}', '${arr[3]}', '${arr[5]}', '${arr[6]}', '${arr[8]}')">  -->
-                                            <select class="status-select" data-txnDate="${arr[0]}" data-txndocno="${arr[2]}" data-txnentity="${arr[3]}" data-txnPerson="${arr[5]}" data-txnQuantity="${arr[6]}" data-txnAmount="${arr[8]}">   
+                                            <select class="status-select" data-txnDate="${arr[0][1]}" data-txndocno="${arr[2][1]}" data-txnentity="${arr[3][1]}" data-txnPerson="${arr[5][1]}" data-txnQuantity="${arr[6][1]}" data-txnAmount="${arr[8][1]}">   
                                                 <option value="A" ${value === 'A' ? 'selected' : ''}>Approve</option>
                                                 <option value="Z" ${value === 'Z' ? 'selected' : ''}>Cancel</option>
                                                 <option value="N" ${value === 'N' ? 'selected' : ''}>Open</option>
-                                                 <option value="V" ${value === 'V' ? 'selected' : ''}>Revise</option>
+                                                <option value="V" ${value === 'V' ? 'selected' : ''}>Revise</option>
                                             </select>
                                         </td>`;
-                        }
-                        else if (index === arr.length - 2) {
-                            console.log(convertStringToJsonObject(value));
+                        } else if (key.toUpperCase().includes("URL_PARAMETER")) { //index === arr.length - 2 && key === "URL_PARAMETER"
                             table += `  <td>
-                                            <a href="${detail_page_url}?${encryptData(convertStringToJsonObject(value))}"  target="_blank">
+                                            <a href="${detail_page_url}?${encryptData(convertStringToJsonObject(value))}" target="_blank">
                                                 Show Detail
                                             </a>
                                         </td>`;
-                        }
-                        else if (index === 0) {
+                        } else if (key.toUpperCase().includes("DATE")) { //index === 0
                             let date = new Date(value);
                             let formattedValue = !isNaN(date) ? date.toLocaleDateString() : value;
                             table += `<td data-order="${value}">${formattedValue}</td>`;
-                        }
-                        else{
+                        } else {
                             // Check if value is a number and format accordingly
                             let formattedValue = typeof value === 'number' ? value.toLocaleString(undefined, {
                                 minimumFractionDigits: 2,
@@ -175,7 +187,6 @@ function fetchData(pswd) {
                             }) : value;
                             table += `<td>${formattedValue}</td>`;
                         }
-
                     });
                     table += '</tr>';
                 });
@@ -186,72 +197,8 @@ function fetchData(pswd) {
                 document.getElementById('result').innerHTML = table;
 
                 // Calculate summary for column 3 and 6 (assuming zero-based index)
-                let col3Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[6]] || 0), 0);
-                let col6Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[8]] || 0), 0);
-
-                // Display summary
-                document.getElementById('summary').innerHTML = `
-                    <h3>Summary:</h3>
-                    <p>Sum of Quantity: ${col3Sum.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        })}</p>
-                    <p>Sum of Amount: ${col6Sum.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        })}</p>
-                `;                            
-
-            }
-            else{
-                let output = data.output;
-
-                let table = '<h2>Showing Data for SO Number ' + output[0]['SO_NO'] + '</h2>';
-                table += '<h3>Count of details: ' + output.length + '</h3>';
-                table += '<table  class="display" id="searchTable"><thead><tr>';
-                // console.log(output[0]);
-                // Create table headers dynamically based on the keys of the first object
-                Object.keys(output[0]).slice(1).forEach(key => {
-                    table += `<th>${key}</th>`;
-                });
-                table += '</tr></thead><tbody>';
-
-                // Create table rows with data
-                output.forEach(obj => {
-                    table += '<tr>';
-                    Object.values(obj).slice(1).forEach((value, index, arr) => {
-                        // If it's the last column, add the dropdown
-                        if (index === arr.length - 1) {
-                            table += `  <td>
-                                            <select>
-                                                <option value="A" ${value === 'A' ? 'selected' : ''}>Approve</option>
-                                                <option value="Z" ${value === 'Z' ? 'selected' : ''}>Cancel</option>
-                                                <option value="N" ${value === 'N' ? 'selected' : ''}>Open</option>
-                                                 <option value="V" ${value === 'V' ? 'selected' : ''}>Revise</option>
-                                            </select>
-                                        </td>`;
-                        }
-                        else{
-                            // Check if value is a number and format accordingly
-                            let formattedValue = typeof value === 'number' ? value.toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 7
-                            }) : value;
-                            table += `<td>${formattedValue}</td>`;
-                        }
-
-                    });
-                    table += '</tr>';
-                });
-
-                table += '</tbody></table>';
-
-                // Display the table in the result div
-                document.getElementById('result').innerHTML = table;
-
-                // Calculate summary for column 3 and 6 (assuming zero-based index)
-                let col3Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[3]] || 0), 0);
-                let col6Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[6]] || 0), 0);
+                let col3Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[col3Index]] || 0), 0);
+                let col6Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[col6Index]] || 0), 0);
 
                 // Display summary
                 document.getElementById('summary').innerHTML = `
@@ -265,11 +212,154 @@ function fetchData(pswd) {
                             maximumFractionDigits: 2
                         })}</p>
                 `;
-            }
+
+            // if(search_param=='ALL'){
+            //     let output = data.output;
+            //     let table = '<h2>Showing Data for ALL SO Pending for Approve of Unit: ' + unit_id + '</h2>';
+            //     table += '<h3>Count of details: ' + output.length + '</h3>';
+            //     table += '<table class="display" id="searchTable"><thead><tr>';
+
+            //     // Create table headers dynamically based on the keys of the first object
+            //     Object.keys(output[0]).forEach(key => {
+            //         table += `<th>${key}</th>`;
+            //     });
+            //     table += '</tr></thead><tbody>';
+
+            //     // Create table rows with data
+            //     output.forEach(obj => {
+            //         table += '<tr>';
+            //         Object.values(obj).forEach((value, index, arr) => {
+            //             // If it's the last column, add the dropdown
+            //             if (index === arr.length - 1) {
+            //                 originalValues[arr[2]] = value; // Save the original value
+            //                 table += `  <td>
+            //                                 <!-- <select onchange="handleSelectChange(this, '${arr[0]}', '${arr[2]}', '${arr[3]}', '${arr[5]}', '${arr[6]}', '${arr[8]}')">  -->
+            //                                 <select class="status-select" data-txnDate="${arr[0]}" data-txndocno="${arr[2]}" data-txnentity="${arr[3]}" data-txnPerson="${arr[5]}" data-txnQuantity="${arr[6]}" data-txnAmount="${arr[8]}">   
+            //                                     <option value="A" ${value === 'A' ? 'selected' : ''}>Approve</option>
+            //                                     <option value="Z" ${value === 'Z' ? 'selected' : ''}>Cancel</option>
+            //                                     <option value="N" ${value === 'N' ? 'selected' : ''}>Open</option>
+            //                                      <option value="V" ${value === 'V' ? 'selected' : ''}>Revise</option>
+            //                                 </select>
+            //                             </td>`;
+            //             }
+            //             else if (index === arr.length - 2) {
+            //                 // console.log(value);
+            //                 // 
+            //                 table += `  <td>
+            //                                 <a href="${detail_page_url}?${encryptData(convertStringToJsonObject(value))}"  target="_blank">
+            //                                     Show Detail
+            //                                 </a>
+            //                             </td>`;
+            //             }
+            //             else if (index === 0) {
+            //                 let date = new Date(value);
+            //                 let formattedValue = !isNaN(date) ? date.toLocaleDateString() : value;
+            //                 table += `<td data-order="${value}">${formattedValue}</td>`;
+            //             }
+            //             else{
+            //                 // Check if value is a number and format accordingly
+            //                 let formattedValue = typeof value === 'number' ? value.toLocaleString(undefined, {
+            //                     minimumFractionDigits: 2,
+            //                     maximumFractionDigits: 7
+            //                 }) : value;
+            //                 table += `<td>${formattedValue}</td>`;
+            //             }
+
+            //         });
+            //         table += '</tr>';
+            //     });
+
+            //     table += '</tbody></table>';
+
+            //     // Display the table in the result div
+            //     document.getElementById('result').innerHTML = table;
+
+            //     // Calculate summary for column 3 and 6 (assuming zero-based index)
+            //     let col3Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[6]] || 0), 0);
+            //     let col6Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[8]] || 0), 0);
+
+            //     // Display summary
+            //     document.getElementById('summary').innerHTML = `
+            //         <h3>Summary:</h3>
+            //         <p>Sum of Quantity: ${col3Sum.toLocaleString(undefined, {
+            //                 minimumFractionDigits: 2,
+            //                 maximumFractionDigits: 2
+            //             })}</p>
+            //         <p>Sum of Amount: ${col6Sum.toLocaleString(undefined, {
+            //                 minimumFractionDigits: 2,
+            //                 maximumFractionDigits: 2
+            //             })}</p>
+            //     `;                            
+
+            // }
+            // else{
+
+            //     let output = data.output;
+
+            //     let table = '<h2>Showing Data for SO Number ' + output[0]['SO_NO'] + '</h2>';
+            //     table += '<h3>Count of details: ' + output.length + '</h3>';
+            //     table += '<table  class="display" id="searchTable"><thead><tr>';
+            //     // console.log(output[0]);
+            //     // Create table headers dynamically based on the keys of the first object
+            //     Object.keys(output[0]).slice(1).forEach(key => {
+            //         table += `<th>${key}</th>`;
+            //     });
+            //     table += '</tr></thead><tbody>';
+
+            //     // Create table rows with data
+            //     output.forEach(obj => {
+            //         table += '<tr>';
+            //         Object.values(obj).slice(1).forEach((value, index, arr) => {
+            //             // If it's the last column, add the dropdown
+            //             if (index === arr.length - 1) {
+            //                 table += `  <td>
+            //                                 <select>
+            //                                     <option value="A" ${value === 'A' ? 'selected' : ''}>Approve</option>
+            //                                     <option value="Z" ${value === 'Z' ? 'selected' : ''}>Cancel</option>
+            //                                     <option value="N" ${value === 'N' ? 'selected' : ''}>Open</option>
+            //                                      <option value="V" ${value === 'V' ? 'selected' : ''}>Revise</option>
+            //                                 </select>
+            //                             </td>`;
+            //             }
+            //             else{
+            //                 // Check if value is a number and format accordingly
+            //                 let formattedValue = typeof value === 'number' ? value.toLocaleString(undefined, {
+            //                     minimumFractionDigits: 2,
+            //                     maximumFractionDigits: 7
+            //                 }) : value;
+            //                 table += `<td>${formattedValue}</td>`;
+            //             }
+
+            //         });
+            //         table += '</tr>';
+            //     });
+
+            //     table += '</tbody></table>';
+
+            //     // Display the table in the result div
+            //     document.getElementById('result').innerHTML = table;
+
+            //     // Calculate summary for column 3 and 6 (assuming zero-based index)
+            //     let col3Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[3]] || 0), 0);
+            //     let col6Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[6]] || 0), 0);
+
+            //     // Display summary
+            //     document.getElementById('summary').innerHTML = `
+            //         <h3>Summary:</h3>
+            //         <p>Sum of Quantity: ${col3Sum.toLocaleString(undefined, {
+            //                 minimumFractionDigits: 2,
+            //                 maximumFractionDigits: 2
+            //             })}</p>
+            //         <p>Sum of Amount: ${col6Sum.toLocaleString(undefined, {
+            //                 minimumFractionDigits: 2,
+            //                 maximumFractionDigits: 2
+            //             })}</p>
+            //     `;
+            // }
 
         } else {
-            document.getElementById('result').innerHTML = 'Error fetching data';
-            throw new Error(data.message);
+            const error_message = JSON.stringify(data.detail[0]);
+            throw new Error(error_message);
         }
 
         let table = new DataTable('#searchTable', {
@@ -293,12 +383,13 @@ function fetchData(pswd) {
                     });
     })
     .catch(error => {
+        // console.trace();
+        console.error('Error fetching data:', error);
+        document.getElementById('result').innerHTML = 'Error fetching data' + error;
         const searchTable = document.getElementById('searchTable');
         if (searchTable) {
             searchTable.remove();
         }
-        console.error('Error fetching data:', error);
-        alert('Error fetching data:', error);
     });
 }
 
@@ -411,22 +502,29 @@ document.addEventListener('click', function(event) {
 
 document.addEventListener('change', function(event) {
     if (event.target.classList.contains('status-select')) {
-        const selectElement = event.target;
-        const txndocno = selectElement.getAttribute('data-txndocno');
-        const txnDate = selectElement.getAttribute('data-txnDate');
-        const txnEntity = selectElement.getAttribute('data-txnentity');
-        const txnPerson = selectElement.getAttribute('data-txnPerson');
-        const soQuantity = selectElement.getAttribute('data-txnQuantity');
-        const soAmount = selectElement.getAttribute('data-txnAmount');
-        const newValue = selectElement.value;
-        // Remove 'selected' attribute from all options
-        Array.from(selectElement.options).forEach(option => option.removeAttribute('selected'));
-        // Set 'selected' attribute to the newly selected option
-        selectElement.options[selectElement.selectedIndex].setAttribute('selected', '');
+        try {
+            const selectElement = event.target;
+            const txndocno = selectElement.getAttribute('data-txndocno');
+            const txnDate = selectElement.getAttribute('data-txnDate');
+            const txnEntity = selectElement.getAttribute('data-txnentity');
+            const txnPerson = selectElement.getAttribute('data-txnPerson');
+            const txnQuantity = selectElement.getAttribute('data-txnQuantity');
+            const txnAmount = selectElement.getAttribute('data-txnAmount');
+            const newValue = selectElement.value;
+            console.log(txndocno, txnDate, txnEntity, txnPerson, txnQuantity, txnAmount, newValue);
+            
+            // Remove 'selected' attribute from all options
+            Array.from(selectElement.options).forEach(option => option.removeAttribute('selected'));
+            // Set 'selected' attribute to the newly selected option
+            selectElement.options[selectElement.selectedIndex].setAttribute('selected', '');
 
-        handleSelectChange(selectElement, txnDate, txndocno, txnEntity, txnPerson, soQuantity, soAmount);
+            handleSelectChange(selectElement, txnDate, txndocno, txnEntity, txnPerson, txnQuantity, txnAmount);
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
     }
 });
+
 
 document.getElementById('submitApproveQueue').addEventListener('click', function() {
     //submit SOs from the ApproveQueue table to the server to approve them
@@ -435,13 +533,25 @@ document.getElementById('submitApproveQueue').addEventListener('click', function
 
 function convertStringToJsonObject(str) {
     // Correct the string format to be valid JSON
-    const correctedStr = str.replace(/([a-zA-Z0-9_]+):/g, '"$1":');
+    const correctedStr = str.replace(/([a-zA-Z0-9_]+):([a-zA-Z0-9_@.]+)/g, '"$1":"$2"')
+                            .replace(/"(\d+)"/g, '$1'); // Remove quotes around numbers
     // console.log('Corrected String:', correctedStr);
 
     // Parse the corrected string to JSON
     const jsonObject = JSON.parse(correctedStr);
     return jsonObject;
 }
+
+
+// function convertStringToJsonObject(str) {
+//     // Correct the string format to be valid JSON
+//     const correctedStr = str.replace(/([a-zA-Z0-9_]+):/g, '"$1":');
+//     // console.log('Corrected String:', correctedStr);
+
+//     // Parse the corrected string to JSON
+//     const jsonObject = JSON.parse(correctedStr);
+//     return jsonObject;
+// }
 
 function decryptData(encryptedData) {
     const decodedString = atob(encryptedData);
@@ -468,12 +578,13 @@ function submitApproveQueue() {
     const search_param = QUERY_CRITERIA;
 
     if (username && password) {
-        fetch(`${api_base_url}/SoApproveStatus`, {
+        fetch(`${api_base_url}/ApproveStatus`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
+                data_type,
                 unit_id,
                 username,
                 password,
