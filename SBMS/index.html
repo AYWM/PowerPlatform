@@ -86,10 +86,15 @@
                 },
                 body: JSON.stringify({username, password, unit_id, email_id, data_type, search_param})
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok: ' + response.statusText);
+                }
+                response.json()
+            })
             .then(data => {
                 if (data.status === 'success') {
-                    // console.log(data.output[0]);
+                    console.log(data.output[0]);
                     const u = data.output[0].USER_NAME;
                     const p = data.output[0].PASSWORD;
                     const d = data.output[0].DEPARTMENT;
@@ -97,7 +102,7 @@
                     const ul = data.output[0].USER_LOCKED;
                     document.getElementById('user-detail').innerHTML = '<p>User ID: ' + u + ',</p><p>Department: ' + d + ',</p><p>Last Logon Date: ' + l + ',</p><p>User Locked: ' + ul + '</p>';
                     if(ul && ul == 'Y'){
-                        alert('User ' + u + ' is Locked !');
+                        alert(`User ${u} is Locked !`);
                         return;
                     }
                     fetchModules(p_email,u,p);
