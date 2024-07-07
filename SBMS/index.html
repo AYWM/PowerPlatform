@@ -143,7 +143,7 @@
                     Object.values(row).forEach((value, index, arr) => {
                         table += `<td>${value}</td>`;
                     });
-                    table += `<td><a href=${detail_page_url}?${url_prams}>Show ${row.DATA_TYPE}s</a></td>`;
+                    table += `<td><a href=${detail_page_url}?${url_prams}>Show Detail</a></td>`;
                     table += '</tr>';
                 });
                 table += '</table>';
@@ -179,9 +179,12 @@
           scriptElement.addEventListener('load', async function () {
             try {
               // Initialize the Teams SDK
+              // await microsoftTeams.app.initialize({
+              //   initializeInClient: true,
+              //   timeout: 120000 // 120 seconds,2 minutes
+              // });
               await microsoftTeams.app.initialize({
-                initializeInClient: true,
-                timeout: 120000 // 120 seconds,2 minutes
+                initializeInClient: true
               });
 
               // Get the context
