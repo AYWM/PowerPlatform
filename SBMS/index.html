@@ -16,10 +16,15 @@
             padding: 8px;
             text-align: left;
         }
+        #error {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
     <h1>TPAC SBMS: Web Extension Home</h1>
+    <div id="error"></div>
     <div id="user-email"></div>
     <div id="user-detail"></div>
     <div id="result"></div>
@@ -102,7 +107,9 @@
                 } 
             })  
             .catch(error => {
-                console.error('Error fetching data:', error)
+                const error_message = 'Error Verifying User: ' + (error.detail ? error.detail : error.message);
+                document.getElementById('error').textContent = error_message;
+                alert(error_message);
             });
         }
 
@@ -150,7 +157,11 @@
                 document.getElementById('result').innerHTML = table;
             })  
             .catch(error => {
-                console.error('Error fetching data:', error)
+                console.error('Error fetching Modules:', error);
+                const error_message = 'Error Fetching Modules: ' + (error.detail ? error.detail : error.message);
+                document.getElementById('error').textContent = error_message;
+                alert(error_message);
+
             });
         }
 
@@ -175,49 +186,63 @@
 
         document.addEventListener('DOMContentLoaded', async function () {
           // Ensure that the SDK script has loaded
-          const scriptElement = document.getElementById('TeamsJS2');
-          scriptElement.addEventListener('load', async function () {
-            try {
-              // Initialize the Teams SDK
-              // await microsoftTeams.app.initialize({
-              //   initializeInClient: true,
-              //   timeout: 120000 // 120 seconds,2 minutes
-              // });
-              await microsoftTeams.app.initialize({
-                initializeInClient: true
-              });
-
-              // Get the context
-              const context = await microsoftTeams.app.getContext();
-
-              microsoftTeams.app.registerOnThemeChangeHandler(handleThemeChange);
-              const userEmail = context.user.userPrincipalName;
-              const currentTheme = context.theme;
-              const sessionId = context.app.host.sessionId;
-              const appSessionId = context.app.sessionId;
-
-              console.log(context);
-              if (userEmail) {
-                let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
-                displayText += "<br />";
-                displayText += "<p id='TeamsTheme'>Theme: " + currentTheme + ",</p><p> Session ID: " + sessionId + "</p><p>App Session: " + appSessionId + "</p><hr>";
-                document.getElementById('user-email').innerHTML = displayText;
-                fetchCredential(userEmail);
-              }else{
-                  loadFromWebParam();
-              }
-            } catch (error) {
-                if (error.message.includes("Initialization Failed. No Parent window found")) {
-                    alert("Please open this application in the Microsoft Teams desktop or web app.");
-                } else if (error.message.includes("SDK initialization timed out")) {
-                    alert("SDK initialization timed out. Please try reloading the page or check your network connection.");
-
-                } else {
-                    console.error("An error occurred:", error);
-                }
-                loadFromWebParam();
+            const scriptElement = document.getElementById('TeamsJS2');
+            if (!scriptElement) {
+                const error_message = "Error: TeamsJS script element not found.";
+                alert(error_message);
+                document.getElementById('error').textContent = error_message;
+                return;
             }
-          });
+
+            scriptElement.addEventListener('load', async function () {
+                try {
+                    // Initialize the Teams SDK
+                    await microsoftTeams.app.initialize({
+                    initializeInClient: true,
+                    timeout: 39000 // 39 seconds
+                    });
+
+                    // Get the context
+                    const context = await microsoftTeams.app.getContext();
+
+                    const userEmail = context.user.userPrincipalName;
+                    const currentTheme = context.theme;
+                    const sessionId = context.app.host.sessionId;
+                    const appSessionId = context.app.sessionId;
+
+                    console.log(context);
+                    if (userEmail) {
+                        let displayText = "<h1>Welcome " + userEmail + ", Choose from below links: </h1>";
+                        displayText += "<br />";
+                        displayText += "<p id='TeamsTheme'>Theme: " + currentTheme + ",</p><p> Session ID: " + sessionId + "</p><p>App Session: " + appSessionId + "</p><hr>";
+                        document.getElementById('user-email').innerHTML = displayText;
+                        fetchCredential(userEmail);
+                    }
+
+                    microsoftTeams.app.registerOnThemeChangeHandler(handleThemeChange);
+
+                }catch (error) {
+                    let error_message = '';
+                    if (error.message.includes("Initialization Failed. No Parent window found"))
+                        error_message = "Please open this application in the Microsoft Teams desktop or web app.";
+                    else if (error.message.includes("SDK initialization timed out"))
+                        error_message = "SDK initialization timed out. Please try on the Mobile App, or try reloading the page or check your network connection.";
+                    else
+                        error_message = "Microsoft Teams JS SDK error: " + error.message;
+
+                    alert(error_message);
+                    document.getElementById('error').textContent = error_message;
+                    loadFromWebParam();
+                }
+            });
+
+            // Handle script load error
+            scriptElement.addEventListener('error', function () {
+                const error_message = "Error: Failed to load TeamsJS script.";
+                alert(error_message);
+                document.getElementById('error').textContent = error_message;
+                loadFromWebParam();
+            });
         });
 
         function handleThemeChange(theme){
@@ -237,7 +262,11 @@
             const encoded_url_params = window.location.search.slice(1);
             const urlParams = decryptData(encoded_url_params);
             const UserEmail = urlParams.EMAIL;
-            fetchCredential(UserEmail);
+            if (UserEmail) {
+                fetchCredential(UserEmail);
+            }else{
+                document.getElementById('error').textContent = 'Loading Teams SDK Failed. Fetching User Identity failed';
+            }
         }
     </script>
 </body>
