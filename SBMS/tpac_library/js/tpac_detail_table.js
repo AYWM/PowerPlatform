@@ -69,7 +69,10 @@ function fetchUsernames(unitId) {
         } 
     })  
     .catch(error => {
-        console.error('Error fetching data:', error)
+        const error_message = 'Error fetch usernames for data: '+DataType+': ' + (error.detail ? error.detail : error.message);
+        document.getElementById('error').textContent = error_message;
+        alert(error_message);
+        console.error('Error fetching data:', error);
     });
 }
 
@@ -99,6 +102,11 @@ function verifyUser(username, password) {
         }
     })  
     .catch(error => {
+
+        const error_message = 'Error verify user '+username+': ' + (error.detail ? error.detail : error.message);
+        document.getElementById('error').textContent = error_message;
+        alert(error_message);
+        console.error('Error fetching data:', error);
         const searchTable = document.getElementById('searchTable');
         if (searchTable) {
             searchTable.remove();
@@ -160,7 +168,7 @@ function fetchData(pswd) {
                         // If it's the last column, add the dropdown
                         if (key.toUpperCase().includes("STATUS")) { //index === arr.length - 1
                             originalValues[arr[2][1]] = value; // Save the original value
-                            console.log(arr);
+                            // console.log(arr);
                             table += `  <td>
                                             <select class="status-select" data-txnDate="${arr[0][1]}" data-txndocno="${arr[2][1]}" data-txnentity="${arr[3][1]}" data-txnPerson="${arr[5][1]}" data-txnQuantity="${arr[6][1]}" data-txnAmount="${arr[8][1]}">   
                                                 <option value="A" ${value === 'A' ? 'selected' : ''}>Approve</option>
@@ -384,8 +392,11 @@ function fetchData(pswd) {
     })
     .catch(error => {
         // console.trace();
+        const error_message = 'Error fetching '+data_type+': ' + (error.detail ? error.detail : error.message);
+        document.getElementById('error').textContent = error_message;
+        alert(error_message);
         console.error('Error fetching data:', error);
-        document.getElementById('result').innerHTML = 'Error fetching data' + error;
+        document.getElementById('result').innerHTML = '';
         const searchTable = document.getElementById('searchTable');
         if (searchTable) {
             searchTable.remove();
@@ -520,6 +531,9 @@ document.addEventListener('change', function(event) {
 
             handleSelectChange(selectElement, txnDate, txndocno, txnEntity, txnPerson, txnQuantity, txnAmount);
         } catch (error) {
+            const error_message = 'Error changing status: ' + (error.detail ? error.detail : error.message);
+            document.getElementById('error').textContent = error_message;
+            alert(error_message);
             console.error('An error occurred:', error);
         }
     }
@@ -606,9 +620,10 @@ function submitApproveQueue() {
             }
         })  
         .catch(error => {
+            const error_message = 'Error Approving Queue: ' + (error.detail ? error.detail : error.message);
+            document.getElementById('error').textContent = error_message;
+            alert(error_message);
             console.error('Error fetching data:', error);
-            alert('Error fetching data:', error);
-
         });
     }
 }
