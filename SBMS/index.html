@@ -203,6 +203,8 @@
                 displayText += "<p id='TeamsTheme'>Theme: " + currentTheme + ",</p><p> Session ID: " + sessionId + "</p><p>App Session: " + appSessionId + "</p><hr>";
                 document.getElementById('user-email').innerHTML = displayText;
                 fetchCredential(userEmail);
+              }else{
+                  loadFromWebParam();
               }
             } catch (error) {
                 if (error.message.includes("Initialization Failed. No Parent window found")) {
