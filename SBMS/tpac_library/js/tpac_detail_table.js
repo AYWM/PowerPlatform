@@ -224,25 +224,29 @@ function fetchData(pswd) {
                 })}</p>
         `;
 
-        let table = new DataTable('#searchTable', {
-                        responsive: true,
-                        buttons: ['copy', 'csv', 'excel', 'print',{
-                                   extend: 'pdfHtml5',
-                                   orientation: 'landscape',
-                                   pageSize: search_param === 'ALL' ? 'A2' : 'A4'
-                                }],
-                        layout: {
-                            top2Start: 'buttons'
-                        },
-                        fixedColumns: true,
-                        "searching": true,
-                        "ordering": true,
-                        "info": true,
-                        "lengthChange": true,
-                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-                        "striped": true,
-                        "hover": true
-                    });
+        new DataTable('#searchTable'
+                        ,{
+                            responsive: true,
+                            buttons: [  'copy', 'csv',  'excel', 'print'
+                                        ,{
+                                            extend: 'pdfHtml5',
+                                            orientation: 'landscape',
+                                            pageSize: search_param === 'ALL' ? 'A2' : 'A4'
+                                        }
+                                    ],
+                            layout: {
+                                top2Start: 'buttons'
+                            },
+                            fixedColumns: true,
+                            "searching": true,
+                            "ordering": true,
+                            "info": true,
+                            "lengthChange": true,
+                            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                            "striped": true,
+                            "hover": true
+                        }
+                    );
     })
     .catch(error => {
         // console.trace();
@@ -523,3 +527,4 @@ window.onload = getQueryParams;
 //         // Use the email to fetch user-specific content
 //       });
 // });
+
