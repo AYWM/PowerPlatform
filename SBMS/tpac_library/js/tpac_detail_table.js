@@ -654,17 +654,17 @@ function showToast(message) {
 // Call the function when the page loads
 window.onload = getQueryParams;
 
-TeamsJs.addEventListener('load', function () {
-     console.log(TeamsJs);
-      microsoftTeams.initialize();
-      microsoftTeams.getContext((context) => {
-        // You can now use context.userPrincipalName or context.userObjectId
-        console.log(context);
-        const userEmail = context.userPrincipalName;
-        if (userEmail) {
-            document.getElementById('user-email').innerText = userEmail;
-        }
-        // Use the email to fetch user-specific content
-      });
-});
+// TeamsJs.addEventListener('load', function () {
+//      console.log(TeamsJs);
+//       microsoftTeams.initialize();
+//       microsoftTeams.getContext((context) => {
+//         // You can now use context.userPrincipalName or context.userObjectId
+//         console.log(context);
+//         const userEmail = context.userPrincipalName;
+//         if (userEmail) {
+//             document.getElementById('user-email').innerText = userEmail;
+//         }
+//         // Use the email to fetch user-specific content
+//       });
+// });
 
