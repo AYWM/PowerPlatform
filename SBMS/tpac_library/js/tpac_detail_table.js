@@ -5,6 +5,7 @@ let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/tpac_detail_tab
 let approveQueue = [];
 let originalValues = {}; // To store the original values of the dropdowns
 let encoded_url_params,UnitParam,QUERY_CRITERIA,UserName,UserEmail,DataType;
+let data_dict = {'SO_LIST_PENDING_APPROVE':{colQuantityIndex:6,colAmountIndex:8,docName:'SO_NO'}};
 
 function getQueryParams() {
     // const urlParams = new URLSearchParams(window.location.search);
@@ -148,15 +149,12 @@ function fetchData(pswd) {
         let output = data.output;
         let tableHeader, tableBody, colQuantityIndex, colAmountIndex;
 
-        if (search_param === 'ALL') {
-            tableHeader = `<h2>Showing Data for ALL ${data_type} of Unit: ${unit_id}</h2>`;
-            colQuantityIndex = 6;
-            colAmountIndex = 8;
-        } else {
-            tableHeader = `<h2>Showing Data for ${data_type} Number ${output[0]['SO_NO']}</h2>`;
-            colQuantityIndex = 3;
-            colAmountIndex = 6;
-        }
+        tableHeader = `<h2>Showing Data for ALL ${data_type} of Unit: ${unit_id}</h2>`;
+        colQuantityIndex = data_dict[data_type].colQuantityIndex;
+        colAmountIndex = data_dict[data_type].colAmountIndex;
+
+        if (search_param !== 'ALL') 
+            tableHeader = `<h2>Showing Data for ${data_type} Number ${output[0][data_dict[data_type].docName]}</h2>`;
 
         let table = `${tableHeader}
                      <h3>Count of details: ${output.length}</h3>
