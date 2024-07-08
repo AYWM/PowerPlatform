@@ -134,241 +134,95 @@ function fetchData(pswd) {
     .then(response => response.json())
     .then(data => {
         // console.log(data);
-        if (data.status === 'success') {
-                let output = data.output;
-                let tableHeader, tableBody, col3Index, col6Index;
-
-                if (search_param === 'ALL') {
-                    tableHeader = `<h2>Showing Data for ALL ${data_type} of Unit: ${unit_id}</h2>`;
-                    col3Index = 6;
-                    col6Index = 8;
-                } else {
-                    tableHeader = `<h2>Showing Data for ${data_type} Number ${output[0]['SO_NO']}</h2>`;
-                    col3Index = 3;
-                    col6Index = 6;
-                }
-
-                let table = `${tableHeader}
-                             <h3>Count of details: ${output.length}</h3>
-                             <table class="display" id="searchTable"><thead><tr>`;
-
-                // Create table headers dynamically based on the keys of the first object
-                Object.keys(output[0]).forEach((key, index) => {
-                    if (search_param !== 'ALL' && index === 0) return; // Skip first column for non-ALL
-                    table += `<th>${key}</th>`;
-                });
-                table += '</tr></thead><tbody>';
-
-                // Create table rows with data
-                output.forEach(obj => {
-                    table += '<tr>';
-                    Object.entries(obj).forEach(([key, value], index, arr) => {
-                        if (search_param !== 'ALL' && index === 0) return; // Skip first column for non-ALL
-
-                        // If it's the last column, add the dropdown
-                        if (key.toUpperCase().includes("STATUS")) { //index === arr.length - 1
-                            originalValues[arr[2][1]] = value; // Save the original value
-                            // console.log(arr);
-                            table += `  <td>
-                                            <select class="status-select" data-txnDate="${arr[0][1]}" data-txndocno="${arr[2][1]}" data-txnentity="${arr[3][1]}" data-txnPerson="${arr[5][1]}" data-txnQuantity="${arr[6][1]}" data-txnAmount="${arr[8][1]}">   
-                                                <option value="A" ${value === 'A' ? 'selected' : ''}>Approve</option>
-                                                <option value="Z" ${value === 'Z' ? 'selected' : ''}>Cancel</option>
-                                                <option value="N" ${value === 'N' ? 'selected' : ''}>Open</option>
-                                                <option value="V" ${value === 'V' ? 'selected' : ''}>Revise</option>
-                                            </select>
-                                        </td>`;
-                        } else if (key.toUpperCase().includes("URL_PARAMETER")) { //index === arr.length - 2 && key === "URL_PARAMETER"
-                            table += `  <td>
-                                            <a href="${detail_page_url}?${encryptData(convertStringToJsonObject(value))}" target="_blank">
-                                                Show Detail
-                                            </a>
-                                        </td>`;
-                        } else if (key.toUpperCase().includes("DATE")) { //index === 0
-                            let date = new Date(value);
-                            let formattedValue = !isNaN(date) ? date.toLocaleDateString() : value;
-                            table += `<td data-order="${value}">${formattedValue}</td>`;
-                        } else {
-                            // Check if value is a number and format accordingly
-                            let formattedValue = typeof value === 'number' ? value.toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 7
-                            }) : value;
-                            table += `<td>${formattedValue}</td>`;
-                        }
-                    });
-                    table += '</tr>';
-                });
-
-                table += '</tbody></table>';
-
-                // Display the table in the result div
-                document.getElementById('result').innerHTML = table;
-
-                // Calculate summary for column 3 and 6 (assuming zero-based index)
-                let col3Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[col3Index]] || 0), 0);
-                let col6Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[col6Index]] || 0), 0);
-
-                // Display summary
-                document.getElementById('summary').innerHTML = `
-                    <h3>Summary:</h3>
-                    <p>Sum of Quantity: ${col3Sum.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        })}</p>
-                    <p>Sum of Amount: ${col6Sum.toLocaleString(undefined, {
-                            minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
-                        })}</p>
-                `;
-
-            // if(search_param=='ALL'){
-            //     let output = data.output;
-            //     let table = '<h2>Showing Data for ALL SO Pending for Approve of Unit: ' + unit_id + '</h2>';
-            //     table += '<h3>Count of details: ' + output.length + '</h3>';
-            //     table += '<table class="display" id="searchTable"><thead><tr>';
-
-            //     // Create table headers dynamically based on the keys of the first object
-            //     Object.keys(output[0]).forEach(key => {
-            //         table += `<th>${key}</th>`;
-            //     });
-            //     table += '</tr></thead><tbody>';
-
-            //     // Create table rows with data
-            //     output.forEach(obj => {
-            //         table += '<tr>';
-            //         Object.values(obj).forEach((value, index, arr) => {
-            //             // If it's the last column, add the dropdown
-            //             if (index === arr.length - 1) {
-            //                 originalValues[arr[2]] = value; // Save the original value
-            //                 table += `  <td>
-            //                                 <!-- <select onchange="handleSelectChange(this, '${arr[0]}', '${arr[2]}', '${arr[3]}', '${arr[5]}', '${arr[6]}', '${arr[8]}')">  -->
-            //                                 <select class="status-select" data-txnDate="${arr[0]}" data-txndocno="${arr[2]}" data-txnentity="${arr[3]}" data-txnPerson="${arr[5]}" data-txnQuantity="${arr[6]}" data-txnAmount="${arr[8]}">   
-            //                                     <option value="A" ${value === 'A' ? 'selected' : ''}>Approve</option>
-            //                                     <option value="Z" ${value === 'Z' ? 'selected' : ''}>Cancel</option>
-            //                                     <option value="N" ${value === 'N' ? 'selected' : ''}>Open</option>
-            //                                      <option value="V" ${value === 'V' ? 'selected' : ''}>Revise</option>
-            //                                 </select>
-            //                             </td>`;
-            //             }
-            //             else if (index === arr.length - 2) {
-            //                 // console.log(value);
-            //                 // 
-            //                 table += `  <td>
-            //                                 <a href="${detail_page_url}?${encryptData(convertStringToJsonObject(value))}"  target="_blank">
-            //                                     Show Detail
-            //                                 </a>
-            //                             </td>`;
-            //             }
-            //             else if (index === 0) {
-            //                 let date = new Date(value);
-            //                 let formattedValue = !isNaN(date) ? date.toLocaleDateString() : value;
-            //                 table += `<td data-order="${value}">${formattedValue}</td>`;
-            //             }
-            //             else{
-            //                 // Check if value is a number and format accordingly
-            //                 let formattedValue = typeof value === 'number' ? value.toLocaleString(undefined, {
-            //                     minimumFractionDigits: 2,
-            //                     maximumFractionDigits: 7
-            //                 }) : value;
-            //                 table += `<td>${formattedValue}</td>`;
-            //             }
-
-            //         });
-            //         table += '</tr>';
-            //     });
-
-            //     table += '</tbody></table>';
-
-            //     // Display the table in the result div
-            //     document.getElementById('result').innerHTML = table;
-
-            //     // Calculate summary for column 3 and 6 (assuming zero-based index)
-            //     let col3Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[6]] || 0), 0);
-            //     let col6Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[8]] || 0), 0);
-
-            //     // Display summary
-            //     document.getElementById('summary').innerHTML = `
-            //         <h3>Summary:</h3>
-            //         <p>Sum of Quantity: ${col3Sum.toLocaleString(undefined, {
-            //                 minimumFractionDigits: 2,
-            //                 maximumFractionDigits: 2
-            //             })}</p>
-            //         <p>Sum of Amount: ${col6Sum.toLocaleString(undefined, {
-            //                 minimumFractionDigits: 2,
-            //                 maximumFractionDigits: 2
-            //             })}</p>
-            //     `;                            
-
-            // }
-            // else{
-
-            //     let output = data.output;
-
-            //     let table = '<h2>Showing Data for SO Number ' + output[0]['SO_NO'] + '</h2>';
-            //     table += '<h3>Count of details: ' + output.length + '</h3>';
-            //     table += '<table  class="display" id="searchTable"><thead><tr>';
-            //     // console.log(output[0]);
-            //     // Create table headers dynamically based on the keys of the first object
-            //     Object.keys(output[0]).slice(1).forEach(key => {
-            //         table += `<th>${key}</th>`;
-            //     });
-            //     table += '</tr></thead><tbody>';
-
-            //     // Create table rows with data
-            //     output.forEach(obj => {
-            //         table += '<tr>';
-            //         Object.values(obj).slice(1).forEach((value, index, arr) => {
-            //             // If it's the last column, add the dropdown
-            //             if (index === arr.length - 1) {
-            //                 table += `  <td>
-            //                                 <select>
-            //                                     <option value="A" ${value === 'A' ? 'selected' : ''}>Approve</option>
-            //                                     <option value="Z" ${value === 'Z' ? 'selected' : ''}>Cancel</option>
-            //                                     <option value="N" ${value === 'N' ? 'selected' : ''}>Open</option>
-            //                                      <option value="V" ${value === 'V' ? 'selected' : ''}>Revise</option>
-            //                                 </select>
-            //                             </td>`;
-            //             }
-            //             else{
-            //                 // Check if value is a number and format accordingly
-            //                 let formattedValue = typeof value === 'number' ? value.toLocaleString(undefined, {
-            //                     minimumFractionDigits: 2,
-            //                     maximumFractionDigits: 7
-            //                 }) : value;
-            //                 table += `<td>${formattedValue}</td>`;
-            //             }
-
-            //         });
-            //         table += '</tr>';
-            //     });
-
-            //     table += '</tbody></table>';
-
-            //     // Display the table in the result div
-            //     document.getElementById('result').innerHTML = table;
-
-            //     // Calculate summary for column 3 and 6 (assuming zero-based index)
-            //     let col3Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[3]] || 0), 0);
-            //     let col6Sum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[6]] || 0), 0);
-
-            //     // Display summary
-            //     document.getElementById('summary').innerHTML = `
-            //         <h3>Summary:</h3>
-            //         <p>Sum of Quantity: ${col3Sum.toLocaleString(undefined, {
-            //                 minimumFractionDigits: 2,
-            //                 maximumFractionDigits: 2
-            //             })}</p>
-            //         <p>Sum of Amount: ${col6Sum.toLocaleString(undefined, {
-            //                 minimumFractionDigits: 2,
-            //                 maximumFractionDigits: 2
-            //             })}</p>
-            //     `;
-            // }
-
-        } else {
+        if (data.status !== 'success') {
             const error_message = JSON.stringify(data.detail[0]);
             throw new Error(error_message);
         }
+        let output = data.output;
+        let tableHeader, tableBody, colQuantityIndex, colAmountIndex;
+
+        if (search_param === 'ALL') {
+            tableHeader = `<h2>Showing Data for ALL ${data_type} of Unit: ${unit_id}</h2>`;
+            colQuantityIndex = 6;
+            colAmountIndex = 8;
+        } else {
+            tableHeader = `<h2>Showing Data for ${data_type} Number ${output[0]['SO_NO']}</h2>`;
+            colQuantityIndex = 3;
+            colAmountIndex = 6;
+        }
+
+        let table = `${tableHeader}
+                     <h3>Count of details: ${output.length}</h3>
+                     <table class="display" id="searchTable"><thead><tr>`;
+
+        // Create table headers dynamically based on the keys of the first object
+        Object.keys(output[0]).forEach((key, index) => {
+            if (search_param !== 'ALL' && index === 0) return; // Skip first column for non-ALL
+            table += `<th>${key}</th>`;
+        });
+        table += '</tr></thead><tbody>';
+
+        // Create table rows with data
+        output.forEach(obj => {
+            table += '<tr>';
+            Object.entries(obj).forEach(([key, value], index, arr) => {
+                if (search_param !== 'ALL' && index === 0) return; // Skip first column for non-ALL
+
+                // If it's the last column, add the dropdown
+                if (key.toUpperCase().includes("STATUS")) { //index === arr.length - 1
+                    originalValues[arr[2][1]] = value; // Save the original value
+                    // console.log(arr);
+                    table += `  <td>
+                                    <select class="status-select" data-txnDate="${arr[0][1]}" data-txndocno="${arr[2][1]}" data-txnentity="${arr[3][1]}" data-txnPerson="${arr[5][1]}" data-txnQuantity="${arr[6][1]}" data-txnAmount="${arr[8][1]}">   
+                                        <option value="A" ${value === 'A' ? 'selected' : ''}>Approve</option>
+                                        <option value="Z" ${value === 'Z' ? 'selected' : ''}>Cancel</option>
+                                        <option value="N" ${value === 'N' ? 'selected' : ''}>Open</option>
+                                        <option value="V" ${value === 'V' ? 'selected' : ''}>Revise</option>
+                                    </select>
+                                </td>`;
+                } else if (key.toUpperCase().includes("URL_PARAMETER")) { //index === arr.length - 2 && key === "URL_PARAMETER"
+                    table += `  <td>
+                                    <a href="${detail_page_url}?${encryptData(convertStringToJsonObject(value))}" target="_blank">
+                                        Show Detail
+                                    </a>
+                                </td>`;
+                } else if (key.toUpperCase().includes("DATE")) { //index === 0
+                    let date = new Date(value);
+                    let formattedValue = !isNaN(date) ? date.toLocaleDateString() : value;
+                    table += `<td data-order="${value}">${formattedValue}</td>`;
+                } else {
+                    // Check if value is a number and format accordingly
+                    let formattedValue = typeof value === 'number' ? value.toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 7
+                    }) : value;
+                    table += `<td>${formattedValue}</td>`;
+                }
+            });
+            table += '</tr>';
+        });
+
+        table += '</tbody></table>';
+
+        // Display the table in the result div
+        document.getElementById('result').innerHTML = table;
+
+        // Calculate summary for column 3 and 6 (assuming zero-based index)
+        let colQuantitySum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[colQuantityIndex]] || 0), 0);
+        let colAmountSum = output.reduce((acc, curr) => acc + parseFloat(curr[Object.keys(curr)[colAmountIndex]] || 0), 0);
+
+        // Display summary
+        document.getElementById('summary').innerHTML = `
+            <h3>Summary:</h3>
+            <p>Sum of Quantity: ${colQuantitySum.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}</p>
+            <p>Sum of Amount: ${colAmountSum.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}</p>
+        `;
 
         let table = new DataTable('#searchTable', {
                         responsive: true,
@@ -420,21 +274,20 @@ function handleSelectChange(selectElement, txnDate, txndocno, entity, txnPerson,
             Amount,
             originalValue
         });
-        renderApproveQueue();
     } else if (originalValue === 'A' && newValue !== 'A') {
         // Remove from approve queue if it was already approved
         approveQueue = approveQueue.filter(item => item.txndocno !== txndocno);
-        renderApproveQueue();
     }
+        renderApproveQueue();
 
     originalValues[txndocno] = newValue; // Update the original value
     
     // Show toast message
-    showToast(`Status changed to ${newValue} for SO: ${txndocno}`);
+    showToast(`Status changed to ${newValue} from previously ${originalValue} for TxnDocNo: ${txndocno}`);
 }
 
 function renderApproveQueue() {
-    let table = `<h2>Approve Queue</h2>`;
+    let table = `<h2>Approve Queue</h2><p id="ApproveQueueMessage"></p>`;
     table += '<table class="responsive-table display"><thead><tr>';
     table += '<th>SO Date</th><th>SO Number</th><th>entity</th><th>Sales Person</th><th>Quantity</th><th>Amount</th><th>Action</th></tr></thead><tbody>';
 
@@ -466,6 +319,9 @@ function renderApproveQueue() {
 }
 
 function removeFromApproveQueue(index) {
+    const message = 'Remove Request, index: ' + index + ', DocNo: ' + approveQueue[index].txndocno;
+    document.getElementById('ApproveQueueMessage').textContent = message;
+    showToast(message);
     const item = approveQueue[index];
     approveQueue.splice(index, 1);
     renderApproveQueue();
@@ -667,4 +523,3 @@ window.onload = getQueryParams;
 //         // Use the email to fetch user-specific content
 //       });
 // });
-
