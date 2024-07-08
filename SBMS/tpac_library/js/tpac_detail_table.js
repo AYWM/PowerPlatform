@@ -82,6 +82,13 @@ function verifyUser(username, password) {
         return;
     }
 
+    approveQueue = [];
+    originalValues = {};
+    document.getElementById('result').innerHTML = '';
+    document.getElementById('summary').innerHTML = '';
+    document.getElementById('approveQueue').innerHTML = '';
+    document.getElementById('user-email').innerHTML = '';
+    
     unit_id = UnitParam;
     username = username.toString();
     
