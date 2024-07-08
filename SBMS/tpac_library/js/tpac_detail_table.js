@@ -182,7 +182,7 @@ function fetchData(pswd) {
                                 </td>`;
                 } else if (key.toUpperCase().includes("URL_PARAMETER")) { //index === arr.length - 2 && key === "URL_PARAMETER"
                     table += `  <td>
-                                    <a href="${detail_page_url}?${encryptData(convertStringToJsonObject(value))}" target="_blank">
+                                    <a href="${detail_page_url}?${encryptData(convertStringToJsonObject(value))}">
                                         Show Detail
                                     </a>
                                 </td>`;
@@ -293,7 +293,7 @@ function handleSelectChange(selectElement, txnDate, txndocno, entity, txnPerson,
 function renderApproveQueue() {
     let table = `<h2>Approve Queue</h2><p id="ApproveQueueMessage"></p>`;
     table += '<table class="responsive-table display"><thead><tr>';
-    table += '<th>SO Date</th><th>SO Number</th><th>entity</th><th>Sales Person</th><th>Quantity</th><th>Amount</th><th>Action</th></tr></thead><tbody>';
+    table += '<th>TxnDate</th><th>TxnNumber</th><th>Entity</th><th>TxnPerson</th><th>Quantity</th><th>Amount</th><th>Action</th></tr></thead><tbody>';
 
     approveQueue.forEach((item, index) => {
         let date = new Date(item.txnDate);
@@ -323,9 +323,6 @@ function renderApproveQueue() {
 }
 
 function removeFromApproveQueue(index) {
-    const message = 'Remove Request, index: ' + index + ', DocNo: ' + approveQueue[index].txndocno;
-    document.getElementById('ApproveQueueMessage').textContent = message;
-    showToast(message);
     const item = approveQueue[index];
     approveQueue.splice(index, 1);
     renderApproveQueue();
@@ -346,11 +343,11 @@ function removeFromApproveQueue(index) {
             if (newOption) {
                 newOption.setAttribute('selected', '');
             }
-
-            // Optionally trigger a change event if necessary
-            const event = new Event('change', { bubbles: true });
-            selectElement.dispatchEvent(event);
         });
+
+        // // Optionally trigger a change event if necessary
+        // const event = new Event('change', { bubbles: true });
+        // selectElement.dispatchEvent(event);
     }
      
 }
@@ -367,6 +364,7 @@ document.getElementById('verifyUser').addEventListener('click', function() {
 document.addEventListener('click', function(event) {
     if (event.target.classList.contains('remove-button')) {
         const rowIndex = event.target.closest('tr').rowIndex - 1; // Adjust for header row
+        // console.log(rowIndex);
         removeFromApproveQueue(rowIndex);
     }
 });
