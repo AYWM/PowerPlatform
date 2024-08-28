@@ -1,7 +1,7 @@
-// let api_base_url = 'http://192.168.12.14:3000/sbms';
-let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
-// let detail_page_url = 'http://192.168.12.14:8888/tpac_detail_table.html';
-let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/tpac_detail_table.html'
+let api_base_url = 'http://192.168.12.14:3000/sbms';
+// let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
+let detail_page_url = 'http://192.168.12.14:8888/tpac_detail_table.html';
+// let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/tpac_detail_table.html'
 let approveQueue = [];
 let originalValues = {}; // To store the original values of the dropdowns
 let encoded_url_params,UnitParam,QUERY_CRITERIA,UserName,UserEmail,DataType;

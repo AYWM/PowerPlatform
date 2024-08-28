@@ -15,19 +15,27 @@
     "full": "TPAC SBMS: Web Extension"
   },
   "description": {
-    "short": "This is your app",
-    "full": "This is a longer description of your app"
+    "short": "TPAC SBMS",
+    "full": "TPAC SBMS: Web Extension"
   },
   "icons": {
-    "outline": "outline.png",
-    "color": "color.png"
+    "outline": "TPAC_LOGO.png",
+    "color": "TPAC_LOGO.png"
   },
   "accentColor": "#FFFFFF",
+  "configurableTabs": [
+    {
+      "configurationUrl": "https://aywm.github.io/PowerPlatform/SBMS/index.html",
+      "canUpdateConfiguration": true,
+      "scopes": ["team","groupchat"]
+    }
+  ],
   "staticTabs": [
     {
-      "entityId": "unique-id",
-      "name": "Your Tab",
-      "contentUrl": "http://sbms.tpacpackaging.com:8888/so_detail.html?eyJVTklUIjo3LCJTTyI6IkFMTCJ9",
+      "entityId": "SBMS_WEB_INDEX_PAGE",
+      "name": "SBMS: SO Approval",
+      "contentUrl": "https://aywm.github.io/PowerPlatform/SBMS/index.html",
+      "websiteUrl": "https://aywm.github.io/PowerPlatform/SBMS/index.html",
       "scopes": ["personal"]
     }
   ],
