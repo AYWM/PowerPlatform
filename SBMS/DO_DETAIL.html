@@ -219,8 +219,8 @@
 		<script type="text/javascript">
 			
 			// let api_base_url = 'http://192.168.12.14:3000/sbms';
-			let api_base_url = 'https://192.168.12.18:3001/sbms';
-        	// let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
+			// let api_base_url = 'https://192.168.12.18:3001/sbms';
+        	let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
 	        // let detail_page_url = 'http://192.168.12.14:8888/DO_DETAIL.html';
 	        let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/DO_DETAIL.html';
 			let scannedCartons = [];
@@ -291,7 +291,7 @@
 					this.errorBeepSound = null;
 					this.correctBeepSound = null;
 					this.isCameraAvailable = isCameraAvailable;
-        			this.scanDelay = 521; // Time interval to prevent double scans
+        			this.scanDelay = 639; // Time interval to prevent double scans
 
 		            // Accessing video element to display camera feed
 		            this.videoElement = document.getElementById('cameraFeed');
@@ -331,11 +331,11 @@
 
 				            // Create a canvas to capture frames from the video feed
 				            this.canvasElement = document.createElement('canvas');
-				            this.ctx = this.canvasElement.getContext('2d');
+				            this.ctx = this.canvasElement.getContext('2d', { willReadFrequently: true });
 				            if (!this.ctx) throw new Error('Canvas 2D context not found.');
 
 				            // Create overlay canvas for the fixed rectangle
-				            this.overlayCtx = this.overlayCanvas.getContext('2d');
+				            this.overlayCtx = this.overlayCanvas.getContext('2d', { willReadFrequently: true });
 				        }
 
 			            return new Promise(resolve => resolve());
@@ -480,6 +480,7 @@
 
 		                if (qrCode) {
 		                	if (now - this.lastScanTime >= this.scanDelay) {
+		                		console.log('QR DATA:' + qrCode.data);
 				                this.lastScanTime = now;  // Update last scan time
 
 				                const response = this.handleScannedData(qrCode.data);
