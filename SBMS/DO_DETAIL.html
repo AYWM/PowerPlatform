@@ -360,14 +360,19 @@
 			    }
 
 			    handleScannedData(scanData) {
-				    let response = this.callback(scanData);
-				    if (response.includes("Error:")) {
-				        if (this.errorBeepSound) this.errorBeepSound.play();
-				        this.showAlert(response);
-				    } else {
-				        if (this.correctBeepSound) this.correctBeepSound.play();
-				    }
-				    return response;
+			    	try{
+					    let response = this.callback(scanData);
+					    if (response.includes("Error:")) {
+					        if (this.errorBeepSound) this.errorBeepSound.play();
+					        this.showAlert(response);
+					    } else {
+					        if (this.correctBeepSound) this.correctBeepSound.play();
+					    }
+					    return response;
+					catch(error){
+						console.error("Error inside handleScannedData:", error);
+						return '0';
+					}
 				}
 
 
@@ -494,20 +499,27 @@
 			            this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
 			            this.drawFixedRectangle();
 
-						// Use the overlay canvas dimensions to capture the QR code
-						// this.ctx.drawImage(this.videoElement, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-						this.ctx.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height);
+			             this.overlayCtx.drawImage(this.videoElement, 0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
 
-						// Define the dimensions of the fixed rectangle
-						const cropX = this.overlayCanvas.width * 0.1;
-						const cropY = this.overlayCanvas.height * 0.2;
-						const cropWidth = this.overlayCanvas.width * 0.8;
-						const cropHeight = this.overlayCanvas.height * 0.6;						
-						
-						// const imageData = this.ctx.getImageData(0, 0, cropWidth, cropHeight);
-						const imageData = this.ctx.getImageData(cropX, cropY, cropWidth, cropHeight);
+				        // Define the dimensions of the fixed rectangle
+				        const cropX = this.overlayCanvas.width * 0.1;
+				        const cropY = this.overlayCanvas.height * 0.2;
+				        const cropWidth = this.overlayCanvas.width * 0.8;
+				        const cropHeight = this.overlayCanvas.height * 0.6;
 
-				        // const qrCode = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+				        // Create a canvas for cropping
+				        const cropCanvas = document.createElement('canvas');
+				        cropCanvas.width = cropWidth;
+				        cropCanvas.height = cropHeight;
+				        const ctx = cropCanvas.getContext('2d');
+
+				        // Draw the cropped region onto the new canvas
+				        ctx.drawImage(this.videoElement, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+
+				        // Get the image data from the cropped canvas
+				        const imageData = ctx.getImageData(0, 0, cropWidth, cropHeight);
+
+				        // Detect QR code
 				        const qrCode = jsQR(imageData.data, cropWidth, cropHeight, { inversionAttempts: "dontInvert" });
 
 		                if (qrCode) {
