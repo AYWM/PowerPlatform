@@ -219,12 +219,12 @@
 		<script type="text/javascript">
 			
 			// let api_base_url = 'http://192.168.12.14:3000/sbms';
-			let api_base_url = 'https://192.168.12.18:3001/sbms';
-        	// let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
+			// let api_base_url = 'https://192.168.12.18:3001/sbms';
+        	let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
 	        // let detail_page_url = 'http://192.168.12.14:8888/DO_DETAIL.html';
 	        let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/DO_DETAIL.html';
 			let scannedCartons = [];
-			let scanner,audioContext,errorBeepSound,correctBeepSound;
+			let scanner;
 
 			document.addEventListener('DOMContentLoaded', function () {
 			    const urlParams = new URLSearchParams(window.location.search);
@@ -234,15 +234,6 @@
 			   
 			    document.getElementById('detailsHeader').innerText = `Showing Details for Delivery Order Number: ${doNumber}`;
 			    fetchOrderDetails(unit_id,deliveryOrderId);
-
-			    try{
-		            // Initialize error beep sound
-		            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-		            errorBeepSound = new Audio('tpac_library/audio/beep-05.mp3');
-                    correctBeepSound = new Audio('tpac_library/audio/beep-02.mp3');
-			    }catch(error) {
-                    console.error("Error loading error beep sound:", error);
-                }
 			});
 
 			// Close the modal when the user clicks on <span> (x)
@@ -267,89 +258,112 @@
                 };
             }
 
-			class CameraScanner {
-                constructor() {
-                    this.videoElement = null;
-                    this.stream = null;
-                    this.canvasElement = null;
-                    this.ctx = null;
-                    this.overlayCanvas = null;
-                    this.overlayCtx = null;
-                    this.scanIntervalId = null;
-                    this.callback = null;
-                    this.handlePlay = this.handlePlay.bind(this);
-                    this.handlePause = this.handlePause.bind(this); 
-
+			class Scanner {
+                constructor(isCameraAvailable) {
+					this.videoElement = null;
+					this.stream = null;
+					this.canvasElement = null;
+					this.ctx = null;
+					this.overlayCanvas = null;
+					this.overlayCtx = null;
+					this.scanIntervalId = null;
+					this.callback = null;
+					this.handlePlay = this.handlePlay.bind(this);
+					this.handlePause = this.handlePause.bind(this); 
+					this.alertTimeout = null;
+					this.audioContext = null;
+					this.errorBeepSound = null;
+					this.correctBeepSound = null;
+					this.isCameraAvailable = isCameraAvailable;
+        			this.scanDelay = 639; // Time interval to prevent double scans
 
 		            // Accessing video element to display camera feed
 		            this.videoElement = document.getElementById('cameraFeed');
 		            this.overlayCanvas = document.getElementById('overlayCanvas');
         			this.isScanning = true;
 
+        			try{
+			            // Initialize error beep sound
+			            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+			            this.errorBeepSound = new Audio('tpac_library/audio/beep-05.mp3');
+	                    this.correctBeepSound = new Audio('tpac_library/audio/beep-02.mp3');
+				    }catch(error) {
+	                    console.error("Error loading beep sound:", error);
+	                }
+
         			//Set up event listeners
                     this.setupEventListeners();
-
                 }
 
-                async startCameraScan(callback) {
+                showAlert(message) {
+				    clearTimeout(this.alertTimeout);
+				    this.alertTimeout = setTimeout(() => {
+				        alert(message);
+				    }, 500); // Wait half a second before showing the alert
+				}
 
-                    try {
-                        
-                        this.callback = callback;  // Store the callback function
+				async startScanning(callback) {
+			        try {
+			            this.callback = callback;
+			            if (!this.videoElement) throw new Error('Video element not found.');
+			            if (!this.overlayCanvas) throw new Error('Overlay canvas element not found.');
 
-                        if (!this.videoElement) {
-                            throw new Error('Video element not found.');
-                        }
+			            this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+			            this.videoElement.srcObject = this.stream;
 
-                        if (!this.overlayCanvas) {
-                            throw new Error('Overlay canvas element not found.');
-                        }
-                        
-                        // Request camera access
-                        this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-                        this.videoElement.srcObject = this.stream;
-                        // this.videoElement.play();
+			            // Create a canvas to capture frames from the video feed
+			            this.canvasElement = document.createElement('canvas');
+			            this.ctx = this.canvasElement.getContext('2d');
+			            if (!this.ctx) throw new Error('Canvas 2D context not found.');
 
+			            // Create overlay canvas for the fixed rectangle
+			            this.overlayCtx = this.overlayCanvas.getContext('2d');
 
+			            return new Promise(resolve => resolve());
+			        } catch (error) {
+			            console.error("Error starting camera scan:", error);
+			            alert('Camera access denied. Please allow camera access and click Retry.');
+			        }
+			    }
 
-                        // Create a canvas to capture frames from the video feed
-                        this.canvasElement = document.createElement('canvas');
-                        this.ctx = this.canvasElement.getContext('2d');
-
-                        if (!this.ctx) {
-                            throw new Error('Canvas 2D context not found.');
-                        }
-
-                        // Create overlay canvas for the fixed rectangle
-                        this.overlayCtx = this.overlayCanvas.getContext('2d');
-
-                        
-
-                        // Return a promise that resolves when the scan starts
-                        return new Promise(resolve => {
-                            resolve();
-                        });
-                    } catch (error) {
-                        console.error("Error starting camera scan:", error);
-                        alert('Camera access denied. Please allow camera access and click Retry.');
-                    }
-                }
+			    handleScannedData(scanData) {
+			        let response = this.callback(scanData);
+			        if (response.includes("Error:")) {
+			            if (this.errorBeepSound) this.errorBeepSound.play();
+			            this.showAlert(response);
+			        } else {
+			            if (this.correctBeepSound) this.correctBeepSound.play();
+			        }
+			    }
 
                 setupEventListeners() {
 
-                	this.videoElement.addEventListener('play', this.handlePlay);
-                    this.videoElement.addEventListener('pause', this.handlePause);
+                	if (this.isCameraAvailable) {
+      
+	                	this.videoElement.addEventListener('play', this.handlePlay);
+	                    this.videoElement.addEventListener('pause', this.handlePause);
 
-			        document.getElementById('toggleScan').addEventListener('click', () => {
-					if (this.isScanning) {
-						this.handlePause();
-						document.getElementById('toggleScan').textContent = 'Resume';
-					} else {
-						this.handlePlay();
-						document.getElementById('toggleScan').textContent = 'Pause';
+				        document.getElementById('toggleScan').addEventListener('click', () => {
+						if (this.isScanning) {
+							this.handlePause();
+							document.getElementById('toggleScan').textContent = 'Resume';
+						} else {
+							this.handlePlay();
+							document.getElementById('toggleScan').textContent = 'Pause';
+						}
+							this.isScanning = !this.isScanning;	
+						});
+
+					}else{
+
+						document.getElementById('scannerInput').addEventListener('keypress', e => {
+			                if (e.key === 'Enter') {
+			                    let scanData = e.target.value.trim();
+			                    this.handleScannedData(scanData);
+			                    e.target.value = ''; // Clear input
+			                }
+			            });
 					}
-						this.isScanning = !this.isScanning;	
-					});
 			    }
 
                 handlePlay() {
@@ -357,7 +371,7 @@
                     this.updateCanvasDimensions();
                     this.drawFixedRectangle();
                     if (this.callback) {
-                        this.startScanning(this.callback); // Ensure callback is passed
+                        this.CameraScanHandler(this.callback); // Ensure callback is passed
                     }
                 }
 
@@ -409,66 +423,52 @@
                     this.drawLine(location.bottomLeftCorner, location.topLeftCorner, "#FF3B58");
                 }
 
-                startScanning(callback) {
 
-                    if (!callback) {
-                        console.error('Callback function is not provided.');
+                CameraScanHandler(callback) {
+
+                	if (!callback) {
+                        this.showAlert('Callback function is not provided.');
                         return;
                     }
 
-                    let lastScanTime = 0;
-                    const scanInterval = 963; // Delay in milliseconds
-
                     const scan = () => {
-                        const now = Date.now();
-                        if (now - lastScanTime < scanInterval) {
-                            // Skip scanning if within the delay interval
-                            requestAnimationFrame(scan);
-                            return;
-                        }
-						
-						this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
-						this.drawFixedRectangle();
-                        
-                        this.ctx.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height);
+			            const now = Date.now();
+			            if (now - this.lastScanTime < this.scanDelay) {
+			                requestAnimationFrame(scan);
+			                return;
+			            }
 
-                        const imageData = this.ctx.getImageData(0, 0, this.canvasElement.width, this.canvasElement.height);
-                        const qrCode = jsQR(    
-                                            imageData.data,
-                                            imageData.width,
-                                            imageData.height,
-                                            // {inversionAttempts: "dontInvert",}
-                                        );
+			            this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
+			            this.drawFixedRectangle();
 
-                        if (qrCode) {
-                            console.log(qrCode.data);
+		                const cropX = this.canvasElement.width * 0.1;
+		                const cropY = this.canvasElement.height * 0.2;
+		                const cropWidth = this.canvasElement.width * 0.8;
+		                const cropHeight = this.canvasElement.height * 0.6;
 
-                            try {
-                                callback(qrCode.data);
-                            } catch (error) {
-                                console.log('Callback error:', error);
-                            }
+		                this.ctx.drawImage(this.videoElement, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+		                const imageData = this.ctx.getImageData(0, 0, cropWidth, cropHeight);
 
-                            // Draw a box around the QR code
-                            // this.drawBoxAroundQRCode(qrCode.location);
+		                const qrCode = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
 
-                            // Update last scan time
-                            lastScanTime =  Date.now();
-                        }
+		                if (qrCode) {
+		                    this.handleScannedData(qrCode.data);
+		                    this.lastScanTime = now;
+		                }
 
-                        // Continue scanning
-                        requestAnimationFrame(scan);
-                    };
+		            	requestAnimationFrame(scan);
+		        	};
 
-                    // Start the scanning process
-                    requestAnimationFrame(scan);
-                }
+			        requestAnimationFrame(scan);
+			    }
 
                 stopScanning() {
                     clearInterval(this.scanIntervalId);
                     this.scanIntervalId = null;
-                    this.stream.getTracks().forEach(track => track.stop());
-                    this.videoElement.srcObject = null;
+                    if (this.stream) {
+			            this.stream.getTracks().forEach(track => track.stop());
+			            this.videoElement.srcObject = null;
+			        }
                 }
 
                 async stopCameraScan() {
@@ -702,7 +702,7 @@
 			                </table>
 			            </div>
 			            <div id="scanControls">
-			                ${renderScanControls(isMobileDevice())}
+			                ${renderScanControls()}
 			            </div>
 			            <div class="progress">
 			                <p>Scanned Cartons: <span id="scannedCount">0</span></p>
@@ -755,6 +755,24 @@
 			    return /Mobi|Android/i.test(navigator.userAgent);
 			}
 
+			async function hasCamera() {
+			    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+			        try {
+			            const devices = await navigator.mediaDevices.enumerateDevices();
+			            return devices.some(device => device.kind === 'videoinput');
+			        } catch (error) {
+			            console.error('Error detecting camera:', error);
+			        	alert('Error detecting camera:' + error.message);
+			            return false;
+			        }
+			    } else {
+			        // Fallback for browsers that don't support navigator.mediaDevices
+			        console.warn('Camera detection not supported in this browser.');
+			        alert('Camera detection not supported in this browser.');
+			        return false;
+			    }
+			}
+
 			// Function to fetch valid cartons list for the item
 			async function fetchValidCartons(itemID) {
 			    try {
@@ -790,8 +808,11 @@
 			}
 
 			// Function to render scan controls based on device type
-			function renderScanControls(isMobile) {
-			    if (isMobile) {
+			function renderScanControls() {
+
+				const cameraAvailable = await hasCamera();
+
+			    if (cameraAvailable) {
 			        return `
 			            <p>Use your camera to scan QR codes continuously.</p>
 			            <div id="cameraContainer">
@@ -824,33 +845,16 @@
                 scannedCount.textContent = 0;
                 scanProgress.value = 0;
 
-			    if (isMobileDevice()) {
+                const cameraAvailable = await hasCamera();
+				
+				scanner = new Scanner(cameraAvailable);
+				scanner.startScanning(scanData => {
+			        console.log("Scanned QR code:", scanData);
+			        return processScanResult(scanData, itemCode, validCartonsList, scannedCartons, scanProgress, scannedCount, pendingQtyElement, pendingCartonsElement);
+			    }).then(() => {
+					console.log("Scan started successfully");
+				});
 
-			    	scanner = new CameraScanner();
-					// Ensure the video element is visible
-        			document.getElementById('cameraFeed').style.display = 'block';
-					
-					try {
-						await scanner.startCameraScan(scanData => {
-							console.log("Scanned QR code:", scanData);
-							processScanResult(scanData, itemCode, validCartonsList, scannedCartons, scanProgress, scannedCount, pendingQtyElement, pendingCartonsElement);
-						}).then(() => {
-							console.log("Scan started successfully");
-						});
-					} catch (error) {
-				        console.error("Error starting camera scan:", error);
-				        alert('Camera access denied. Please allow camera access and click Retry.');
-				    }
-
-			    } else {
-
-			        document.getElementById('scannerInput').addEventListener('keypress', function (e) {
-			            if (e.key === 'Enter') {
-			                processScanResult(e.target.value.trim(), itemCode, validCartonsList, scannedCartons, scanProgress, scannedCount, pendingQtyElement, pendingCartonsElement);
-			                e.target.value = ''; // Clear input
-			            }
-			        });
-			    }
 			}
 
 			// Function to process scanned data
@@ -861,43 +865,27 @@
                 const quantityPCS = parseInt(parsedData[3], 10);
 
                 // Validate the scanned data
-                if (scannedItemCode !== itemCode) {
-                    // Play beep sound
-                    if(errorBeepSound)
-                        errorBeepSound.play();
-                    alert('Scanned item code ('+scannedItemCode+') does not match the selected item code ('+itemCode+').');
-                    return;
-                }
+                if (scannedItemCode !== itemCode)
+                	return 'Error: Scanned item code ('+scannedItemCode+') mismatch the selected item code ('+itemCode+').';
 
-                if (scannedCartons.length > 0 && scannedCartons.some(item => item.CartonNo === uniqueCartonNumber)) {
-                    // Play beep sound
-                    if(errorBeepSound)
-                        errorBeepSound.play();
-                      alert('Carton ('+uniqueCartonNumber+') is duplicate and already scanned.');
-                      return;
-                }
+                if (scannedCartons.length > 0 && scannedCartons.some(item => item.CartonNo === uniqueCartonNumber))
+                    return 'Error: Carton ('+uniqueCartonNumber+') is duplicate and already scanned.';
                
-                if (!validCartonsList.some(item => item.PACK_SRL_NO === uniqueCartonNumber)) {
-                    // Play beep sound
-                    if(errorBeepSound)
-                        errorBeepSound.play();
-                    alert('Invalid carton number. Check detail for ' + uniqueCartonNumber);
-                    return;
-                }
+                if (!validCartonsList.some(item => item.PACK_SRL_NO === uniqueCartonNumber))
+                	return 'Error: Invalid carton number. Check detail for ' + uniqueCartonNumber;
 
                 // Add scanned carton to the list
                 const scanTime = new Date().toLocaleTimeString();
                 scanned_data = {"ProductCode":itemCode,"CartonNo":uniqueCartonNumber,"Qty":quantityPCS,"TimeStamp":scanTime};
                 scannedCartons.push(scanned_data);
+
+                //update the scan table rows to show new scan
                 updateScanTable(uniqueCartonNumber, quantityPCS, scanTime);
-                // Play beep sound
-                if(correctBeepSound)
-                    correctBeepSound.play();
-                console.log(scannedCartons);
                 
-                // Update progress
-                scannedCount.textContent = scannedCartons.length;
-                scanProgress.value = scannedCartons.length;
+                // Update the progress bar and scanned count
+                v_scanned = scannedCartons.length;
+                scannedCount.textContent = v_scanned;
+                scanProgress.value = v_scanned;
                 
                 // Update pending quantities
                 let pendingQty = parseInt(pendingQtyElement.textContent, 10);
@@ -910,10 +898,13 @@
                 pendingCartonsElement.textContent = pendingCartons;
 
                 // Check if scanning is complete
-                if (pendingQty <= 0) {
-                    alert('Scanning complete.');
+                if (pendingQty = 0) {
                     disableScanning();
+                    if(scanner) scanner.stopCameraScan();
+                    alert('Scanning complete.');
                 }
+
+                return '0';
             }
 
 			// Function to update the scan table with the new scanned carton
@@ -945,7 +936,7 @@
 			    confirmSaveAction();
 			    const modal = document.getElementById('itemDetailsModal');
 			    modal.style.display = 'none';
-			    scanner.stopCameraScan();
+			    if(scanner) scanner.stopCameraScan();
                 disableScanning();
 			}
 
