@@ -274,305 +274,567 @@
                 };
             }
 
-			class ScannerMan {
-                constructor(isCameraAvailable) {
-					this.videoElement = null;
-					this.stream = null;
-					this.canvasElement = null;
-					this.ctx = null;
-					this.overlayCanvas = null;
-					this.overlayCtx = null;
-					this.scanIntervalId = null;
-					this.callback = null;
-					this.handlePlay = this.handlePlay.bind(this);
-					this.handlePause = this.handlePause.bind(this); 
-					this.alertTimeout = null;
-					this.audioContext = null;
-					this.errorBeepSound = null;
-					this.correctBeepSound = null;
-					this.isCameraAvailable = isCameraAvailable;
-        			this.scanDelay = 369; // Time interval to prevent double scans
-        			this.lastScanTime = 0; // Initialize in the constructor
+			// class ScannerMan {
+            //     constructor(isCameraAvailable) {
+			// 		this.videoElement = null;
+			// 		this.stream = null;
+			// 		this.canvasElement = null;
+			// 		this.ctx = null;
+			// 		this.overlayCanvas = null;
+			// 		this.overlayCtx = null;
+			// 		this.scanIntervalId = null;
+			// 		this.callback = null;
+			// 		this.handlePlay = this.handlePlay.bind(this);
+			// 		this.handlePause = this.handlePause.bind(this); 
+			// 		this.alertTimeout = null;
+			// 		this.audioContext = null;
+			// 		this.errorBeepSound = null;
+			// 		this.correctBeepSound = null;
+			// 		this.isCameraAvailable = isCameraAvailable;
+        	// 		this.scanDelay = 369; // Time interval to prevent double scans
+        	// 		this.lastScanTime = 0; // Initialize in the constructor
 
-		            // Accessing video element to display camera feed
-		            this.videoElement = document.getElementById('cameraFeed');
-		            this.overlayCanvas = document.getElementById('overlayCanvas');
-        			this.isScanning = true;
+		    //         // Accessing video element to display camera feed
+		    //         this.videoElement = document.getElementById('cameraFeed');
+		    //         this.overlayCanvas = document.getElementById('overlayCanvas');
+        	// 		this.isScanning = true;
 
-        			try{
-			            // Initialize error beep sound
-			            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-			            this.errorBeepSound = new Audio('tpac_library/audio/beep-05.mp3');
-	                    this.correctBeepSound = new Audio('tpac_library/audio/beep-02.mp3');
-				    }catch(error) {
-	                    console.error("Error loading beep sound:", error);
-	                }
+        	// 		try{
+			//             // Initialize error beep sound
+			//             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+			//             this.errorBeepSound = new Audio('tpac_library/audio/beep-05.mp3');
+	        //             this.correctBeepSound = new Audio('tpac_library/audio/beep-02.mp3');
+			// 	    }catch(error) {
+	        //             console.error("Error loading beep sound:", error);
+	        //         }
 
-        			//Set up event listeners
-                    this.setupEventListeners();
-                }
+        	// 		//Set up event listeners
+            //         this.setupEventListeners();
+            //     }
 
-                showAlert(message) {
-				    clearTimeout(this.alertTimeout);
-				    this.alertTimeout = setTimeout(() => {
-				        alert(message);
-				    }, 500); // Wait half a second before showing the alert
-				}
+            //     showAlert(message) {
+			// 	    clearTimeout(this.alertTimeout);
+			// 	    this.alertTimeout = setTimeout(() => {
+			// 	        alert(message);
+			// 	    }, 500); // Wait half a second before showing the alert
+			// 	}
 
-				async startScanning(callback) {
-			        try {
-			            this.callback = callback;
+			// 	async startScanning(callback) {
+			//         try {
+			//             this.callback = callback;
 
-			            if (this.isCameraAvailable) {
-				            if (!this.videoElement) throw new Error('Video element not found.');
-				            if (!this.overlayCanvas) throw new Error('Overlay canvas element not found.');
+			//             if (this.isCameraAvailable) {
+			// 	            if (!this.videoElement) throw new Error('Video element not found.');
+			// 	            if (!this.overlayCanvas) throw new Error('Overlay canvas element not found.');
 
-				            this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-				            this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-											    .catch(error => {
-											        console.error('Error accessing the camera:', error);
-											        alert('Camera access denied. Please allow camera access and click Retry.');
-											        return null;
-											    });
-							if (!this.stream) return; // Exit if stream couldn't start
-				            this.videoElement.srcObject = this.stream;
+			// 	            this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+			// 	            this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+			// 								    .catch(error => {
+			// 								        console.error('Error accessing the camera:', error);
+			// 								        alert('Camera access denied. Please allow camera access and click Retry.');
+			// 								        return null;
+			// 								    });
+			// 				if (!this.stream) return; // Exit if stream couldn't start
+			// 	            this.videoElement.srcObject = this.stream;
 
-				            // Ensure video plays as soon as the metadata is loaded
-				            this.videoElement.onloadedmetadata = () => {
-				                this.videoElement.play();
-				                this.handlePlay(); // Start scanning once video is ready
-				            };
+			// 	            // Ensure video plays as soon as the metadata is loaded
+			// 	            this.videoElement.onloadedmetadata = () => {
+			// 	                this.videoElement.play();
+			// 	                this.handlePlay(); // Start scanning once video is ready
+			// 	            };
 
-				            // Create a canvas to capture frames from the video feed
-				            this.canvasElement = document.createElement('canvas');
-				            this.ctx = this.canvasElement.getContext('2d', { willReadFrequently: true });
-				            if (!this.ctx) throw new Error('Canvas 2D context not found.');
+			// 	            // Create a canvas to capture frames from the video feed
+			// 	            this.canvasElement = document.createElement('canvas');
+			// 	            this.ctx = this.canvasElement.getContext('2d', { willReadFrequently: true });
+			// 	            if (!this.ctx) throw new Error('Canvas 2D context not found.');
 
-				            // Create overlay canvas for the fixed rectangle
-				            this.overlayCtx = this.overlayCanvas.getContext('2d', { willReadFrequently: true });
-				        }
+			// 	            // Create overlay canvas for the fixed rectangle
+			// 	            this.overlayCtx = this.overlayCanvas.getContext('2d', { willReadFrequently: true });
+			// 	        }
 
-			            return new Promise(resolve => resolve());
-			        } catch (error) {
-			            console.error("Error starting camera scan:", error);
-			            alert('Camera access denied. Please allow camera access and click Retry.');
-			        }
-			    }
+			//             return new Promise(resolve => resolve());
+			//         } catch (error) {
+			//             console.error("Error starting camera scan:", error);
+			//             alert('Camera access denied. Please allow camera access and click Retry.');
+			//         }
+			//     }
 
-			    handleScannedData(scanData) {
-			    	try{
-					    let response = this.callback(scanData);
-					    if (response.includes("Error:")) {
-					        if (this.errorBeepSound) this.errorBeepSound.play();
-					        this.showAlert(response);
-					    } else {
-					        if (this.correctBeepSound) this.correctBeepSound.play();
-					    }
-					    return response;
-					}catch(error){
-						console.error("Error inside handleScannedData:", error);
-						return '0';
-					}
-				}
+			//     handleScannedData(scanData) {
+			//     	try{
+			// 		    let response = this.callback(scanData);
+			// 		    if (response.includes("Error:")) {
+			// 		        if (this.errorBeepSound) this.errorBeepSound.play();
+			// 		        this.showAlert(response);
+			// 		    } else {
+			// 		        if (this.correctBeepSound) this.correctBeepSound.play();
+			// 		    }
+			// 		    return response;
+			// 		catch(error){
+			// 			console.error("Error inside handleScannedData:", error);
+			// 			return '0';
+			// 		}
+			// 	}
 
 
-                setupEventListeners() {
+            //     setupEventListeners() {
 
-      				console.log('About to setup listereners with Camera Available: ' + this.isCameraAvailable);
+      		// 		console.log('About to setup listereners with Camera Available: ' + this.isCameraAvailable);
 
-                	if (this.isCameraAvailable) {
+            //     	if (this.isCameraAvailable) {
 
-	                	this.videoElement.addEventListener('play', this.handlePlay);
-	                    this.videoElement.addEventListener('pause', this.handlePause);
+	        //         	this.videoElement.addEventListener('play', this.handlePlay);
+	        //             this.videoElement.addEventListener('pause', this.handlePause);
 
-				        document.getElementById('toggleScan').addEventListener('click', () => {
-						if (this.isScanning) {
-							this.handlePause();
-							document.getElementById('toggleScan').textContent = 'Resume';
-						} else {
-							this.handlePlay();
-							document.getElementById('toggleScan').textContent = 'Pause';
-						}
-							this.isScanning = !this.isScanning;	
-						});
+			// 	        document.getElementById('toggleScan').addEventListener('click', () => {
+			// 			if (this.isScanning) {
+			// 				this.handlePause();
+			// 				document.getElementById('toggleScan').textContent = 'Resume';
+			// 			} else {
+			// 				this.handlePlay();
+			// 				document.getElementById('toggleScan').textContent = 'Pause';
+			// 			}
+			// 				this.isScanning = !this.isScanning;	
+			// 			});
 
-					}else{
-						const scannerInput = document.getElementById('scannerInput');
-						if (scannerInput) {
-				            scannerInput.addEventListener('keypress', e => {
-				                if (e.key === 'Enter') {
-				                    let scanData = e.target.value.trim();
-				                    this.handleScannedData(scanData);
-				                    e.target.value = ''; // Clear input
-				                }
-				            });
-				        } else {
-				            console.error('Scanner input field is not available.');
-				        }
-					}
-			    }
+			// 		}else{
+			// 			const scannerInput = document.getElementById('scannerInput');
+			// 			if (scannerInput) {
+			// 	            scannerInput.addEventListener('keypress', e => {
+			// 	                if (e.key === 'Enter') {
+			// 	                    let scanData = e.target.value.trim();
+			// 	                    this.handleScannedData(scanData);
+			// 	                    e.target.value = ''; // Clear input
+			// 	                }
+			// 	            });
+			// 	        } else {
+			// 	            console.error('Scanner input field is not available.');
+			// 	        }
+			// 		}
+			//     }
 
-                handlePlay() {
-                    // Update canvas dimensions when video starts playing
-                    this.updateCanvasDimensions();
-                    this.drawFixedRectangle();
-                    if (this.callback) {
-        				console.log('Video element playing:', !this.videoElement.paused);
-                        this.CameraScanHandler(this.callback); // Ensure callback is passed
-                    }
-                }
+            //     handlePlay() {
+            //         // Update canvas dimensions when video starts playing
+            //         this.updateCanvasDimensions();
+            //         this.drawFixedRectangle();
+            //         if (this.callback) {
+        	// 			console.log('Video element playing:', !this.videoElement.paused);
+            //             this.CameraScanHandler(this.callback); // Ensure callback is passed
+            //         }
+            //     }
 
-                handlePause() {
-                    // Stop scanning when video pauses
-                    this.stopScanning();
-                }
+            //     handlePause() {
+            //         // Stop scanning when video pauses
+            //         this.stopScanning();
+            //     }
 
-                updateCanvasDimensions() {
-                    if (this.canvasElement && this.videoElement) {
-                        this.canvasElement.width = this.videoElement.videoWidth;
-                        this.canvasElement.height = this.videoElement.videoHeight;
-                        this.overlayCanvas.width = this.videoElement.videoWidth;
-                        this.overlayCanvas.height = this.videoElement.videoHeight;
-                        console.log('Canvas dimensions:', this.canvasElement.width, this.canvasElement.height);
+            //     updateCanvasDimensions() {
+            //         if (this.canvasElement && this.videoElement) {
+            //             this.canvasElement.width = this.videoElement.videoWidth;
+            //             this.canvasElement.height = this.videoElement.videoHeight;
+            //             this.overlayCanvas.width = this.videoElement.videoWidth;
+            //             this.overlayCanvas.height = this.videoElement.videoHeight;
+            //             console.log('Canvas dimensions:', this.canvasElement.width, this.canvasElement.height);
    
-                    } else {
-                        console.error('Canvas or video element not properly initialized.');
-                    }
-                }
+            //         } else {
+            //             console.error('Canvas or video element not properly initialized.');
+            //         }
+            //     }
 
-				drawFixedRectangle() {
-					if (this.overlayCtx) {
-						const width = this.overlayCanvas.width;
-						const height = this.overlayCanvas.height;
+			// 	drawFixedRectangle() {
+			// 		if (this.overlayCtx) {
+			// 			const width = this.overlayCanvas.width;
+			// 			const height = this.overlayCanvas.height;
 
-						this.overlayCtx.clearRect(0, 0, width, height);
-						this.overlayCtx.strokeStyle = 'red'; //'rgba(255, 0, 0, 0.5)'
-						this.overlayCtx.lineWidth = 2;
-						// this.overlayCtx.strokeRect(50, 50, this.canvasElement.width - 100, this.canvasElement.height - 100);
-						this.overlayCtx.strokeRect(width * 0.1, height * 0.2, width * 0.8, height * 0.6);
-					} else {
-                        console.error('Overlay canvas context not found.');
-                    }
-				}
+			// 			this.overlayCtx.clearRect(0, 0, width, height);
+			// 			this.overlayCtx.strokeStyle = 'red'; //'rgba(255, 0, 0, 0.5)'
+			// 			this.overlayCtx.lineWidth = 2;
+			// 			// this.overlayCtx.strokeRect(50, 50, this.canvasElement.width - 100, this.canvasElement.height - 100);
+			// 			this.overlayCtx.strokeRect(width * 0.1, height * 0.2, width * 0.8, height * 0.6);
+			// 		} else {
+            //             console.error('Overlay canvas context not found.');
+            //         }
+			// 	}
 
-                drawLine(begin, end, color) {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(begin.x, begin.y);
-                    this.ctx.lineTo(end.x, end.y);
-                    this.ctx.lineWidth = 4;
-                    this.ctx.strokeStyle = color;
-                    this.ctx.stroke();
-                }
+            //     drawLine(begin, end, color) {
+            //         this.ctx.beginPath();
+            //         this.ctx.moveTo(begin.x, begin.y);
+            //         this.ctx.lineTo(end.x, end.y);
+            //         this.ctx.lineWidth = 4;
+            //         this.ctx.strokeStyle = color;
+            //         this.ctx.stroke();
+            //     }
 
-                // Method to draw a box around the QR code
-                drawBoxAroundQRCode(location) {
-                    this.drawLine(location.topLeftCorner, location.topRightCorner, "#FF3B58");
-                    this.drawLine(location.topRightCorner, location.bottomRightCorner, "#FF3B58");
-                    this.drawLine(location.bottomRightCorner, location.bottomLeftCorner, "#FF3B58");
-                    this.drawLine(location.bottomLeftCorner, location.topLeftCorner, "#FF3B58");
-                }
+            //     // Method to draw a box around the QR code
+            //     drawBoxAroundQRCode(location) {
+            //         this.drawLine(location.topLeftCorner, location.topRightCorner, "#FF3B58");
+            //         this.drawLine(location.topRightCorner, location.bottomRightCorner, "#FF3B58");
+            //         this.drawLine(location.bottomRightCorner, location.bottomLeftCorner, "#FF3B58");
+            //         this.drawLine(location.bottomLeftCorner, location.topLeftCorner, "#FF3B58");
+            //     }
 
 
 
-                CameraScanHandler(callback) {
+            //     CameraScanHandler(callback) {
 
-                	if (!callback) {
-                        this.showAlert('Callback function is not provided.');
-                        return;
-                    }
+            //     	if (!callback) {
+            //             this.showAlert('Callback function is not provided.');
+            //             return;
+            //         }
 
-                    const scan = () => {
+            //         const scan = () => {
         				
-        				console.log('RequestAnimationFrame is running');
+        	// 			console.log('RequestAnimationFrame is running');
 
-        				// Add a flag to check if scanning should continue
-				        if (!this.isScanning) {
-				            return;
-				        }
+        	// 			// Add a flag to check if scanning should continue
+			// 	        if (!this.isScanning) {
+			// 	            return;
+			// 	        }
 			            
-			            const now = Date.now();
-			            if (now - this.lastScanTime < this.scanDelay) {
-			                requestAnimationFrame(scan);
-			                return;
-			            }
+			//             const now = Date.now();
+			//             if (now - this.lastScanTime < this.scanDelay) {
+			//                 requestAnimationFrame(scan);
+			//                 return;
+			//             }
 
-			            this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
-			            this.drawFixedRectangle();
+			//             this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
+			//             this.drawFixedRectangle();
 
-			             this.overlayCtx.drawImage(this.videoElement, 0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
+			//             this.ctx.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height);
 
-				        // Define the dimensions of the fixed rectangle
-				        const cropX = this.overlayCanvas.width * 0.1;
-				        const cropY = this.overlayCanvas.height * 0.2;
-				        const cropWidth = this.overlayCanvas.width * 0.8;
-				        const cropHeight = this.overlayCanvas.height * 0.6;
 
-				        // Create a canvas for cropping
-				        const cropCanvas = document.createElement('canvas');
-				        cropCanvas.width = cropWidth;
-				        cropCanvas.height = cropHeight;
-				        const ctx = cropCanvas.getContext('2d');
+			// 	        const cropX = this.overlayCanvas.width * 0.1;
+			// 			const cropY = this.overlayCanvas.height * 0.2;
+			// 			const cropWidth = this.overlayCanvas.width * 0.8;
+			// 			const cropHeight = this.overlayCanvas.height * 0.6;
 
-				        // Draw the cropped region onto the new canvas
-				        ctx.drawImage(this.videoElement, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+			// 			const imageData = this.ctx.getImageData(cropX, cropY, cropWidth, cropHeight);
 
-				        // Get the image data from the cropped canvas
-				        const imageData = ctx.getImageData(0, 0, cropWidth, cropHeight);
+			// 	        // Detect QR code
+			// 	        const qrCode = jsQR(imageData.data, cropWidth, cropHeight, { inversionAttempts: "dontInvert" });
 
-				        // Detect QR code
-				        const qrCode = jsQR(imageData.data, cropWidth, cropHeight, { inversionAttempts: "dontInvert" });
+		    //             if (qrCode) {
+		    //             	if (now - this.lastScanTime >= this.scanDelay) {
+		    //             		console.log('QR DATA:' + qrCode.data);
+			// 	                this.lastScanTime = now;  // Update last scan time
 
-		                if (qrCode) {
-		                	if (now - this.lastScanTime >= this.scanDelay) {
-		                		console.log('QR DATA:' + qrCode.data);
-				                this.lastScanTime = now;  // Update last scan time
+			// 	                const response = this.handleScannedData(qrCode.data);
+			// 	                requestAnimationFrame(scan);  // Only continue scanning if no error
+			// 	            }
+		    //             } else {
+			// 	            requestAnimationFrame(scan);  // Continue scanning if no QR code detected
+			// 	        }
+		    //     	};
 
-				                const response = this.handleScannedData(qrCode.data);
-				                requestAnimationFrame(scan);  // Only continue scanning if no error
-				            }
-		                } else {
-				            requestAnimationFrame(scan);  // Continue scanning if no QR code detected
-				        }
-		        	};
+			//         requestAnimationFrame(scan);
+			//     }
 
-			        requestAnimationFrame(scan);
-			    }
+            //     stopScanning() {
+            //         clearInterval(this.scanIntervalId);
+            //         this.scanIntervalId = null;
+            //         if (this.stream) {
+            //         	// Stop the video stream
+            //             this.stream.getTracks().forEach(track => track.stop());
+			//         }
+			//         // Remove video element from the DOM
+            //         this.videoElement.pause();
+            //         this.videoElement.srcObject = null;
+            //         this.videoElement.remove();
 
-                stopScanning() {
-                    clearInterval(this.scanIntervalId);
-                    this.scanIntervalId = null;
-                    if (this.stream) {
-                    	// Stop the video stream
-                        this.stream.getTracks().forEach(track => track.stop());
-			        }
-			        // Remove video element from the DOM
-                    this.videoElement.pause();
-                    this.videoElement.srcObject = null;
-                    this.videoElement.remove();
+            //         // Clean up event listeners
+            //         this.videoElement.removeEventListener('play', this.handlePlay);
+            //         this.videoElement.removeEventListener('pause', this.handlePause);
 
-                    // Clean up event listeners
-                    this.videoElement.removeEventListener('play', this.handlePlay);
-                    this.videoElement.removeEventListener('pause', this.handlePause);
+            //         // Remove other resources
+            //         this.canvasElement.remove();
+            //     }
 
-                    // Remove other resources
-                    this.canvasElement.remove();
-                }
+            //     async stopCameraScan() {
+            //         try {
 
-                async stopCameraScan() {
-                    try {
+            //         	if (this.isScanning) {
+			// 		        this.isScanning = false;
+			// 		        this.stopScanning();
+			// 		    }
 
-                    	if (this.isScanning) {
-					        this.isScanning = false;
-					        this.stopScanning();
-					    }
+            //             console.log("Camera scan stopped successfully");
+            //         } catch (error) {
+            //             console.error("Error stopping camera scan:", error);
+            //         }
+            //     }
 
-                        console.log("Camera scan stopped successfully");
-                    } catch (error) {
-                        console.error("Error stopping camera scan:", error);
-                    }
-                }
+            // }
 
+            class ScannerMan {
+    constructor(isCameraAvailable) {
+        this.videoElement = null;
+        this.stream = null;
+        this.canvasElement = null;
+        this.ctx = null;
+        this.overlayCanvas = null;
+        this.overlayCtx = null;
+        this.scanIntervalId = null;
+        this.callback = null;
+        this.handlePlay = this.handlePlay.bind(this);
+        this.handlePause = this.handlePause.bind(this);
+        this.alertTimeout = null;
+        this.audioContext = null;
+        this.errorBeepSound = null;
+        this.correctBeepSound = null;
+        this.isCameraAvailable = isCameraAvailable;
+        this.scanDelay = 369; // Time interval to prevent double scans
+        this.lastScanTime = 0; // Initialize in the constructor
+
+        // Accessing video element to display camera feed
+        this.videoElement = document.getElementById('cameraFeed');
+        this.overlayCanvas = document.getElementById('overlayCanvas');
+        this.isScanning = true;
+
+        try {
+            // Initialize error beep sound
+            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            this.errorBeepSound = new Audio('tpac_library/audio/beep-05.mp3');
+            this.correctBeepSound = new Audio('tpac_library/audio/beep-02.mp3');
+        } catch (error) {
+            console.error("Error loading beep sound:", error);
+        }
+
+        // Set up event listeners
+        this.setupEventListeners();
+    }
+
+    showAlert(message) {
+        clearTimeout(this.alertTimeout);
+        this.alertTimeout = setTimeout(() => {
+            // Use a more subtle UI element instead of alert
+            console.warn(message);
+        }, 500); // Wait half a second before showing the alert
+    }
+
+    async startScanning(callback) {
+        try {
+            this.callback = callback;
+
+            if (this.isCameraAvailable) {
+                if (!this.videoElement) throw new Error('Video element not found.');
+                if (!this.overlayCanvas) throw new Error('Overlay canvas element not found.');
+
+                this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+                if (!this.stream) return; // Exit if stream couldn't start
+                this.videoElement.srcObject = this.stream;
+
+                // Ensure video plays as soon as the metadata is loaded
+                this.videoElement.onloadedmetadata = () => {
+                    this.videoElement.play();
+                    this.handlePlay(); // Start scanning once video is ready
+                };
+
+                // Create a canvas to capture frames from the video feed
+                this.canvasElement = document.createElement('canvas');
+                this.ctx = this.canvasElement.getContext('2d', { willReadFrequently: true });
+                if (!this.ctx) throw new Error('Canvas 2D context not found.');
+
+                // Create overlay canvas for the fixed rectangle
+                this.overlayCtx = this.overlayCanvas.getContext('2d', { willReadFrequently: true });
             }
+
+            return new Promise(resolve => resolve());
+        } catch (error) {
+            console.error("Error starting camera scan:", error);
+            this.showAlert('Camera access denied. Please allow camera access and click Retry.');
+        }
+    }
+
+    handleScannedData(scanData) {
+        try {
+            let response = this.callback(scanData);
+            if (response.includes("Error:")) {
+                if (this.errorBeepSound) this.errorBeepSound.play();
+                this.showAlert(response);
+            } else {
+                if (this.correctBeepSound) this.correctBeepSound.play();
+            }
+            return response;
+        } catch (error) {
+            console.error("Error inside handleScannedData:", error);
+            return '0';
+        }
+    }
+
+    setupEventListeners() {
+        console.log('About to setup listeners with Camera Available: ' + this.isCameraAvailable);
+
+        if (this.isCameraAvailable) {
+            this.videoElement.addEventListener('play', this.handlePlay);
+            this.videoElement.addEventListener('pause', this.handlePause);
+
+            document.getElementById('toggleScan').addEventListener('click', () => {
+                if (this.isScanning) {
+                    this.handlePause();
+                    document.getElementById('toggleScan').textContent = 'Resume';
+                } else {
+                    this.handlePlay();
+                    document.getElementById('toggleScan').textContent = 'Pause';
+                }
+                this.isScanning = !this.isScanning;
+            });
+        } else {
+            const scannerInput = document.getElementById('scannerInput');
+            if (scannerInput) {
+                scannerInput.addEventListener('keypress', e => {
+                    if (e.key === 'Enter') {
+                        let scanData = e.target.value.trim();
+                        this.handleScannedData(scanData);
+                        e.target.value = ''; // Clear input
+                    }
+                });
+            } else {
+                console.error('Scanner input field is not available.');
+            }
+        }
+    }
+
+    handlePlay() {
+        // Update canvas dimensions when video starts playing
+        this.updateCanvasDimensions();
+        this.drawFixedRectangle();
+        if (this.callback) {
+            console.log('Video element playing:', !this.videoElement.paused);
+            this.CameraScanHandler(this.callback); // Ensure callback is passed
+        }
+    }
+
+    handlePause() {
+        // Stop scanning when video pauses
+        this.stopScanning();
+    }
+
+    updateCanvasDimensions() {
+        if (this.canvasElement && this.videoElement) {
+            this.canvasElement.width = this.videoElement.videoWidth;
+            this.canvasElement.height = this.videoElement.videoHeight;
+            this.overlayCanvas.width = this.videoElement.videoWidth;
+            this.overlayCanvas.height = this.videoElement.videoHeight;
+            console.log('Canvas dimensions:', this.canvasElement.width, this.canvasElement.height);
+        } else {
+            console.error('Canvas or video element not properly initialized.');
+        }
+    }
+
+    drawFixedRectangle() {
+        if (this.overlayCtx) {
+            const width = this.overlayCanvas.width;
+            const height = this.overlayCanvas.height;
+
+            this.overlayCtx.clearRect(0, 0, width, height);
+            this.overlayCtx.strokeStyle = 'red'; //'rgba(255, 0, 0, 0.5)'
+            this.overlayCtx.lineWidth = 2;
+            this.overlayCtx.strokeRect(width * 0.1, height * 0.2, width * 0.8, height * 0.6);
+        } else {
+            console.error('Overlay canvas context not found.');
+        }
+    }
+
+    drawLine(begin, end, color) {
+        this.ctx.beginPath();
+        this.ctx.moveTo(begin.x, begin.y);
+        this.ctx.lineTo(end.x, end.y);
+        this.ctx.lineWidth = 4;
+        this.ctx.strokeStyle = color;
+        this.ctx.stroke();
+    }
+
+    drawBoxAroundQRCode(location) {
+        this.drawLine(location.topLeftCorner, location.topRightCorner, "#FF3B58");
+        this.drawLine(location.topRightCorner, location.bottomRightCorner, "#FF3B58");
+        this.drawLine(location.bottomRightCorner, location.bottomLeftCorner, "#FF3B58");
+        this.drawLine(location.bottomLeftCorner, location.topLeftCorner, "#FF3B58");
+    }
+
+    CameraScanHandler(callback) {
+        if (!callback) {
+            this.showAlert('Callback function is not provided.');
+            return;
+        }
+
+        const scan = () => {
+            console.log('RequestAnimationFrame is running');
+
+            // Add a flag to check if scanning should continue
+            if (!this.isScanning) {
+                return;
+            }
+
+            const now = Date.now();
+            if (now - this.lastScanTime < this.scanDelay) {
+                requestAnimationFrame(scan);
+                return;
+            }
+
+            this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
+            this.drawFixedRectangle();
+
+            this.ctx.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height);
+
+            const cropX = this.overlayCanvas.width * 0.1;
+            const cropY = this.overlayCanvas.height * 0.2;
+            const cropWidth = this.overlayCanvas.width * 0.8;
+            const cropHeight = this.overlayCanvas.height * 0.6;
+
+            const imageData = this.ctx.getImageData(cropX, cropY, cropWidth, cropHeight);
+
+            // Detect QR code
+            const qrCode = jsQR(imageData.data, cropWidth, cropHeight, { inversionAttempts: "dontInvert" });
+
+            if (qrCode) {
+                if (now - this.lastScanTime >= this.scanDelay) {
+                    console.log('QR DATA:' + qrCode.data);
+                    this.lastScanTime = now;  // Update last scan time
+
+                    const response = this.handleScannedData(qrCode.data);
+                    requestAnimationFrame(scan);  // Only continue scanning if no error
+                }
+            } else {
+                requestAnimationFrame(scan);  // Continue scanning if no QR code detected
+            }
+        };
+
+        requestAnimationFrame(scan);
+    }
+
+    stopScanning() {
+        clearInterval(this.scanIntervalId);
+        this.scanIntervalId = null;
+        if (this.stream) {
+            // Stop the video stream
+            this.stream.getTracks().forEach(track => track.stop());
+        }
+        // Remove video element from the DOM
+        this.videoElement.pause();
+        this.videoElement.srcObject = null;
+        this.videoElement.remove();
+
+        // Clean up event listeners
+        this.videoElement.removeEventListener('play', this.handlePlay);
+        this.videoElement.removeEventListener('pause', this.handlePause);
+
+        // Remove other resources
+        this.canvasElement.remove();
+    }
+
+    async stopCameraScan() {
+        try {
+            if (this.isScanning) {
+                this.isScanning = false;
+                this.stopScanning();
+            }
+
+            console.log("Camera scan stopped successfully");
+        } catch (error) {
+            console.error("Error stopping camera scan:", error);
+        }
+    }
+}
+
 
 
             async function fetchOrderDetails(p_unit_id,p_deliveryOrderId) {
