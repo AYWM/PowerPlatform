@@ -291,7 +291,7 @@
 					this.errorBeepSound = null;
 					this.correctBeepSound = null;
 					this.isCameraAvailable = isCameraAvailable;
-        			this.scanDelay = 369; // Time interval to prevent double scans
+        			this.scanDelay = 521; // Time interval to prevent double scans
 
 		            // Accessing video element to display camera feed
 		            this.videoElement = document.getElementById('cameraFeed');
@@ -346,14 +346,16 @@
 			    }
 
 			    handleScannedData(scanData) {
-			        let response = this.callback(scanData);
-			        if (response.includes("Error:")) {
-			            if (this.errorBeepSound) this.errorBeepSound.play();
-			            this.showAlert(response);
-			        } else {
-			            if (this.correctBeepSound) this.correctBeepSound.play();
-			        }
-			    }
+				    let response = this.callback(scanData);
+				    if (response.includes("Error:")) {
+				        if (this.errorBeepSound) this.errorBeepSound.play();
+				        this.showAlert(response);
+				    } else {
+				        if (this.correctBeepSound) this.correctBeepSound.play();
+				    }
+				    return response;
+				}
+
 
                 setupEventListeners() {
 
@@ -448,6 +450,7 @@
                 }
 
 
+
                 CameraScanHandler(callback) {
 
                 	if (!callback) {
@@ -476,11 +479,17 @@
 		                const qrCode = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
 
 		                if (qrCode) {
-		                    this.handleScannedData(qrCode.data);
-		                    this.lastScanTime = Date.now(); //now;
-		                }
+		                	if (now - this.lastScanTime >= this.scanDelay) {
+				                this.lastScanTime = now;  // Update last scan time
 
-		            	requestAnimationFrame(scan);
+				                const response = this.handleScannedData(qrCode.data);
+				                if (!response.includes("Error:")) {
+				                    requestAnimationFrame(scan);  // Only continue scanning if no error
+				                }
+				            }
+		                } else {
+				            requestAnimationFrame(scan);  // Continue scanning if no QR code detected
+				        }
 		        	};
 
 			        requestAnimationFrame(scan);
