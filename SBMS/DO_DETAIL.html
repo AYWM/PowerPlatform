@@ -291,7 +291,7 @@
 					this.errorBeepSound = null;
 					this.correctBeepSound = null;
 					this.isCameraAvailable = isCameraAvailable;
-        			this.scanDelay = 639; // Time interval to prevent double scans
+        			this.scanDelay = 369; // Time interval to prevent double scans
         			this.lastScanTime = 0; // Initialize in the constructor
 
 		            // Accessing video element to display camera feed
@@ -479,6 +479,11 @@
                     const scan = () => {
         				
         				console.log('RequestAnimationFrame is running');
+
+        				// Add a flag to check if scanning should continue
+				        if (!this.isScanning) {
+				            return;
+				        }
 			            
 			            const now = Date.now();
 			            if (now - this.lastScanTime < this.scanDelay) {
@@ -498,7 +503,7 @@
 				        const imageData = this.ctx.getImageData(0, 0, cropWidth, cropHeight);
 
 				        const qrCode = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
-				        
+
 		                if (qrCode) {
 		                	if (now - this.lastScanTime >= this.scanDelay) {
 		                		console.log('QR DATA:' + qrCode.data);
@@ -521,27 +526,29 @@
                     clearInterval(this.scanIntervalId);
                     this.scanIntervalId = null;
                     if (this.stream) {
-			            this.stream.getTracks().forEach(track => track.stop());
-			            this.videoElement.srcObject = null;
+                    	// Stop the video stream
+                        this.stream.getTracks().forEach(track => track.stop());
 			        }
+			        // Remove video element from the DOM
+                    this.videoElement.pause();
+                    this.videoElement.srcObject = null;
+                    this.videoElement.remove();
+
+                    // Clean up event listeners
+                    this.videoElement.removeEventListener('play', this.handlePlay);
+                    this.videoElement.removeEventListener('pause', this.handlePause);
+
+                    // Remove other resources
+                    this.canvasElement.remove();
                 }
 
                 async stopCameraScan() {
                     try {
-                        // Stop the video stream
-                        this.stream.getTracks().forEach(track => track.stop());
 
-                        // Remove video element from the DOM
-                        this.videoElement.pause();
-                        this.videoElement.srcObject = null;
-                        this.videoElement.remove();
-
-                        // Clean up event listeners
-                        this.videoElement.removeEventListener('play', this.handlePlay);
-                        this.videoElement.removeEventListener('pause', this.handlePause);
-
-                        // Remove other resources
-                        this.canvasElement.remove();
+                    	if (this.isScanning) {
+					        this.isScanning = false;
+					        this.stopScanning();
+					    }
 
                         console.log("Camera scan stopped successfully");
                     } catch (error) {
@@ -915,51 +922,56 @@
 
 			// Function to process scanned data
             function processScanResult(scanData, itemCode, validCartonsList, scannedCartons, scanProgress, scannedCount, pendingQtyElement, pendingCartonsElement) {
-                const parsedData = scanData.split(';');
-                const scannedItemCode = parsedData[0];
-                const uniqueCartonNumber = parsedData[1];
-                const quantityPCS = parseInt(parsedData[3], 10);
+            	try {
+	                const parsedData = scanData.split(';');
+	                const scannedItemCode = parsedData[0];
+	                const uniqueCartonNumber = parsedData[1];
+	                const quantityPCS = parseInt(parsedData[3], 10);
 
-                // Validate the scanned data
-                if (scannedItemCode !== itemCode)
-                	return 'Error: Scanned item code ('+scannedItemCode+') mismatch the selected item code ('+itemCode+').';
+	                // Validate the scanned data
+	                if (scannedItemCode !== itemCode)
+	                	return 'Error: Scanned item code ('+scannedItemCode+') mismatch the selected item code ('+itemCode+').';
 
-                if (scannedCartons.length > 0 && scannedCartons.some(item => item.CartonNo === uniqueCartonNumber))
-                    return 'Error: Carton ('+uniqueCartonNumber+') is duplicate and already scanned.';
-               
-                if (!validCartonsList.some(item => item.PACK_SRL_NO === uniqueCartonNumber))
-                	return 'Error: Invalid carton number. Check detail for ' + uniqueCartonNumber;
+	                if (scannedCartons.length > 0 && scannedCartons.some(item => item.CartonNo === uniqueCartonNumber))
+	                    return 'Error: Carton ('+uniqueCartonNumber+') is duplicate and already scanned.';
+	               
+	                if (!validCartonsList.some(item => item.PACK_SRL_NO === uniqueCartonNumber))
+	                	return 'Error: Invalid carton number. Check detail for ' + uniqueCartonNumber;
 
-                // Add scanned carton to the list
-                const scanTime = new Date().toLocaleTimeString();
-                scanned_data = {"ProductCode":itemCode,"CartonNo":uniqueCartonNumber,"Qty":quantityPCS,"TimeStamp":scanTime};
-                scannedCartons.push(scanned_data);
+	                // Add scanned carton to the list
+	                const scanTime = new Date().toLocaleTimeString();
+	                scanned_data = {"ProductCode":itemCode,"CartonNo":uniqueCartonNumber,"Qty":quantityPCS,"TimeStamp":scanTime};
+	                scannedCartons.push(scanned_data);
 
-                //update the scan table rows to show new scan
-                updateScanTable(uniqueCartonNumber, quantityPCS, scanTime);
-                
-                // Update the progress bar and scanned count
-                v_scanned = scannedCartons.length;
-                scannedCount.textContent = v_scanned;
-                scanProgress.value = v_scanned;
-                
-                // Update pending quantities
-                let pendingQty = parseInt(pendingQtyElement.textContent, 10);
-                pendingQty -= quantityPCS;
-                pendingQtyElement.textContent = pendingQty;
+	                //update the scan table rows to show new scan
+	                updateScanTable(uniqueCartonNumber, quantityPCS, scanTime);
+	                
+	                // Update the progress bar and scanned count
+	                v_scanned = scannedCartons.length;
+	                scannedCount.textContent = v_scanned;
+	                scanProgress.value = v_scanned;
+	                
+	                // Update pending quantities
+	                let pendingQty = parseInt(pendingQtyElement.textContent, 10);
+	                pendingQty -= quantityPCS;
+	                pendingQtyElement.textContent = pendingQty;
 
-                // Update pending cartons
-                let pendingCartons = parseInt(pendingCartonsElement.textContent, 10);
-                pendingCartons -=1;
-                pendingCartonsElement.textContent = pendingCartons;
+	                // Update pending cartons
+	                let pendingCartons = parseInt(pendingCartonsElement.textContent, 10);
+	                pendingCartons -=1;
+	                pendingCartonsElement.textContent = pendingCartons;
 
-                // Check if scanning is complete
-                if (pendingQty = 0) {
-                    disableScanning();
-                    alert('Scanning complete.');
-                }
+	                // Check if scanning is complete
+	                if (pendingQty = 0) {
+	                    disableScanning();
+	                    alert('Scanning complete.');
+	                }
 
-                return '0';
+	                return '0';
+			    } catch (error) {
+			        console.error('Error processing scan result:', error);
+			        return `Error: ${error.message}`;
+			    }
             }
 
 			// Function to update the scan table with the new scanned carton
@@ -976,15 +988,10 @@
 
 			// Function to disable scanning once completed
 			function disableScanning() {
-
 			    if(scanner) scanner.stopCameraScan();
-
 				const scannerInput = document.getElementById('scannerInput');
-				if (scannerInput) {
-			    	scannerInput.disabled = true; // Disable input for handheld scanner
-			    }
+				if (scannerInput) scannerInput.disabled = true; // Disable input for handheld scanner
 			}
-
 			
 			// Function to show the modal
 			function showModal() {
