@@ -510,9 +510,7 @@
 				                this.lastScanTime = now;  // Update last scan time
 
 				                const response = this.handleScannedData(qrCode.data);
-				                if (!response.includes("Error:")) {
-				                    requestAnimationFrame(scan);  // Only continue scanning if no error
-				                }
+				                requestAnimationFrame(scan);  // Only continue scanning if no error
 				            }
 		                } else {
 				            requestAnimationFrame(scan);  // Continue scanning if no QR code detected
