@@ -226,17 +226,30 @@
 			let scannedCartons = [];
 			let cameraAvailable,scanner;
 
-			document.addEventListener('DOMContentLoaded', function () {
+			// Define an async function to handle camera availability and fetch order details
+			async function handlePageLoad() {
 			    const urlParams = new URLSearchParams(window.location.search);
 			    const doNumber = urlParams.get('doNumber');
 			    const unit_id = urlParams.get('unit_id');
 			    const deliveryOrderId = urlParams.get('deliveryOrderId');
 			    
-			    // Get the device info, whether camera is available or not
-        		cameraAvailable = await hasCamera();
-			   
-			    document.getElementById('detailsHeader').innerText = `Showing Details for Delivery Order Number: ${doNumber}`;
-			    fetchOrderDetails(unit_id,deliveryOrderId);
+			    try {
+			        // Get the device info, whether camera is available or not
+			        const cameraAvailable = await hasCamera();
+
+			        // Update the UI or handle camera availability
+			        console.log('Camera available:', cameraAvailable); // Or use it as needed
+
+			        document.getElementById('detailsHeader').innerText = `Showing Details for Delivery Order Number: ${doNumber}`;
+			        fetchOrderDetails(unit_id, deliveryOrderId);
+			    } catch (error) {
+			        console.error('Error during page load:', error);
+			    }
+			}
+
+			// Call the async function when the DOM content is fully loaded
+			document.addEventListener('DOMContentLoaded', function () {
+			    handlePageLoad();
 			});
 
 			// Close the modal when the user clicks on <span> (x)
