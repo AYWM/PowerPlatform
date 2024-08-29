@@ -292,6 +292,7 @@
 					this.correctBeepSound = null;
 					this.isCameraAvailable = isCameraAvailable;
         			this.scanDelay = 639; // Time interval to prevent double scans
+        			this.lastScanTime = 0; // Initialize in the constructor
 
 		            // Accessing video element to display camera feed
 		            this.videoElement = document.getElementById('cameraFeed');
@@ -327,7 +328,20 @@
 				            if (!this.overlayCanvas) throw new Error('Overlay canvas element not found.');
 
 				            this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+				            this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+											    .catch(error => {
+											        console.error('Error accessing the camera:', error);
+											        alert('Camera access denied. Please allow camera access and click Retry.');
+											        return null;
+											    });
+							if (!this.stream) return; // Exit if stream couldn't start
 				            this.videoElement.srcObject = this.stream;
+
+				            // Ensure video plays as soon as the metadata is loaded
+				            this.videoElement.onloadedmetadata = () => {
+				                this.videoElement.play();
+				                this.handlePlay(); // Start scanning once video is ready
+				            };
 
 				            // Create a canvas to capture frames from the video feed
 				            this.canvasElement = document.createElement('canvas');
@@ -362,6 +376,7 @@
       				console.log('About to setup listereners with Camera Available: ' + this.isCameraAvailable);
 
                 	if (this.isCameraAvailable) {
+
 	                	this.videoElement.addEventListener('play', this.handlePlay);
 	                    this.videoElement.addEventListener('pause', this.handlePause);
 
@@ -397,6 +412,7 @@
                     this.updateCanvasDimensions();
                     this.drawFixedRectangle();
                     if (this.callback) {
+        				console.log('Video element playing:', !this.videoElement.paused);
                         this.CameraScanHandler(this.callback); // Ensure callback is passed
                     }
                 }
@@ -412,6 +428,8 @@
                         this.canvasElement.height = this.videoElement.videoHeight;
                         this.overlayCanvas.width = this.videoElement.videoWidth;
                         this.overlayCanvas.height = this.videoElement.videoHeight;
+                        console.log('Canvas dimensions:', this.canvasElement.width, this.canvasElement.height);
+   
                     } else {
                         console.error('Canvas or video element not properly initialized.');
                     }
@@ -459,6 +477,9 @@
                     }
 
                     const scan = () => {
+        				
+        				console.log('RequestAnimationFrame is running');
+			            
 			            const now = Date.now();
 			            if (now - this.lastScanTime < this.scanDelay) {
 			                requestAnimationFrame(scan);
@@ -474,10 +495,10 @@
 		                const cropHeight = this.canvasElement.height * 0.6;
 
 		                this.ctx.drawImage(this.videoElement, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-		                const imageData = this.ctx.getImageData(0, 0, cropWidth, cropHeight);
+				        const imageData = this.ctx.getImageData(0, 0, cropWidth, cropHeight);
 
-		                const qrCode = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
-
+				        const qrCode = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+				        
 		                if (qrCode) {
 		                	if (now - this.lastScanTime >= this.scanDelay) {
 		                		console.log('QR DATA:' + qrCode.data);
