@@ -321,19 +321,22 @@
 				async startScanning(callback) {
 			        try {
 			            this.callback = callback;
-			            if (!this.videoElement) throw new Error('Video element not found.');
-			            if (!this.overlayCanvas) throw new Error('Overlay canvas element not found.');
 
-			            this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
-			            this.videoElement.srcObject = this.stream;
+			            if (this.isCameraAvailable) {
+				            if (!this.videoElement) throw new Error('Video element not found.');
+				            if (!this.overlayCanvas) throw new Error('Overlay canvas element not found.');
 
-			            // Create a canvas to capture frames from the video feed
-			            this.canvasElement = document.createElement('canvas');
-			            this.ctx = this.canvasElement.getContext('2d');
-			            if (!this.ctx) throw new Error('Canvas 2D context not found.');
+				            this.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+				            this.videoElement.srcObject = this.stream;
 
-			            // Create overlay canvas for the fixed rectangle
-			            this.overlayCtx = this.overlayCanvas.getContext('2d');
+				            // Create a canvas to capture frames from the video feed
+				            this.canvasElement = document.createElement('canvas');
+				            this.ctx = this.canvasElement.getContext('2d');
+				            if (!this.ctx) throw new Error('Canvas 2D context not found.');
+
+				            // Create overlay canvas for the fixed rectangle
+				            this.overlayCtx = this.overlayCanvas.getContext('2d');
+				        }
 
 			            return new Promise(resolve => resolve());
 			        } catch (error) {
@@ -731,9 +734,6 @@
 			            </div>
 			        `;
 
-			        // Initialize scanning based on the device type
-			        initScanner(itemCode, validCartonsList);
-
 			        const retryButton = document.getElementById('retryButton');
 			        if(retryButton){
 			        	retryButton.addEventListener('click', () => {
@@ -744,6 +744,11 @@
 
 			        // Show the modal
 					showModal();// modal.style.display = 'block';
+
+
+			        // Initialize scanning based on the device type
+			        initScanner(itemCode, validCartonsList);
+
 			    });
 			}
 
@@ -829,8 +834,8 @@
 			}
 
 			// Function to render scan controls based on device type
-			async function renderScanControls() {
-
+			function renderScanControls() {
+				console.log('About to renderScanControls with CameraAvailable = ' + cameraAvailable);
 			    if (cameraAvailable) {
 			        return `
 			            <p>Use your camera to scan QR codes continuously.</p>
