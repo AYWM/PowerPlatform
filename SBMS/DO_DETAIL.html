@@ -219,18 +219,21 @@
 		<script type="text/javascript">
 			
 			// let api_base_url = 'http://192.168.12.14:3000/sbms';
-			// let api_base_url = 'https://192.168.12.18:3001/sbms';
-        	let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
+			let api_base_url = 'https://192.168.12.18:3001/sbms';
+        	// let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
 	        // let detail_page_url = 'http://192.168.12.14:8888/DO_DETAIL.html';
 	        let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/DO_DETAIL.html';
 			let scannedCartons = [];
-			let scanner;
+			let cameraAvailable,scanner;
 
 			document.addEventListener('DOMContentLoaded', function () {
 			    const urlParams = new URLSearchParams(window.location.search);
 			    const doNumber = urlParams.get('doNumber');
 			    const unit_id = urlParams.get('unit_id');
 			    const deliveryOrderId = urlParams.get('deliveryOrderId');
+			    
+			    // Get the device info, whether camera is available or not
+        		cameraAvailable = await hasCamera();
 			   
 			    document.getElementById('detailsHeader').innerText = `Showing Details for Delivery Order Number: ${doNumber}`;
 			    fetchOrderDetails(unit_id,deliveryOrderId);
@@ -808,9 +811,7 @@
 			}
 
 			// Function to render scan controls based on device type
-			function renderScanControls() {
-
-				const cameraAvailable = await hasCamera();
+			async function renderScanControls() {
 
 			    if (cameraAvailable) {
 			        return `
@@ -844,8 +845,6 @@
 			    document.getElementById("scannedTable").getElementsByTagName("tbody")[0].innerHTML = "";
                 scannedCount.textContent = 0;
                 scanProgress.value = 0;
-
-                const cameraAvailable = await hasCamera();
 				
 				scanner = new Scanner(cameraAvailable);
 				scanner.startScanning(scanData => {
