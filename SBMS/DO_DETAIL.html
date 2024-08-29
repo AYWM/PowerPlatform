@@ -235,7 +235,7 @@
 			    
 			    try {
 			        // Get the device info, whether camera is available or not
-			        const cameraAvailable = await hasCamera();
+			        cameraAvailable = await hasCamera();
 
 			        // Update the UI or handle camera availability
 			        console.log('Camera available:', cameraAvailable); // Or use it as needed
