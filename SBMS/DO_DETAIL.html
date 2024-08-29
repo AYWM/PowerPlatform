@@ -291,7 +291,7 @@
 					this.errorBeepSound = null;
 					this.correctBeepSound = null;
 					this.isCameraAvailable = isCameraAvailable;
-        			this.scanDelay = 639; // Time interval to prevent double scans
+        			this.scanDelay = 369; // Time interval to prevent double scans
 
 		            // Accessing video element to display camera feed
 		            this.videoElement = document.getElementById('cameraFeed');
@@ -477,7 +477,7 @@
 
 		                if (qrCode) {
 		                    this.handleScannedData(qrCode.data);
-		                    this.lastScanTime = now;
+		                    this.lastScanTime = Date.now(); //now;
 		                }
 
 		            	requestAnimationFrame(scan);
@@ -615,7 +615,7 @@
 
 			    new DataTable('#ordersTable'
                         ,{
-                            // responsive: true,
+                            responsive: true,
                             buttons: [  'copy', 'csv',  'excel', 'print'
                                         ,{
                                             extend: 'pdfHtml5',
@@ -626,7 +626,9 @@
                             layout: {
                                 top2Start: 'buttons'
                             },
-                            fixedColumns: true,
+                            fixedColumns: {
+							    leftColumns: [0, 1]
+							},
                             "searching": true,
                             "ordering": true,
                             "info": true,
