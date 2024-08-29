@@ -494,15 +494,21 @@
 			            this.overlayCtx.clearRect(0, 0, this.overlayCanvas.width, this.overlayCanvas.height);
 			            this.drawFixedRectangle();
 
-		                const cropX = this.canvasElement.width * 0.1;
-		                const cropY = this.canvasElement.height * 0.2;
-		                const cropWidth = this.canvasElement.width * 0.8;
-		                const cropHeight = this.canvasElement.height * 0.6;
+						// Use the overlay canvas dimensions to capture the QR code
+						// this.ctx.drawImage(this.videoElement, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+						this.ctx.drawImage(this.videoElement, 0, 0, this.canvasElement.width, this.canvasElement.height);
 
-		                this.ctx.drawImage(this.videoElement, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
-				        const imageData = this.ctx.getImageData(0, 0, cropWidth, cropHeight);
+						// Define the dimensions of the fixed rectangle
+						const cropX = this.overlayCanvas.width * 0.1;
+						const cropY = this.overlayCanvas.height * 0.2;
+						const cropWidth = this.overlayCanvas.width * 0.8;
+						const cropHeight = this.overlayCanvas.height * 0.6;						
+						
+						// const imageData = this.ctx.getImageData(0, 0, cropWidth, cropHeight);
+						const imageData = this.ctx.getImageData(cropX, cropY, cropWidth, cropHeight);
 
-				        const qrCode = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+				        // const qrCode = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: "dontInvert" });
+				        const qrCode = jsQR(imageData.data, cropWidth, cropHeight, { inversionAttempts: "dontInvert" });
 
 		                if (qrCode) {
 		                	if (now - this.lastScanTime >= this.scanDelay) {
