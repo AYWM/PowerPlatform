@@ -274,7 +274,7 @@
                 };
             }
 
-			class Scanner {
+			class ScannerMan {
                 constructor(isCameraAvailable) {
 					this.videoElement = null;
 					this.stream = null;
@@ -354,8 +354,9 @@
 
                 setupEventListeners() {
 
+      				console.log('About to setup listereners with Camera Available: ' + this.isCameraAvailable);
+
                 	if (this.isCameraAvailable) {
-      
 	                	this.videoElement.addEventListener('play', this.handlePlay);
 	                    this.videoElement.addEventListener('pause', this.handlePause);
 
@@ -371,14 +372,18 @@
 						});
 
 					}else{
-
-						document.getElementById('scannerInput').addEventListener('keypress', e => {
-			                if (e.key === 'Enter') {
-			                    let scanData = e.target.value.trim();
-			                    this.handleScannedData(scanData);
-			                    e.target.value = ''; // Clear input
-			                }
-			            });
+						const scannerInput = document.getElementById('scannerInput');
+						if (scannerInput) {
+				            scannerInput.addEventListener('keypress', e => {
+				                if (e.key === 'Enter') {
+				                    let scanData = e.target.value.trim();
+				                    this.handleScannedData(scanData);
+				                    e.target.value = ''; // Clear input
+				                }
+				            });
+				        } else {
+				            console.error('Scanner input field is not available.');
+				        }
 					}
 			    }
 
@@ -859,7 +864,8 @@
                 scannedCount.textContent = 0;
                 scanProgress.value = 0;
 				
-				scanner = new Scanner(cameraAvailable);
+				console.log('Starting ScannerMan with Camera Available = ' + cameraAvailable);
+				scanner = new ScannerMan(cameraAvailable);
 				scanner.startScanning(scanData => {
 			        console.log("Scanned QR code:", scanData);
 			        return processScanResult(scanData, itemCode, validCartonsList, scannedCartons, scanProgress, scannedCount, pendingQtyElement, pendingCartonsElement);
@@ -912,7 +918,6 @@
                 // Check if scanning is complete
                 if (pendingQty = 0) {
                     disableScanning();
-                    if(scanner) scanner.stopCameraScan();
                     alert('Scanning complete.');
                 }
 
@@ -933,8 +938,13 @@
 
 			// Function to disable scanning once completed
 			function disableScanning() {
-			    document.getElementById('scannerInput').disabled = true; // Disable input for handheld scanner
-			    // Implement additional logic to stop camera feed if using mobile
+
+			    if(scanner) scanner.stopCameraScan();
+
+				const scannerInput = document.getElementById('scannerInput');
+				if (scannerInput) {
+			    	scannerInput.disabled = true; // Disable input for handheld scanner
+			    }
 			}
 
 			
@@ -948,7 +958,6 @@
 			    confirmSaveAction();
 			    const modal = document.getElementById('itemDetailsModal');
 			    modal.style.display = 'none';
-			    if(scanner) scanner.stopCameraScan();
                 disableScanning();
 			}
 
