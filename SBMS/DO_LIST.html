@@ -4,52 +4,6 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<title></title>
-		<style type="text/css">
-			#ordersTable {
-			    width: 100%;
-			    border-collapse: collapse;
-			}
-
-			#ordersTable th, #ordersTable td {
-			    border: 1px solid #ddd;
-			    padding: 8px;
-			    text-align: left;
-			}
-
-			#ordersTable th {
-			    background-color: #f2f2f2;
-			}
-
-			@media screen and (max-width: 600px) {
-			    #ordersTable thead {
-			        display: none;
-			    }
-
-			    #ordersTable, #ordersTable tbody, #ordersTable tr, #ordersTable td {
-			        display: block;
-			        width: 100%;
-			    }
-
-			    #ordersTable tr {
-			        margin-bottom: 15px;
-			    }
-
-			    #ordersTable td {
-			        text-align: right;
-			        padding-left: 50%;
-			        position: relative;
-			    }
-
-			    #ordersTable td::before {
-			        content: attr(data-label);
-			        position: absolute;
-			        left: 0;
-			        padding-left: 15px;
-			        font-weight: bold;
-			        text-align: left;
-			    }
-			}
-		</style>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" crossorigin="anonymous" />
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	    <link rel="stylesheet" href="tpac_library/css/dataTables.min.css">
@@ -81,9 +35,12 @@
 		</table>
 
 		<script type="text/javascript">
-		// let api_base_url = 'http://192.168.12.14:3000/sbms';
-        	let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
-	        let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/DO_DETAIL.html';
+			// let api_base_url = 'http://192.168.12.14:3000/sbms';
+			let api_base_url = 'http://192.168.12.18:3000/sbms';
+			// let api_base_url = 'https://192.168.12.18:3001/sbms';
+        	// let api_base_url = 'https://api.tpacpackaging.com:3001/sbms';
+	        let detail_page_url = 'http://192.168.12.14:8888/DO_DETAIL.html';
+	        // let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/DO_DETAIL.html';
 			async function fetchPendingOrders() {
 			    try {
 					const email_id = '';
