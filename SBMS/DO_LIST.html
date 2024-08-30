@@ -43,10 +43,13 @@
 	        let detail_page_url = 'https://aywm.github.io/PowerPlatform/SBMS/DO_DETAIL.html';
 			async function fetchPendingOrders() {
 			    try {
+
+			    	const urlParams = new URLSearchParams(window.location.search);
+				    const unit_id = urlParams.get('unit_id');
 					const email_id = '';
 		            const username = '';
 		            const password = '';
-		            const unit_id = 7;
+		            // const unit_id = 7;
 		            const data_type = 'PENDING_DO';
 		            const search_param = '';
 			        const response = await fetch(`${api_base_url}/SelectFromSBMS`, {
