@@ -19,6 +19,9 @@
         h1, h2,h3, h5, p {
             color: #37474f;
         }
+        .concept {
+            margin-bottom: 40px;
+        }
         .code-block-container {
             position: relative;
 /*            display: inline-block;*/
@@ -33,15 +36,22 @@
         .tabs .tab a {
             color: #42a5f5;
         }
+
         .tabs .tab a.active {
             color: #0d47a1;
         }
+
         pre {
-            background: #f5f5f5;
-            padding: 15px;
+            background-color: #f4f4f4;
+            padding: 10px;
             border-radius: 5px;
-            overflow: auto;
+            overflow-x: auto;
         }
+
+        code {
+            font-family: monospace;
+        }
+
         .btn {
             background: linear-gradient(45deg, #42a5f5, #1e88e5);
         }
@@ -309,12 +319,19 @@
     <div class="container bookmarks">
         <!-- <a href="#intro">Intro</a> -->
         <a href="#translators">Translators</a>
+        <a href="#sequencing">Sequencing</a>
         <a href="#variables">Variables</a>
         <a href="#arrays">Arrays</a>
+        <a href="#indexing">Indexing</a>
+        <a href="#dictionary">Dictionary</a>
         <a href="#condition">If-Else</a>
+        <a href="#boolean-operators">Boolean Operators</a>
         <a href="#function">Function</a>
+        <a href="#range">Range</a>
         <a href="#for_loop">For-Loop</a>
         <a href="#while_loop">While-Loop</a>
+        <a href="#classes">Classes</a>
+        <a href="#input-output">Input-Output</a>
         <a href="#events">Events</a>
         <a href="#projects">Projects</a>
         <a href="#codemonkey">CodeMonkey</a>
@@ -355,6 +372,91 @@
                 <div class="play-button"></div>
             </div>
         </div>
+
+        <h2 id="sequencing">Sequencing</h2>
+<div class="code-block">
+    <ul class="tabs">
+        <li class="tab col s2"><a href="#python-sequencing">Python</a></li>
+        <li class="tab col s2"><a href="#javascript-sequencing">JavaScript</a></li>
+        <li class="tab col s2"><a href="#c-sequencing">C</a></li>
+        <li class="tab col s2"><a href="#cpp-sequencing">C++</a></li>
+        <li class="tab col s2"><a href="#java-sequencing">Java</a></li>
+    </ul>
+    <div id="python-sequencing" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+# Python example: Wearing socks before shoes
+def get_dressed():
+    print("Putting on socks")
+    print("Putting on shoes")
+    
+get_dressed()
+        </code></pre>
+    </div>
+    <div id="javascript-sequencing" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// JavaScript example: Wearing socks before shoes
+function getDressed() {
+    console.log("Putting on socks");
+    console.log("Putting on shoes");
+}
+
+getDressed();
+        </code></pre>
+    </div>
+    <div id="c-sequencing" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C example: Wearing socks before shoes
+#include <stdio.h>
+
+void get_dressed() {
+    printf("Putting on socks\n");
+    printf("Putting on shoes\n");
+}
+
+int main() {
+    get_dressed();
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="cpp-sequencing" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C++ example: Wearing socks before shoes
+#include <iostream>
+using namespace std;
+
+void getDressed() {
+    cout << "Putting on socks" << endl;
+    cout << "Putting on shoes" << endl;
+}
+
+int main() {
+    getDressed();
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="java-sequencing" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// Java example: Wearing socks before shoes
+public class Main {
+    public static void getDressed() {
+        System.out.println("Putting on socks");
+        System.out.println("Putting on shoes");
+    }
+
+    public static void main(String[] args) {
+        getDressed();
+    }
+}
+        </code></pre>
+    </div>
+</div>
 
 
         <h2 id="variables">Variables and Data Types</h2>
@@ -474,8 +576,6 @@ public class Main {
             <p id="stringOutput">String Output: Hello</p>
         </div>
 
-
-
         <h2 id="arrays">Arrays (Lists)</h2>
         <div class="code-block">
             <ul class="tabs">
@@ -546,6 +646,162 @@ public class Main {
                 </pre>
             </div>
         </div>
+
+<h2 id="indexing">Indexing</h2>
+<div class="code-block">
+    <ul class="tabs">
+        <li class="tab col s2"><a href="#python-indexing">Python</a></li>
+        <li class="tab col s2"><a href="#javascript-indexing">JavaScript</a></li>
+        <li class="tab col s2"><a href="#c-indexing">C</a></li>
+        <li class="tab col s2"><a href="#cpp-indexing">C++</a></li>
+        <li class="tab col s2"><a href="#java-indexing">Java</a></li>
+    </ul>
+    <div id="python-indexing" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+# Python: Accessing elements by index
+fruits = ['apple', 'banana', 'cherry']
+print(fruits[0])  # Output: apple
+print(fruits[1])  # Output: banana
+print(fruits[2])  # Output: cherry
+        </code></pre>
+    </div>
+    <div id="javascript-indexing" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// JavaScript: Accessing elements by index
+let fruits = ['apple', 'banana', 'cherry'];
+console.log(fruits[0]);  // Output: apple
+console.log(fruits[1]);  // Output: banana
+console.log(fruits[2]);  // Output: cherry
+        </code></pre>
+    </div>
+    <div id="c-indexing" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C: Accessing elements by index
+#include <stdio.h>
+
+int main() {
+    char *fruits[] = {"apple", "banana", "cherry"};
+    printf("%s\n", fruits[0]);  // Output: apple
+    printf("%s\n", fruits[1]);  // Output: banana
+    printf("%s\n", fruits[2]);  // Output: cherry
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="cpp-indexing" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C++: Accessing elements by index
+#include <iostream>
+using namespace std;
+
+int main() {
+    string fruits[] = {"apple", "banana", "cherry"};
+    cout << fruits[0] << endl;  // Output: apple
+    cout << fruits[1] << endl;  // Output: banana
+    cout << fruits[2] << endl;  // Output: cherry
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="java-indexing" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// Java: Accessing elements by index
+public class Main {
+    public static void main(String[] args) {
+        String[] fruits = {"apple", "banana", "cherry"};
+        System.out.println(fruits[0]);  // Output: apple
+        System.out.println(fruits[1]);  // Output: banana
+        System.out.println(fruits[2]);  // Output: cherry
+    }
+}
+        </code></pre>
+    </div>
+</div>
+
+
+<h2 id="dictionary">Dictionary</h2>
+<div class="code-block">
+    <ul class="tabs">
+        <li class="tab col s2"><a href="#python-dictionary">Python</a></li>
+        <li class="tab col s2"><a href="#javascript-dictionary">JavaScript</a></li>
+        <li class="tab col s2"><a href="#c-dictionary">C</a></li>
+        <li class="tab col s2"><a href="#cpp-dictionary">C++</a></li>
+        <li class="tab col s2"><a href="#java-dictionary">Java</a></li>
+    </ul>
+    <div id="python-dictionary" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+# Python: Student grades
+grades = {"Alice": 90, "Bob": 85, "Charlie": 92}
+print(grades["Alice"])  # Output: 90
+        </code></pre>
+    </div>
+    <div id="javascript-dictionary" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// JavaScript: Student grades
+let grades = {"Alice": 90, "Bob": 85, "Charlie": 92};
+console.log(grades["Alice"]);  // Output: 90
+        </code></pre>
+    </div>
+    <div id="c-dictionary" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C: (No direct dictionary support, use arrays or structs)
+#include <stdio.h>
+
+typedef struct {
+    char name[50];
+    int grade;
+} Student;
+
+int main() {
+    Student grades[3] = {{"Alice", 90}, {"Bob", 85}, {"Charlie", 92}};
+    printf("%s: %d\n", grades[0].name, grades[0].grade);  // Alice: 90
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="cpp-dictionary" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C++: Student grades with map
+#include <iostream>
+#include <map>
+using namespace std;
+
+int main() {
+    map<string, int> grades = {{"Alice", 90}, {"Bob", 85}, {"Charlie", 92}};
+    cout << "Alice: " << grades["Alice"] << endl;  // Output: 90
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="java-dictionary" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// Java: Student grades with HashMap
+import java.util.HashMap;
+
+public class Main {
+    public static void main(String[] args) {
+        HashMap<String, Integer> grades = new HashMap<>();
+        grades.put("Alice", 90);
+        grades.put("Bob", 85);
+        grades.put("Charlie", 92);
+        System.out.println("Alice: " + grades.get("Alice"));  // Output: 90
+    }
+}
+        </code></pre>
+    </div>
+</div>
+
+
 
         <h2 id="condition">If-Else Statements (Condition)</h2>
         <div class="code-block">
@@ -637,6 +893,85 @@ public class Main {
             </div>
         </div>
 
+
+        <h2 id="boolean-operators">Boolean Operators</h2>
+<div class="code-block">
+    <ul class="tabs">
+        <li class="tab col s2"><a href="#python-boolean">Python</a></li>
+        <li class="tab col s2"><a href="#javascript-boolean">JavaScript</a></li>
+        <li class="tab col s2"><a href="#c-boolean">C</a></li>
+        <li class="tab col s2"><a href="#cpp-boolean">C++</a></li>
+        <li class="tab col s2"><a href="#java-boolean">Java</a></li>
+    </ul>
+    <div id="python-boolean" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+# Python: Checking if you have enough money
+money = 20
+item_cost = 15
+can_afford = money >= item_cost  # True
+print(can_afford)
+        </code></pre>
+    </div>
+    <div id="javascript-boolean" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// JavaScript: Checking if you have enough money
+let money = 20;
+let itemCost = 15;
+let canAfford = money >= itemCost;  // true
+console.log(canAfford);
+        </code></pre>
+    </div>
+    <div id="c-boolean" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C: Checking if you have enough money
+#include <stdio.h>
+
+int main() {
+    int money = 20;
+    int item_cost = 15;
+    int can_afford = (money >= item_cost);  // 1 (true)
+    printf("%d\n", can_afford);
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="cpp-boolean" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C++: Checking if you have enough money
+#include <iostream>
+using namespace std;
+
+int main() {
+    int money = 20;
+    int itemCost = 15;
+    bool canAfford = (money >= itemCost);  // true
+    cout << canAfford << endl;
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="java-boolean" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// Java: Checking if you have enough money
+public class Main {
+    public static void main(String[] args) {
+        int money = 20;
+        int itemCost = 15;
+        boolean canAfford = money >= itemCost;  // true
+        System.out.println(canAfford);
+    }
+}
+        </code></pre>
+    </div>
+</div>
+
+
+        
         <h2 id="function">Functions</h2>
         <div class="code-block">
             <ul class="tabs">
@@ -829,6 +1164,77 @@ public class Main {
             </div>
         </div>
 
+       <h2 id="range">Range</h2>
+<div class="code-block">
+    <ul class="tabs">
+        <li class="tab col s2"><a href="#python-range">Python</a></li>
+        <li class="tab col s2"><a href="#javascript-range">JavaScript</a></li>
+        <li class="tab col s2"><a href="#c-range">C</a></li>
+        <li class="tab col s2"><a href="#cpp-range">C++</a></li>
+        <li class="tab col s2"><a href="#java-range">Java</a></li>
+    </ul>
+    <div id="python-range" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+# Python: Counting steps on a staircase
+for step in range(1, 11, 2):
+    print("Step:", step)
+        </code></pre>
+    </div>
+    <div id="javascript-range" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// JavaScript: Counting steps on a staircase
+for (let step = 1; step <= 10; step += 2) {
+    console.log("Step:", step);
+}
+        </code></pre>
+    </div>
+    <div id="c-range" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C: Counting steps on a staircase
+#include <stdio.h>
+
+int main() {
+    for (int step = 1; step <= 10; step += 2) {
+        printf("Step: %d\n", step);
+    }
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="cpp-range" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C++: Counting steps on a staircase
+#include <iostream>
+using namespace std;
+
+int main() {
+    for (int step = 1; step <= 10; step += 2) {
+        cout << "Step: " << step << endl;
+    }
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="java-range" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// Java: Counting steps on a staircase
+public class Main {
+    public static void main(String[] args) {
+        for (int step = 1; step <= 10; step += 2) {
+            System.out.println("Step: " + step);
+        }
+    }
+}
+        </code></pre>
+    </div>
+</div>
+
+
         <h2 id="for_loop">For Loops</h2>
         <div class="code-block">
             <ul class="tabs">
@@ -988,6 +1394,376 @@ public class Main {
                 </pre>
             </div>
         </div>
+
+<h2 id="classes">Classes</h2>
+<div class="code-block">
+    <ul class="tabs">
+        <li class="tab col s2"><a href="#python-classes">Python</a></li>
+        <li class="tab col s2"><a href="#javascript-classes">JavaScript</a></li>
+        <li class="tab col s2"><a href="#c-classes">C</a></li>
+        <li class="tab col s2"><a href="#cpp-classes">C++</a></li>
+        <li class="tab col s2"><a href="#java-classes">Java</a></li>
+    </ul>
+    <div id="python-classes" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+# Python: Car class with more properties and methods
+class Car:
+    def __init__(self, model, speed, color, year):
+        self.model = model
+        self.speed = speed
+        self.color = color
+        self.year = year
+
+    def accelerate(self):
+        self.speed += 10
+        print(f"Accelerated to {self.speed} km/h")
+
+    def brake(self):
+        self.speed -= 10
+        print(f"Slowed down to {self.speed} km/h")
+
+my_car = Car("Toyota", 120, "Red", 2022)
+print(my_car.model)  # Output: Toyota
+print(my_car.color)  # Output: Red
+my_car.accelerate()  # Output: Accelerated to 130 km/h
+my_car.brake()       # Output: Slowed down to 120 km/h
+        </code></pre>
+    </div>
+    <div id="javascript-classes" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// JavaScript: Car class with more properties and methods
+class Car {
+    constructor(model, speed, color, year) {
+        this.model = model;
+        this.speed = speed;
+        this.color = color;
+        this.year = year;
+    }
+
+    accelerate() {
+        this.speed += 10;
+        console.log(`Accelerated to ${this.speed} km/h`);
+    }
+
+    brake() {
+        this.speed -= 10;
+        console.log(`Slowed down to ${this.speed} km/h`);
+    }
+}
+
+let myCar = new Car("Toyota", 120, "Red", 2022);
+console.log(myCar.model);  // Output: Toyota
+console.log(myCar.color);  // Output: Red
+myCar.accelerate();       // Output: Accelerated to 130 km/h
+myCar.brake();            // Output: Slowed down to 120 km/h
+        </code></pre>
+    </div>
+    <div id="c-classes" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C: Struct example (no classes in C, so we use struct)
+#include &lt;stdio.h&gt;
+
+typedef struct {
+    char model[20];
+    int speed;
+    char color[10];
+    int year;
+} Car;
+
+void accelerate(Car *car) {
+    car->speed += 10;
+    printf("Accelerated to %d km/h\n", car->speed);
+}
+
+void brake(Car *car) {
+    car->speed -= 10;
+    printf("Slowed down to %d km/h\n", car->speed);
+}
+
+int main() {
+    Car myCar = {"Toyota", 120, "Red", 2022};
+    printf("%s\n", myCar.model);  // Output: Toyota
+    printf("%s\n", myCar.color);  // Output: Red
+    accelerate(&myCar);           // Output: Accelerated to 130 km/h
+    brake(&myCar);                // Output: Slowed down to 120 km/h
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="cpp-classes" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C++: Car class with more properties and methods
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+
+using namespace std;
+
+class Car {
+private:
+    string model;
+    int speed;
+    string color;
+    int year;
+
+public:
+    Car(string m, int s, string c, int y) : model(m), speed(s), color(c), year(y) {}
+
+    void accelerate() {
+        speed += 10;
+        cout << "Accelerated to " << speed << " km/h" << endl;
+    }
+
+    void brake() {
+        speed -= 10;
+        cout << "Slowed down to " << speed << " km/h" << endl;
+    }
+
+    string getModel() { return model; }
+    string getColor() { return color; }
+};
+
+int main() {
+    Car myCar("Toyota", 120, "Red", 2022);
+    cout << myCar.getModel() << endl;  // Output: Toyota
+    cout << myCar.getColor() << endl;  // Output: Red
+    myCar.accelerate();               // Output: Accelerated to 130 km/h
+    myCar.brake();                    // Output: Slowed down to 120 km/h
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="java-classes" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// Java: Car class with more properties and methods
+public class Car {
+    private String model;
+    private int speed;
+    private String color;
+    private int year;
+
+    public Car(String model, int speed, String color, int year) {
+        this.model = model;
+        this.speed = speed;
+        this.color = color;
+        this.year = year;
+    }
+
+    public void accelerate() {
+        speed += 10;
+        System.out.println("Accelerated to " + speed + " km/h");
+    }
+
+    public void brake() {
+        speed -= 10;
+        System.out.println("Slowed down to " + speed + " km/h");
+    }
+
+    public String getModel() { return model; }
+    public String getColor() { return color; }
+
+    public static void main(String[] args) {
+        Car myCar = new Car("Toyota", 120, "Red", 2022);
+        System.out.println(myCar.getModel());  // Output: Toyota
+        System.out.println(myCar.getColor());  // Output: Red
+        myCar.accelerate();                   // Output: Accelerated to 130 km/h
+        myCar.brake();                        // Output: Slowed down to 120 km/h
+    }
+}
+        </code></pre>
+    </div>
+</div>
+
+<h2 id="input-output">Input and Output</h2>
+<div class="code-block">
+    <ul class="tabs">
+        <li class="tab col s2"><a href="#python-input-output">Python</a></li>
+        <li class="tab col s2"><a href="#javascript-input-output">JavaScript</a></li>
+        <li class="tab col s2"><a href="#c-input-output">C</a></li>
+        <li class="tab col s2"><a href="#cpp-input-output">C++</a></li>
+        <li class="tab col s2"><a href="#java-input-output">Java</a></li>
+    </ul>
+    <div id="python-input-output" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+name = input("Enter your name: ")
+print("Hello, " + name)
+        </code></pre>
+    </div>
+    <div id="javascript-input-output" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+let name = prompt("Enter your name: ");
+console.log("Hello, " + name);
+        </code></pre>
+    </div>
+    <div id="c-input-output" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+#include &lt;stdio.h&gt;
+
+int main() {
+    char name[30];
+    printf("Enter your name: ");
+    scanf("%s", name);
+    printf("Hello, %s", name);
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="cpp-input-output" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    string name;
+    cout << "Enter your name: ";
+    cin >> name;
+    cout << "Hello, " << name;
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="java-input-output" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter your name: ");
+        String name = sc.nextLine();
+        System.out.println("Hello, " + name);
+    }
+}
+        </code></pre>
+    </div>
+</div>
+
+ <h5>Input with Integers</h5>
+<div class="code-block">
+    <ul class="tabs">
+        <li class="tab col s2"><a href="#python-integers">Python</a></li>
+        <li class="tab col s2"><a href="#javascript-integers">JavaScript</a></li>
+        <li class="tab col s2"><a href="#c-integers">C</a></li>
+        <li class="tab col s2"><a href="#cpp-integers">C++</a></li>
+        <li class="tab col s2"><a href="#java-integers">Java</a></li>
+    </ul>
+    <div id="python-integers" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+# Python: Entering age as an integer
+age = int(input("Enter your age: "))
+print(f"You are {age} years old.")
+
+# Python: Performing arithmetic operations
+num1 = int(input("Enter first number: "))
+num2 = int(input("Enter second number: "))
+sum = num1 + num2
+print(f"The sum of {num1} and {num2} is {sum}.")
+        </code></pre>
+    </div>
+    <div id="javascript-integers" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// JavaScript: Entering age as an integer
+let age = parseInt(prompt("Enter your age: "));
+console.log("You are " + age + " years old.");
+
+// JavaScript: Performing arithmetic operations
+let num1 = parseInt(prompt("Enter first number: "));
+let num2 = parseInt(prompt("Enter second number: "));
+let sum = num1 + num2;
+console.log("The sum of " + num1 + " and " + num2 + " is " + sum + ".");
+        </code></pre>
+    </div>
+    <div id="c-integers" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C: Entering age as an integer
+#include &lt;stdio.h&gt;
+
+int main() {
+    int age;
+    printf("Enter your age: ");
+    scanf("%d", &age);
+    printf("You are %d years old.\n", age);
+
+    // C: Performing arithmetic operations
+    int num1, num2, sum;
+    printf("Enter first number: ");
+    scanf("%d", &num1);
+    printf("Enter second number: ");
+    scanf("%d", &num2);
+    sum = num1 + num2;
+    printf("The sum of %d and %d is %d.\n", num1, num2, sum);
+    
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="cpp-integers" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// C++: Entering age as an integer
+#include &lt;iostream&gt;
+
+using namespace std;
+
+int main() {
+    int age;
+    cout << "Enter your age: ";
+    cin >> age;
+    cout << "You are " << age << " years old." << endl;
+
+    // C++: Performing arithmetic operations
+    int num1, num2, sum;
+    cout << "Enter first number: ";
+    cin >> num1;
+    cout << "Enter second number: ";
+    cin >> num2;
+    sum = num1 + num2;
+    cout << "The sum of " << num1 << " and " << num2 << " is " << sum << "." << endl;
+
+    return 0;
+}
+        </code></pre>
+    </div>
+    <div id="java-integers" class="code-block-container">
+        <button class="copy-button" onclick="copyCode(this)">Copy</button>
+        <pre><code>
+// Java: Entering age as an integer
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter your age: ");
+        int age = scanner.nextInt();
+        System.out.println("You are " + age + " years old.");
+
+        // Java: Performing arithmetic operations
+        System.out.print("Enter first number: ");
+        int num1 = scanner.nextInt();
+        System.out.print("Enter second number: ");
+        int num2 = scanner.nextInt();
+        int sum = num1 + num2;
+        System.out.println("The sum of " + num1 + " and " + num2 + " is " + sum + ".");
+    }
+}
+        </code></pre>
+    </div>
+</div>
+
+
 
         <h2 id="events">Events (Mouse, Keyboard, etc.)</h2>
         <div class="code-block">
