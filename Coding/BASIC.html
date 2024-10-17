@@ -3058,42 +3058,6 @@ body {
 
         <h1 class="center-align" id="BSD">Build Something Different (BSD)</h1>
         <!-- Playlist Container -->
-        <div class="project-container">
-            <div class="project-header" aria-controls="bsdCardSorting" onclick="toggleProject('bsdCardSorting')">
-                <h3>BSD Card Sorting Filter: HTML,CSS,Javascript Quiz (Teacher Amon)</h3>
-                <i class="fas fa-chevron-down collapse-icon"></i>
-            </div>
-            <div class="project-content" id="bsdCardSorting">
-                <div style="width:100%;display:flex;flex-direction:column;gap:8px;min-height:635px;"><iframe src="https://quizizz.com/embed/quiz/65fe5ed26135f870425701c5" title=" - Quizizz" style="flex:1;" frameBorder="0" allowfullscreen></iframe><a href="https://quizizz.com/admin?source=embedFrame" target="_blank">Explore more at Quizizz.</a></div>
-            </div>
-        </div>
-        <div class="project-container">
-            <div class="project-header" aria-controls="bsdCoinCollectorF" onclick="toggleProject('bsdCoinCollectorF')">
-                <h3>BSD Coin Collector Game : HTML,CSS,JS Functional Quiz (Kru'Amon)</h3>
-                <i class="fas fa-chevron-down collapse-icon"></i>
-            </div>
-            <div class="project-content" id="bsdCoinCollectorF">
-                <div style="width:100%;display:flex;flex-direction:column;gap:8px;min-height:635px;"><iframe src="https://quizizz.com/embed/quiz/66516d2c0d40a403ea2a09d4" title=" - Quizizz" style="flex:1;" frameBorder="0" allowfullscreen></iframe><a href="https://quizizz.com/admin?source=embedFrame" target="_blank">Explore more at Quizizz.</a></div>
-            </div>
-        </div>
-        <div class="project-container">
-            <div class="project-header" aria-controls="bsdCoinCollectorT" onclick="toggleProject('bsdCoinCollectorT')">
-                <h3>BSD Coin Collector Game: HTML,CSS,JS Technical Quiz (Khru Amon)</h3>
-                <i class="fas fa-chevron-down collapse-icon"></i>
-            </div>
-            <div class="project-content" id="bsdCoinCollectorT">
-                <div style="width:100%;display:flex;flex-direction:column;gap:8px;min-height:635px;"><iframe src="https://quizizz.com/embed/quiz/6651714b0d40a463552a0cfc" title=" - Quizizz" style="flex:1;" frameBorder="0" allowfullscreen></iframe><a href="https://quizizz.com/admin?source=embedFrame" target="_blank">Explore more at Quizizz.</a></div>
-            </div>
-        </div>
-        <div class="project-container">
-            <div class="project-header" aria-controls="bsdAframeLighting" onclick="toggleProject('bsdAframeLighting')">
-                <h3>BSD A-Frame Lighting and Fog: HTML,CSS,JS Quiz (Khru Amon)</h3>
-                <i class="fas fa-chevron-down collapse-icon"></i>
-            </div>
-            <div class="project-content" id="bsdAframeLighting">
-                <div style="width:100%;display:flex;flex-direction:column;gap:8px;min-height:635px;"><iframe src="https://quizizz.com/embed/quiz/6700bdcf12c76a605171a1f0" title=" - Quizizz" style="flex:1;" frameBorder="0" allowfullscreen></iframe><a href="https://quizizz.com/admin?source=embedFrame" target="_blank">Explore more at Quizizz.</a></div>
-            </div>
-        </div>
 
         <h2>Conclusion</h2>
         <p>With these basics, you're now ready to start your coding adventure! Remember, practice makes perfect, and the more you code, the better you'll get. Happy coding!</p>
@@ -3281,6 +3245,52 @@ body {
                     dropdown.style.display = 'none';
                 }
             });
+
+            // Example array with data for each div
+            const projects = [
+              { uniqueID: 'bsdQuizMaker', h3text: 'BSD Quiz Maker: HTML,CSS,Javascript Quiz (Teacher Amon)', quizid: '652a39673f475ac7c22d0792' },
+              { uniqueID: 'bsdPieChart', h3text: 'BSD Pie Chart: HTML, CSS, Javascript Quiz (Teacher Amon)', quizid: '653357ab1c71595700f6b67d' },
+              { uniqueID: 'bsdRetroTV', h3text: 'BSD Retro TV : HTML, CSS, Javascript Quiz (Teacher Amon)', quizid: '654f0c59ee33d699e0fb1f6f' },
+              { uniqueID: 'bsdMadLibs', h3text: 'BSD Mad Libs: HTML, CSS, Javascript Quiz (Teacher Amon)', quizid: '6573f1b4942df68ebeda6e3f' },
+              { uniqueID: 'bsdDigitalPocket', h3text: 'BSD Digital Pocket: HTML, CSS, Javascript Quiz (Teacher Amon)', quizid: '6598cff0db09d77f51b9ee5a' },
+              { uniqueID: 'bsdStoryMaker', h3text: 'BSD Story Maker: HTML, CSS, Javascript Quiz (Teacher Amon)', quizid: '65ab3f4245b4a8187c8716ea' },
+              { uniqueID: 'bsdOnlineProfile', h3text: 'BSD Online Profile: HTML, CSS, Javascript Quiz (Teacher Amon)', quizid: '65ebed5c824c4d083f452786' },
+              { uniqueID: 'bsdCardSorting', h3text: 'BSD Card Sorting Filter: HTML,CSS,Javascript Quiz (Teacher Amon)', quizid: '65fe5ed26135f870425701c5' },
+              { uniqueID: 'bsdCoinCollectorF', h3text: 'BSD Coin Collector Game : HTML,CSS,JS Functional Quiz (Teacher Amon)', quizid: '66516d2c0d40a403ea2a09d4' },
+              { uniqueID: 'bsdCoinCollectorT', h3text: 'BSD Coin Collector Game: HTML,CSS,JS Technical Quiz (Teacher Amon)', quizid: '6651714b0d40a463552a0cfc' },
+              { uniqueID: 'bsdCarrotPicker', h3text: 'BSD Carrot Picker: HTML,CSS,JS Technical Quiz (Teacher Amon)', quizid: '6688cf7f4add3a3ac2549fee' },
+              { uniqueID: 'bsdDigitalAssistant', h3text: 'BSD Digital Assistant: HTML,CSS,JS Technical Quiz (Teacher Amon)', quizid: '669207166e265a07619ddf4c' },
+              { uniqueID: 'bsdAframeSetup', h3text: 'BSD A-Frame (Set Up): HTML,CSS,JS Techno-Funct. Quiz (Teacher Amon)', quizid: '66c02f8a71c8418f6e369f27' },
+              { uniqueID: 'bsdAframeModeling', h3text: 'BSD A-Frame Modeling: HTML,CSS,JS Techno-Funct. Quiz (Teacher Amon)', quizid: '66c9533cfd63f0784a757317' },
+              { uniqueID: 'bsdAframeTexture', h3text: 'BSD A-Frame Texture: HTML,CSS,JS Techno-Funct. Quiz (Teacher Amon)', quizid: '66ee4fee8b576c422d325934' },
+              { uniqueID: 'bsdAframeLighting', h3text: 'BSD A-Frame Lighting and Fog: HTML,CSS,JS Quiz (Khru Amon)', quizid: '6700bdcf12c76a605171a1f0' },
+              // Add more objects as needed
+            ];
+
+            // Get the <h1> element with id 'BSD'
+            const h1Element = document.getElementById('BSD');
+
+            // Function to create the project divs using string templates
+            projects.forEach(project => {
+              // HTML template for each project div
+              const projectHTML = `
+                <div class="project-container">
+                  <div class="project-header" aria-controls="${project.uniqueID}" onclick="toggleProject('${project.uniqueID}')">
+                    <h3>${project.h3text}</h3>
+                    <i class="fas fa-chevron-down collapse-icon"></i>
+                  </div>
+                  <div class="project-content" id="${project.uniqueID}">
+                    <div style="width:100%;display:flex;flex-direction:column;gap:8px;min-height:635px;">
+                      <iframe src="https://quizizz.com/embed/quiz/${project.quizid}" title="${project.h3text} - Quizizz" style="flex:1;" frameBorder="0" allowfullscreen></iframe>
+                      <a href="https://quizizz.com/admin?source=embedFrame" target="_blank">Explore more at Quizizz.</a>
+                    </div>
+                  </div>
+                </div>
+              `;
+
+              // Insert the HTML string after the <h1> element
+              h1Element.insertAdjacentHTML('afterend', projectHTML);
+            });
         });
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -3416,5 +3426,4 @@ body {
     });
     </script>
 </body>
-
 </html>
